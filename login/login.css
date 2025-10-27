@@ -1,0 +1,174 @@
+/* General Reset and Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Login Container (Splits the Screen) --- */
+.login-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    /* Optional: Add a subtle box shadow to the entire container if desired */
+    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); */
+}
+
+/* --- Left Panel: Logo and Images (with the vertical line) --- */
+.left-panel {
+    flex: 1; 
+    background-color: #fff;
+    position: relative; 
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    /* --- CRUCIAL CHANGE 1: The vertical dividing line --- */
+    border-right: 1px solid #eee; /* Light gray line to separate sections */
+}
+
+/* Logo Styling (Kept the same) */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    font-size: 32px;
+    color: #e57373;
+    line-height: 1;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Food Image Sizing & Placeholder */
+.food-image {
+    position: absolute;
+    width: 200px; 
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+}
+
+.image-placeholder img {
+    /* Style the image to fill the circular container and be a crop of the food */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    
+}
+
+
+/* --- CRUCIAL CHANGE 2: Image Positioning --- */
+
+.top-left {
+    /* Position the top image exactly as in the picture */
+    top: -50px;
+    left: -50px;
+}
+
+/* This is the new class for the bottom image */
+.bottom-right { 
+    /* Position the bottom image at the bottom-right of the left panel */
+    bottom: -50px;
+    /* Move it to the right, just partially off-screen */
+    right: -50px; 
+    left: auto; /* Remove previous 'left' property if it was set */
+}
+
+
+/* --- Right Panel: Login Form (Kept the same) --- */
+.right-panel {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.app-name {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #333;
+    margin-bottom: 50px;
+}
+
+.log-in-title {
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.social-login-buttons {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.login-button {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.login-button:hover {
+    background-color: #f5f5f5;
+}
+
+.login-button .icon {
+    margin-right: 10px;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.google .icon { color: #db4437; font-weight: bold; }
+.apple .icon { font-family: Arial, sans-serif; font-size: 20px; }
+.email .icon { color: #666; }
+
+.signup-prompt {
+    font-size: 14px;
+    color: #666;
+}
+
+.signup-link {
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid #333;
+    padding-bottom: 2px;
+}
