@@ -8,51 +8,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     </head>
 <body>
-    <div class="login-container">
-        <div class="left-panel">
-            <div class="food-image top-left">
-                <div class="image-placeholder">
-                    <img src="../images/food.png"></img>
-                </div>
+    <section class="login_page">
+        <div class="left_panel">
+            <div class="image_placeholder top">
+                <img src="../images/food.png">
             </div>
             
-            <div class="logo-area">
-                <img src="../images/Frame 13.png"></img>
+            
+            <div class="logo_area">
+                <img src="../images/Frame 13.png">
             </div>
 
-            <div class="food-image bottom-right">
-                <div class="image-placeholder">
-                    <img src="../images/food.png"></img>
+                <div class="image_placeholder bottom">
+                    <img src="../images/food.png">
                 </div>
-            </div>
+            
         </div>
 
         <div class="right-panel">
-            <h1 class="app-name">DISHCOVERY</h1>
-            <h2 class="log-in-title">Log in</h2>
+            <h1>dishcovery</h1>
+            <h2>welcome back</h2>
+            <h3>Please Log in</h3>
+            
+            <form>
+                <div class="form_wrapper">
+                    <div class="input_wrapper">
+                        
+                        <label for="email">Email</label>
+                        <input type="text" required>
+                        
+                        <label for="password">Password</label>
+                        <input type="password" required>
+                        
+                        <div class="forgot_password">
+                            <a href="">forgot password?</a>
+                        </div>
+                        
+                        <div class="submit_btn">
+                            <button class="log-in_btn" type="submit">Log in</button>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="social-login-buttons">
-                <button class="login-button google">
-                    <span class="icon">
-                        <img src="../images/logos_google-icon.png"></img>
-                    </span> Continue with Google
+                <div class="new_user">
+                    <p>Don't have an account?</p>
+                    <a href="">Sign up</a>
+                </div>
+            </form> 
+
+
+
+
+
+
+
+
+
+            <div class="redirect_btn">
+                <button>
+                        <img src="../images/logos_google-icon.png">
+                     <p>Continue with Google</p>
                 </button>
-                <button class="login-button apple">
-                    <span class="icon">
-                        <img src="../images/ic_outline-apple.png"></img>
-                    </span> Continue with Apple
+
+                <button>
+                        <img src="../images/ic_outline-apple.png">
+                         <p>Continue with Apple</p>
                 </button>
-                <button class="login-button email">
-                    <span class="icon">
-                        <img src="../images/ic_outline-email.png"></img>
-                    </span> Continue with Email
+
+                <button>
+                    <img src="../images/ic_outline-email.png">
+                     <p>Continue with Email</p>
                 </button>
             </div>
-
-            <p class="signup-prompt">
-                Don't have an account? <a href="#" class="signup-link">Sign up</a>
-            </p>
+         
         </div>
-    </div>
+    </section>
 </body>
 </html>
