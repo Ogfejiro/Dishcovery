@@ -1,0 +1,292 @@
+/* =======================
+   Global Styles
+======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f9f9f9;
+  color: #333;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =======================
+   Sidebar
+======================= */
+.sidebar {
+  width: 240px;
+  background: #fff;
+  border-right: 1px solid #eee;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  transition: transform 0.4s ease;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar .logo img {
+  width: 180px;
+  height: auto;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #555;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+.menu a:hover,
+.menu a.active {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.more-btn {
+  border: none;
+  background: #f44336;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =======================
+   Overlay
+======================= */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 15;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* =======================
+   Main
+======================= */
+.main {
+  flex: 1;
+  margin-left: 240px;
+  padding: 2rem;
+  width: 100%;
+}
+
+/* =======================
+   Topbar
+======================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.toggle-sidebar {
+  display: none;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filters button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.filters button.active,
+.filters button:hover {
+  background: #f44336;
+  color: #fff;
+  border-color: #f44336;
+}
+
+/* =======================
+   Recipe Grid & Cards
+======================= */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.recipe-card {
+  background: #f1f1f1; /* Slight grey background */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.recipe-info {
+  background: #fff;
+  padding: 1rem;
+}
+
+.tag {
+  background: #f44336;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: none;
+  margin-bottom: 0.5rem;
+}
+
+.recipe-info h3 {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.meta {
+  color: #777;
+  font-size: 0.9rem;
+  margin: 0.4rem 0;
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* =======================
+   Search Page
+======================= */
+.search-area {
+  position: relative;
+  margin: 1.5rem auto;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-area input {
+  width: 100%;
+  padding: 0.9rem 2.5rem 0.9rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  font-size: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-area i {
+  position: absolute;
+  right: 18px;
+  color: #f44336;
+  font-size: 1.2rem;
+}
+
+/* Page visibility */
+.page {
+  display: none;
+}
+
+.active-page {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =======================
+   Responsive
+======================= */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .overlay.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .toggle-sidebar {
+    display: block;
+  }
+
+  .filters {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}

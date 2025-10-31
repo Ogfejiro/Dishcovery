@@ -1,0 +1,201 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  color: #222;
+  background: #fff;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 5%;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo img {
+  width: 55px;  /* increased size */
+  height: auto;
+  object-fit: contain;
+}
+
+/* Navigation */
+.nav-links a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #d33;
+}
+
+/* Buttons */
+.nav-buttons {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.btn-outline {
+  border: 1px solid #d33;
+  background: transparent;
+  color: #d33;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: #d33;
+  color: white;
+}
+
+.btn-filled {
+  background: #d33;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-filled:hover {
+  background: #b22;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 5%;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.hero-text {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  color: #555;
+  max-width: 480px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  max-width: 450px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  outline: none;
+}
+
+.search-bar button {
+  background: #d33;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  gap: 2rem;
+}
+
+.stats div h3 {
+  color: #d33;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.stats div p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Hero Image */
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 500px;  /* made slightly bigger */
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-text p {
+    margin: 0 auto 1.5rem;
+  }
+
+  .stats {
+    justify-content: center;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero-image img {
+    max-width: 350px;
+  }
+}
