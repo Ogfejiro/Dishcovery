@@ -1,59 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dishcovery</title>
-  <link rel="stylesheet" href="home.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dishcovery - Find Your Next Meal</title>
+    <link rel="stylesheet" href="./index/home.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+        rel="stylesheet"
+    />
 </head>
 <body>
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo">
-      <img src="../images/Frame 13.png" alt="Dishcovery Logo">
-      
-    </div>
-    <nav class="nav-links">
-      <a href="#">Recipes</a>
-      <a href="#">Discover</a>
-      <a href="#">Community</a>
-      <a href="#">About</a>
-    </nav>
-    <div class="nav-buttons">
-      <a href="../sign/inactive.html">
-      <button class="btn-outline">Sign In</button>
-      </a>
+    <header class="navbar" id="navbar">
+        <div class="logo">
+            <!-- Placeholder for your Frame 13.png -->
+            <img src="./images/Frame 13.png" alt="Dishcovery Logo" />
+            
+        </div>
+        
+        
+        
+            
+            <!-- MOBILE ONLY: Inserting buttons into the nav-links element for a single sliding pane -->
+            <div class="nav-buttons mobile-buttons">
+                <a href="../sign/inactive.html">
+                    <button class="btn-outline">Sign In</button>
+                </a>
+                <a href="../login/login.html">
+                    <button class="btn-filled">Get Started</button>
+                </a>
+            </div>
+            
+        </nav>
 
-      <a href="../login/login.html">
-      <button class="btn-filled">Get Started</button>
-      </a>
-    </div>
-  </header>
+        <!-- ORIGINAL BUTTONS (Hidden on mobile via CSS) -->
+        <div class="nav-buttons desktop-buttons">
+            <a href="../sign/inactive.html">
+                <button class="btn-outline">Sign In</button>
+            </a>
+            <a href="../login/login.html">
+                <button class="btn-filled">Get Started</button>
+            </a>
+        </div>
+        
+        <!-- Hamburger Menu Button (Required for toggle) -->
+        <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">
+            &#9776;
+        </button>
+    </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Discover Your <br> Next Favorite Dish</h1>
-      <p>
-        Explore thousands of recipes from around the world. Find inspiration, learn new
-        cooking techniques, and connect with fellow food lovers.
-      </p>
+    <!-- Overlay to close menu when clicking outside (Required for side-slide effect) -->
+    <div class="overlay" id="menuOverlay"></div>
 
-      <div class="search-bar">
-        <input type="text" placeholder="Search for recipes, ingredients, cuisine..." />
-        <button>Search</button>
-      </div>
+    <main class="hero">
+        <div class="hero-text">
+            <h1>Discover Your <br> Next Favorite Dish</h1>
+            <p>
+                Explore thousands of recipes from around the world. Find inspiration, learn new
+                cooking techniques, and connect with fellow food lovers.
+            </p>
 
-      <div class="stats">
-        <div><h3>2k+</h3><p>Recipes</p></div>
-        <div><h3>5k+</h3><p>Members</p></div>
-        <div><h3>35+</h3><p>Cities</p></div>
-      </div>
-    </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for recipes, ingredients, cuisine..." />
+                <button>Search</button>
+            </div>
 
-    <div class="hero-image">
-      <img src="../images/home.png" alt="Delicious Food">
-    </div>
-  </section>
+            <div class="stats">
+                <div><h3>2k+</h3><p>Recipes</p></div>
+                <div><h3>5k+</h3><p>Members</p></div>
+                <div><h3>35+</h3><p>Cities</p></div>
+            </div>
+        </div>
+
+        <div class="hero-image">
+             <!-- Placeholder for your home.png -->
+            <img 
+                src="./images/home.png"
+                alt="Delicious Food" 
+                onerror="this.onerror=null; this.src='./images/home.png';"
+            />
+        </div>
+    </main>
+
+    <script>
+        // JavaScript for Mobile Menu Toggle and Overlay
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const body = document.body;
+
+            function toggleMenu(open) {
+                const isOpen = open !== undefined ? open : !navLinks.classList.contains('active');
+                
+                // Toggle active class on navLinks (the drawer)
+                navLinks.classList.toggle('active', isOpen);
+                
+                // Toggle overlay and body scroll lock
+                menuOverlay.classList.toggle('active', isOpen);
+                body.classList.toggle('no-scroll', isOpen);
+                
+                // Update ARIA attributes
+                menuToggle.setAttribute('aria-expanded', isOpen);
+            }
+
+            // 1. Toggle when the hamburger button is clicked
+            menuToggle.addEventListener('click', () => toggleMenu());
+            
+            // 2. Close the menu when a link inside is clicked (simulating navigation)
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    // Only close if screen size is mobile (less than 900px)
+                    if (window.innerWidth <= 900) {
+                        toggleMenu(false);
+                    }
+                });
+            });
+            
+            // 3. Close the menu when the overlay is clicked
+            menuOverlay.addEventListener('click', () => toggleMenu(false));
+            
+            // 4. Close the menu on window resize if it was open (desktop mode)
+            window.addEventListener('resize', () => {
+                 if (window.innerWidth > 900 && navLinks.classList.contains('active')) {
+                     toggleMenu(false);
+                 }
+            });
+        });
+    </script>
 </body>
 </html>
