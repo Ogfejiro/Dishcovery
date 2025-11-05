@@ -1,369 +1,90 @@
- /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
+/* --- FIXED RESPONSIVE BEHAVIOR --- */
 
-        body {
-            color: #222;
-            background: #fff;
-            transition: all 0.3s ease;
-        }
+/* Base reset to ensure container fits screen */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
-        /* Class to disable background scrolling when sidebar is open */
-        body.no-scroll {
-            overflow: hidden;
-        }
+/* Search Bar (Desktop remains same) */
+.search-bar {
+  display: flex;
+  align-items: center;
+  max-width: 450px;
+  width: 100%; /* ✅ Allow full width on mobile */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
 
-        html {
-            font-size: 16px; 
-        }
+.search-bar input {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  min-width: 0; /* ✅ Prevent flexbox overflow issue */
+}
 
-        /* Navbar */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 5%;
-            border-bottom: 1px solid #eee;
-            background: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+.search-bar button {
+  background: #d33;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 700;
-            color: #d33;
-            z-index: 101; 
-        }
+.search-bar button:hover {
+  background: #b22;
+}
 
-        .logo img {
-            width: 55px; 
-            height: auto;
-            object-fit: contain;
-        }
-        
-        /* Navigation (Desktop) */
-        .nav-links {
-            display: flex;
-            align-items: center;
-            /* Using margin and padding from your original CSS */
-        }
+/* ============================== */
+/* Responsive Adjustments */
+/* ============================== */
 
-        .nav-links a {
-            margin: 0 1rem;
-            text-decoration: none;
-            color: #000;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 2rem 1.5rem; /* ✅ Prevent side overflow */
+  }
 
-        .nav-links a:hover {
-            color: #d33;
-        }
+  .hero-text {
+    width: 100%;
+  }
 
-        /* Buttons (Desktop) */
-        .nav-buttons {
-            display: flex;
-            gap: 0.7rem;
-            align-items: center;
-        }
+  .search-bar {
+    flex-direction: column; /* ✅ Stack vertically on small screens */
+    align-items: stretch;
+    width: 100%;
+    max-width: none;
+  }
 
-        .btn-outline, .btn-filled {
-            border-radius: 6px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-decoration: none; 
-            display: inline-block;
-            text-align: center;
-        }
+  .search-bar input {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+    font-size: 1rem;
+  }
 
-        .btn-outline {
-            border: 1px solid #d33;
-            background: transparent;
-            color: #d33;
-        }
+  .search-bar button {
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    padding: 1rem;
+  }
 
-        .btn-outline:hover {
-            background: #d33;
-            color: white;
-        }
+  /* Make sure hero image resizes perfectly */
+  .hero-image img {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+  }
 
-        .btn-filled {
-            background: #d33;
-            color: white;
-            border: none;
-        }
-
-        .btn-filled:hover {
-            background: #b22;
-        }
-
-        /* Mobile Menu Toggle (Default: Hidden) */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.8rem;
-            color: #d33;
-            line-height: 1;
-            margin-left: 1rem;
-            z-index: 101;
-        }
-
-        /* Full-screen Overlay for Mobile Menu */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 90;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-
-        /* Hero Section */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4rem 5%;
-            gap: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-text {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .hero-text h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-
-        .hero-text p {
-            color: #555;
-            max-width: 480px;
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-        }
-
-        /* Search Bar */
-        .search-bar {
-            display: flex;
-            align-items: center;
-            max-width: 450px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .search-bar input {
-            flex: 1;
-            padding: 0.8rem;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        .search-bar button {
-            background: #d33;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .search-bar button:hover {
-            background: #b22;
-        }
-
-        /* Stats */
-        .stats {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .stats div h3 {
-            color: #d33;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .stats div p {
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        /* Hero Image */
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-image img {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 50%;
-            object-fit: cover;
-            aspect-ratio: 1/1;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        /* ==================================== */
-        /* RESPONSIVE STYLES (SIDEBAR MENU) */
-        /* ==================================== */
-
-        @media (max-width: 900px) {
-            
-            /* Show the hamburger icon */
-            .menu-toggle {
-                display: block;
-            }
-            
-            /* --- Shared Sidebar Styling for Links and Buttons --- */
-            .nav-links, .nav-buttons {
-                /* Fix position to create the side drawer effect */
-                position: fixed;
-                top: 0;
-                right: 0; 
-                height: 100vh;
-                width: 300px; 
-                max-width: 85%; 
-                background: #fff;
-                z-index: 100;
-                flex-direction: column;
-                align-items: flex-start; /* Align text/buttons to the left of the drawer */
-                
-                /* Animation: Slide off-screen initially */
-                transform: translateX(100%);
-                transition: transform 0.3s ease-in-out; 
-            }
-            
-            /* Specific link styling within the drawer */
-            .nav-links {
-                padding: 5rem 1.5rem 0; /* Padding to clear the navbar logo */
-                border-bottom: 1px solid #eee;
-            }
-
-            .nav-links a {
-                display: block;
-                padding: 0.5rem 0;
-                text-align: left;
-                width: 100%;
-                font-size: 1.1rem;
-                margin: 0; /* Override desktop margin */
-            }
-
-            /* Specific button container styling within the drawer */
-            .nav-buttons {
-                padding: 10rem 1.5rem 0; /* Position below the links */
-                gap: 1rem;
-                /* NOTE: Because .nav-buttons is a sibling of .nav-links, 
-                   we must offset their positions manually. */
-            }
-            
-            .nav-buttons a {
-                width: 100%;
-            }
-
-            /* Hiding the secondary button container initially, 
-               since it will be contained in the links container when active */
-            .nav-buttons {
-                display: none;
-            }
-
-            /* --- Activation Classes (Toggled by JS) --- */
-            
-            .navbar.active .nav-links,
-            .navbar.active .nav-buttons {
-                transform: translateX(0); /* Slide into view */
-            }
-            
-            /* To make the links and buttons appear stacked in the drawer, 
-               I'll merge the two elements into a single drawer that is toggled. 
-               Since they are separate elements, this requires slightly modified
-               logic in JS to control both elements, but for the CSS, we can 
-               just focus on showing the links and manually position the buttons.
-            */
-            .nav-links.active {
-                /* When the links are active, they are the main drawer */
-                transform: translateX(0);
-                padding-bottom: 1rem; /* Space before buttons */
-            }
-            
-            .nav-links {
-                /* This is the sidebar container */
-                position: fixed;
-                top: 0;
-                right: 0;
-                height: 100vh;
-                width: 300px;
-                max-width: 85%;
-                background: #fff;
-                z-index: 100;
-                padding: 5rem 1.5rem 1.5rem;
-                flex-direction: column;
-                transform: translateX(100%);
-                transition: transform 0.3s ease-in-out;
-            }
-            
-            .nav-links .nav-buttons {
-                /* Display buttons inside the links container on mobile */
-                display: flex; 
-                flex-direction: column;
-                width: 100%;
-                padding: 1rem 0 0;
-                gap: 1rem;
-            }
-            
-            /* --- Hero Section Mobile Adjustments (From your original CSS) --- */
-            .hero {
-                flex-direction: column-reverse;
-                text-align: center;
-            }
-
-            .hero-text h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero-text p {
-                margin: 0 auto 1.5rem;
-            }
-
-            .stats {
-                justify-content: center;
-            }
-            
-            .hero-image img {
-                max-width: 350px;
-            }
-        }
-        
-    
+  /* Prevent horizontal scrollbars entirely */
+  body, html {
+    overflow-x: hidden;
+  }
+}
