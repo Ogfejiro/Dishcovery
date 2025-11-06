@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dishcovery - Find Your Next Meal</title>
+  <link rel="stylesheet" href="./index/home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <header class="navbar" id="navbar">
+    <div class="logo">
+      <img src="./images/Frame 13.png" alt="Dishcovery Logo" />
+    </div>
+
+    <!-- ✅ Proper Nav Container -->
+    <nav class="nav-links" id="navLinks">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Recipes</a>
+      <a href="#">Contact</a>
+
+      <!-- MOBILE BUTTONS INSIDE THE SIDEBAR -->
+      <div class="nav-buttons mobile-buttons">
+        
+        <a href="./dishcovery-dashboard/index.html">
+          <button class="btn-filled">Get Started</button>
+        </a>
+      </div>
+    </nav>
+
+    <!-- DESKTOP BUTTONS -->
+    <div class="nav-buttons desktop-buttons">
+      
+      <a href="../Dishcovery/dishcovery-dashboard/index.html">
+        <button class="btn-filled">Get Started</button>
+      </a>
+    </div>
+
+    <!-- Hamburger -->
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">
+      &#9776;
+    </button>
+  </header>
+
+  <div class="overlay" id="menuOverlay"></div>
+
+  <main class="hero">
+    <div class="hero-text">
+      <h1>Discover Your <br> Next Favorite Dish</h1>
+      <p>Explore thousands of recipes from around the world. Find inspiration, learn new cooking techniques, and connect with fellow food lovers.</p>
+
+      <div class="search-bar">
+        <input type="text" placeholder="Search for recipes, ingredients, cuisine..." />
+        <button>Search</button>
+      </div>
+
+      <div class="stats">
+        <div><h3>2k+</h3><p>Recipes</p></div>
+        <div><h3>5k+</h3><p>Members</p></div>
+        <div><h3>35+</h3><p>Cities</p></div>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img src="./images/home.png" alt="Delicious Food" onerror="this.onerror=null; this.src='./images/home.png';"/>
+    </div>
+  </main>
+
+  <script>
+    // ✅ JavaScript for Mobile Menu
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      const menuOverlay = document.getElementById('menuOverlay');
+      const body = document.body;
+
+      function toggleMenu(open) {
+        const isOpen = open !== undefined ? open : !navLinks.classList.contains('active');
+        navLinks.classList.toggle('active', isOpen);
+        menuOverlay.classList.toggle('active', isOpen);
+        body.classList.toggle('no-scroll', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+      }
+
+      menuToggle.addEventListener('click', () => toggleMenu());
+      menuOverlay.addEventListener('click', () => toggleMenu(false));
+
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 900) toggleMenu(false);
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 900 && navLinks.classList.contains('active')) {
+          toggleMenu(false);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

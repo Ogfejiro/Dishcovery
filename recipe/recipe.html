@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dishcovery Recipe</title>
+  <link rel="stylesheet" href="recipe.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="../images/Frame 13.png" alt="Dishcovery Logo" />
+      </div>
+      <nav class="menu">
+        <a href="../dashboard/dashboard.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#"><i class="fa-solid fa-user"></i> Profile</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div id="recipeDetail" class="recipe-detail">
+        <p>Loading recipe...</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE = "https://dishcovery-backend-2-0.onrender.com/api";
+
+    async function loadRecipe() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      if (!id) {
+        document.getElementById("recipeDetail").innerHTML = "<p>No recipe ID found.</p>";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/recipes/${id}`);
+        const recipe = await res.json();
+
+        document.getElementById("recipeDetail").innerHTML = `
+          <div class="recipe-header">
+            <img src="${recipe.image}" alt="${recipe.name}" class="recipe-image" />
+            <h1>${recipe.name}</h1>
+            <p><i class="fa-regular fa-clock"></i> ${recipe.cookingTime} mins</p>
+          </div>
+
+          <div class="recipe-content">
+            <h2>Ingredients</h2>
+            <ul>${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+
+            <h2>Instructions</h2>
+            <ol>${recipe.instructions.map(step => `<li>${step}</li>`).join('')}</ol>
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("recipeDetail").innerHTML = "<p>Failed to load recipe details.</p>";
+      }
+    }
+
+    loadRecipe();
+  </script>
+</body>
+</html>

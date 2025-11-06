@@ -1,0 +1,300 @@
+/* ============================== */
+/* GLOBAL RESETS */
+/* ============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ============================== */
+/* NAVBAR */
+/* ============================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 8%;
+  background: #fff;
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #d33;
+}
+
+/* Buttons */
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-outline {
+  border: 2px solid #d33;
+  background: transparent;
+  color: #d33;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: #d33;
+  color: white;
+}
+
+.btn-filled {
+  border: none;
+  background: #d33;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-filled:hover {
+  background: #b22;
+}
+
+/* Hamburger Menu */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ============================== */
+/* HERO SECTION */
+/* ============================== */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 8%;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.hero-text {
+  flex: 1 1 400px;
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  line-height: 1.2;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+/* Hero Image */
+.hero-image img {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================== */
+/* SEARCH BAR */
+/* ============================== */
+.search-bar {
+  display: flex;
+  align-items: center;
+  max-width: 450px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background: #fff;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  min-width: 0;
+}
+
+.search-bar button {
+  background: #d33;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.search-bar button:hover {
+  background: #b22;
+}
+
+/* ============================== */
+/* STATS */
+/* ============================== */
+.stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.stats div h3 {
+  color: #d33;
+  font-size: 1.5rem;
+}
+
+.stats div p {
+  color: #555;
+}
+
+/* ============================== */
+/* MOBILE STYLES */
+/* ============================== */
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  /* Hide desktop buttons */
+  .desktop-buttons {
+    display: none;
+  }
+
+  /* Mobile Navigation Menu */
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100%;
+    background: #fff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .mobile-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
+
+  /* Overlay */
+  .overlay.active {
+    display: block;
+  }
+
+  /* HERO STACKING */
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-text {
+    width: 100%;
+  }
+
+  /* Search Bar (Stacked) */
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: none;
+  }
+
+  .search-bar input {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .search-bar button {
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    padding: 1rem;
+  }
+
+  .stats {
+    justify-content: center;
+  }
+
+  .hero-image img {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+  }
+
+  body,
+  html {
+    overflow-x: hidden;
+  }
+}
+
+/* ============================== */
+/* OVERLAY FOR MENU BACKDROP */
+/* ============================== */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 50;
+}
