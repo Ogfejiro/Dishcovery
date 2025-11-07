@@ -1,300 +1,509 @@
-/* ============================== */
-/* GLOBAL RESETS */
-/* ============================== */
+/* --- Base Styles --- */
+:root {
+    --color-primary: #FF5A5F; /* Closest to the red/coral used for buttons and highlights */
+    --color-text-dark: #333;
+    --color-text-light: #666;
+    --color-background-light: #FFF8F0; /* Light background for the main sections */
+    --color-white: #fff;
+    --color-yellow: #FFD25E; /* Testimonial Yellow */
+    --color-red: #FA6065;    /* Testimonial Red */
+    --color-blue: #6392FF;   /* Testimonial Blue */
+    --color-green: #90B384;  /* A neutral green for the text in the image */
+    --font-family: 'Poppins', sans-serif;
+}
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html,
 body {
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  font-family: "Poppins", sans-serif;
+    font-family: var(--font-family);
+    color: var(--color-text-dark);
+    background-color: var(--color-background-light);
+    line-height: 1.6;
 }
 
-/* ============================== */
-/* NAVBAR */
-/* ============================== */
+h1, h2, h3, h4 {
+    color: var(--color-text-dark);
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-login {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.btn-signup, .btn-discover, .btn-view-all {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-signup:hover, .btn-discover:hover, .btn-view-all:hover {
+    background: #d44d51;
+}
+
+/* --- Navigation Bar --- */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 8%;
-  background: #fff;
-  position: relative;
-  z-index: 100;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 8%;
+    background: var(--color-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .logo img {
-  height: 40px;
-  width: auto;
-}
-
-/* Navigation Links */
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  transition: all 0.3s ease;
+    height: 40px; /* Adjust as needed */
+    filter: brightness(0.6) sepia(1) hue-rotate(-25deg) saturate(3); /* Simple filter attempt to match logo color */
 }
 
 .nav-links a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
+    text-decoration: none;
+    color: var(--color-text-light);
+    font-weight: 500;
+    margin: 0 15px;
+    transition: color 0.3s;
 }
 
 .nav-links a:hover {
-  color: #d33;
+    color: var(--color-primary);
 }
 
-/* Buttons */
-.nav-buttons {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.nav-actions button:first-child {
+    margin-right: 10px;
 }
 
-.btn-outline {
-  border: 2px solid #d33;
-  background: transparent;
-  color: #d33;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* --- Main Sections --- */
+main {
+    padding: 0 8%;
 }
 
-.btn-outline:hover {
-  background: #d33;
-  color: white;
-}
-
-.btn-filled {
-  border: none;
-  background: #d33;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.btn-filled:hover {
-  background: #b22;
-}
-
-/* Hamburger Menu */
-.menu-toggle {
-  display: none;
-  font-size: 1.8rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* ============================== */
-/* HERO SECTION */
-/* ============================== */
-.hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  padding: 4rem 8%;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-}
-
-.hero-text {
-  flex: 1 1 400px;
-  max-width: 600px;
-}
-
-.hero-text h1 {
-  font-size: 2.8rem;
-  line-height: 1.2;
-  color: #222;
-  margin-bottom: 1rem;
-}
-
-.hero-text p {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 2rem;
-}
-
-/* Hero Image */
-.hero-image img {
-  max-width: 500px;
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ============================== */
-/* SEARCH BAR */
-/* ============================== */
-.search-bar {
-  display: flex;
-  align-items: center;
-  max-width: 450px;
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 2rem;
-  background: #fff;
-}
-
-.search-bar input {
-  flex: 1;
-  padding: 0.8rem;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  min-width: 0;
-}
-
-.search-bar button {
-  background: #d33;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  flex-shrink: 0;
-}
-
-.search-bar button:hover {
-  background: #b22;
-}
-
-/* ============================== */
-/* STATS */
-/* ============================== */
-.stats {
-  display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.stats div h3 {
-  color: #d33;
-  font-size: 1.5rem;
-}
-
-.stats div p {
-  color: #555;
-}
-
-/* ============================== */
-/* MOBILE STYLES */
-/* ============================== */
-@media (max-width: 900px) {
-  .menu-toggle {
-    display: block;
-  }
-
-  /* Hide desktop buttons */
-  .desktop-buttons {
-    display: none;
-  }
-
-  /* Mobile Navigation Menu */
-  .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 70%;
-    height: 100%;
-    background: #fff;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-links.active {
-    right: 0;
-  }
-
-  .mobile-buttons {
+/* --- 1. Hero Section --- */
+.hero-section {
     display: flex;
-    flex-direction: column;
-    width: 80%;
-  }
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 0 0;
+    gap: 3rem;
+}
 
-  /* Overlay */
-  .overlay.active {
-    display: block;
-  }
+.hero-content {
+    flex: 1;
+}
 
-  /* HERO STACKING */
-  .hero {
-    flex-direction: column-reverse;
-    text-align: center;
-    padding: 2rem 1.5rem;
-  }
+.hero-image {
+    flex-shrink: 0;
+    width: 500px; /* Specific width based on image visual */
+}
 
-  .hero-text {
-    width: 100%;
-  }
-
-  /* Search Bar (Stacked) */
-  .search-bar {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    max-width: none;
-  }
-
-  .search-bar input {
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-    border-radius: 8px 8px 0 0;
-  }
-
-  .search-bar button {
-    width: 100%;
-    border-radius: 0 0 8px 8px;
-    padding: 1rem;
-  }
-
-  .stats {
-    justify-content: center;
-  }
-
-  .hero-image img {
-    max-width: 320px;
+.hero-image img {
     width: 100%;
     height: auto;
-  }
-
-  body,
-  html {
-    overflow-x: hidden;
-  }
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* ============================== */
-/* OVERLAY FOR MENU BACKDROP */
-/* ============================== */
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 50;
+.hero-stats {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.stat-item {
+    text-align: left;
+    padding-right: 2rem;
+    border-right: 1px solid #ddd;
+}
+
+.stat-item:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+/* --- Swish Divider (Visual element from image) --- */
+.swish-divider {
+    height: 50px; /* Height for the curve */
+    background: linear-gradient(to bottom, var(--color-background-light) 50%, #fff 50%);
+    margin-top: 5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.swish-divider::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10%;
+    width: 120%;
+    height: 100%;
+    background: var(--color-white);
+    transform: skewY(-2deg); /* Creates the gentle upward curve effect */
+    transform-origin: 0% 100%;
+    z-index: 10;
+}
+
+/* --- Yellow Slanted Divider Line --- */
+.swish-divider::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px; /* Thickness of the line */
+    background: var(--color-yellow); /* Using the yellow color variable */
+    z-index: 15; /* Above the white swish */
+    transform: skewY(-1.5deg); /* Creates the gentle downward slant */
+    transform-origin: 0% 100%;
+}
+
+/* --- 2. Recipes Resonance Section --- */
+.recipes-resonance-section {
+    display: flex;
+    gap: 5rem;
+    padding: 6rem 0;
+    background: var(--color-white); /* Section background */
+}
+
+.resonance-content {
+    flex: 1;
+    padding-right: 4rem;
+}
+
+.resonance-content h2 {
+    color: var(--color-primary); /* The visual uses the primary color here */
+}
+
+.resonance-images {
+    flex: 1.5;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.main-resonance-image {
+    grid-column: 1 / 2;
+    grid-row: 1 / span 2;
+}
+
+.main-resonance-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sub-resonance-images {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sub-resonance-images img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* --- 3. Popular Food Section --- */
+.popular-food-section {
+    padding: 4rem 0 6rem;
+    text-align: center;
+}
+
+.popular-food-section h2 {
+    color: var(--color-green);
+    margin-bottom: 0.5rem;
+}
+
+.popular-food-section p {
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+.popular-food-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.food-card {
+    position: relative;
+    width: 250px;
+    height: 350px;
+    background: var(--color-white);
+    border-radius: 50% / 20%; /* Creates the curved top edge effect */
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.food-card img {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 50%; /* Circular image */
+    margin-bottom: 1rem;
+    transform: translateY(-20px); /* Lifts image slightly above the card edge */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-info {
+    text-align: center;
+    margin-top: auto; /* Push info to the bottom */
+}
+
+.card-info h3 {
+    margin: 0.5rem 0;
+}
+
+.rating {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.rating i {
+    font-size: 0.8rem;
+}
+
+/* --- 4. Guest Say Section --- */
+.guest-say-section {
+    padding: 3rem 0 6rem;
+    text-align: center;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-top: 3rem;
+}
+
+.testimonial-card {
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: left;
+    color: var(--color-white);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-card.color-yellow { background: var(--color-yellow); }
+.testimonial-card.color-red { background: var(--color-red); }
+.testimonial-card.color-blue { background: var(--color-blue); }
+.testimonial-card.color-green { background: var(--color-green); }
+
+.author-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.author-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 3px solid var(--color-white);
+}
+
+.author-info h4 {
+    color: var(--color-white);
+    font-weight: 600;
+}
+
+.testimonial-card p {
+    color: var(--color-white);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+/* --- Footer --- */
+.footer {
+    position: relative;
+    padding-top: 200px; /* Space for background image effect */
+    background: #444; /* Fallback for footer */
+    color: #eee;
+}
+
+.footer-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    background-image: url('https://via.placeholder.com/1920x250?text=Background+Recipe+Pattern');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2; /* Darkened effect */
+    z-index: 1;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem 8%;
+    border-bottom: 1px solid #555;
+}
+
+.footer-logo img {
+    height: 40px;
+    filter: brightness(2); /* Lighten logo for dark background */
+}
+
+.footer-links {
+    display: flex;
+    gap: 4rem;
+}
+
+.footer-column h4 {
+    color: var(--color-white);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li a {
+    color: #bbb;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: var(--color-primary);
+}
+
+.footer-newsletter input[type="email"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    width: 200px;
+}
+
+.footer-newsletter button {
+    padding: 10px 15px;
+    border: none;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    margin-left: -5px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 1rem 8%;
+    background: #333;
+    font-size: 0.9rem;
+}
+
+/* --- Media Queries for basic responsiveness --- */
+@media (max-width: 1200px) {
+    h1 { font-size: 3rem; }
+    h2 { font-size: 2rem; }
+}
+
+@media (max-width: 992px) {
+    .navbar { padding: 1rem 5%; }
+    main { padding: 0 5%; }
+
+    .hero-section, .recipes-resonance-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 3rem 0;
+    }
+    
+    .hero-image, .resonance-images {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .hero-stats { justify-content: center; }
+
+    .recipes-resonance-section { background: var(--color-background-light); }
+    .resonance-images {
+        grid-template-columns: 1fr;
+    }
+    .main-resonance-image { grid-column: 1 / span 1; grid-row: auto; }
+    .sub-resonance-images { flex-direction: row; }
+    .sub-resonance-images img { height: 100px; }
+
+    .popular-food-cards { flex-wrap: wrap; }
+
+    .testimonial-grid { grid-template-columns: 1fr; }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+    .footer-links {
+        gap: 2rem;
+        justify-content: center;
+    }
+    .footer-column { text-align: left; }
+}
+
+@media (max-width: 768px) {
+    .nav-links { display: none; }
 }

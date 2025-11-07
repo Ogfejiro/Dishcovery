@@ -1,159 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dishcovery Admin Dashboard</title>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
-  <link rel="stylesheet" href="admin.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dishcovery Admin Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <div class="dashboard">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="logo">
-       <img  class="img" src="../images/Frame 13.png"></img>
-      </div>
+  <div class="dashboard">
+        <aside class="sidebar">
+      <div class="logo">
+       <img class="img" src="../images/Frame 13.png" alt="Dishcovery Logo">       </div>
 
-      <nav class="menu">
-        <a href="#" class="menu-item active" data-page="dashboard">
-          <i class="fa-solid fa-chart-line"></i> Dashboard
-        </a>
-        <a href="#" class="menu-item" data-page="manage">
-          <i class="fa-solid fa-list"></i> Manage Recipes
-        </a>
-        <a href="#" class="menu-item" data-page="add">
-          <i class="fa-solid fa-plus"></i> Add Recipe
-        </a>
-        <a href="#" class="menu-item" data-page="profile">
-          <i class="fa-solid fa-user"></i> Profile
-        </a>
-        <a href="#" class="menu-item" data-page="settings">
-          <i class="fa-solid fa-gear"></i> Settings
-        </a>
-      </nav>
+      <nav class="menu">
+        <a href="#" class="menu-item active" data-page="dashboard">
+          <i class="fa-solid fa-chart-line"></i> Dashboard
+        </a>
+        <a href="#" class="menu-item" data-page="manage">
+          <i class="fa-solid fa-list"></i> Manage Recipes
+        </a>
+        <a href="#" class="menu-item" data-page="add">
+          <i class="fa-solid fa-plus"></i> Add Recipe
+        </a>
+        <a href="#" class="menu-item" data-page="profile">
+          <i class="fa-solid fa-user"></i> Profile
+        </a>
+        <a href="#" class="menu-item" data-page="settings">
+          <i class="fa-solid fa-gear"></i> Settings
+        </a>
+      </nav>
 
-       <a href="../dishcovery-dashboard/index.html" class="menu-item back-dashboard">
-    <i class="fa-solid fa-arrow-left"></i> Back to Dishcovery
-  </a>
-    </aside>
+       <a href="../dishcovery-dashboard/index.html" class="menu-item back-dashboard">
+    <i class="fa-solid fa-arrow-left"></i> Back to Dishcovery
+  </a>
+    </aside>
 
-    <!-- Main -->
-    <main class="main">
-      <!-- Dashboard -->
-      <section id="dashboard" class="page active-page">
-        <h1>Welcome Back, Admin 👋</h1>
-        <p>Here's an overview of your recipes.</p>
-        <div class="stats">
-          <div class="stat-card">
-            <i class="fa-solid fa-utensils"></i>
-            <h3 id="totalRecipes">0</h3>
-            <p>Total Recipes</p>
-          </div>
-        </div>
-      </section>
+        <main class="main">
+            <section id="dashboard" class="page active-page">
+        <h1>Welcome Back, Admin 👋</h1>
+        <p>Here's an overview of your recipes.</p>
+        <div class="stats">
+          <div class="stat-card">
+            <i class="fa-solid fa-utensils"></i>
+            <h3 id="totalRecipes">0</h3>
+            <p>Total Recipes</p>
+          </div>
+        </div>
+      </section>
 
-      <!-- Manage -->
-      <section id="manage" class="page">
-        <h2>Manage Recipes</h2>
-        <table class="recipe-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Prep Time</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="recipeList">
-            <tr><td colspan="5" class="empty">No recipes added yet.</td></tr>
-          </tbody>
-        </table>
-      </section>
+            <section id="manage" class="page">
+        <h2>Manage Recipes</h2>
+        <table class="recipe-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Prep Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recipeList">
+            <tr><td colspan="5" class="empty">No recipes added yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
 
-      <!-- Add Recipe -->
-      <section id="add" class="page">
-        <h2>Add New Recipe</h2>
-        <div class="add-layout">
-          <form id="addRecipeForm" class="recipe-form">
-            <div class="form-group">
-              <label>Recipe Name</label>
-              <input type="text" id="recipeName" placeholder="Enter recipe name" required />
-            </div>
+            <section id="add" class="page">
+        <h2>Add New Recipe</h2>
+        <div class="add-layout">
+          <form id="addRecipeForm" class="recipe-form">
+            <div class="form-group">
+              <label>Recipe Name</label>
+              <input type="text" id="recipeName" placeholder="Enter recipe name" required />
+            </div>
 
-            <div class="form-group">
-              <label>Category</label>
-              <select id="recipeCategory">
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
-                <option value="snacks">Snacks</option>
-                <option value="drinks">Drinks</option>
-              </select>
-            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="recipeCategory">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snacks">Snacks</option>
+                <option value="drinks">Drinks</option>
+              </select>
+            </div>
 
-            <div class="form-group">
-              <label>Preparation Time</label>
-              <input type="text" id="prepTime" placeholder="e.g. 30 mins" required />
-            </div>
+            <div class="form-group">
+              <label>Preparation Time</label>
+              <input type="text" id="prepTime" placeholder="e.g. 30 mins" required />
+            </div>
 
-            <div class="form-group">
-              <label>Description</label>
-              <textarea id="recipeDesc" placeholder="Short description..." required></textarea>
-            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="recipeDesc" placeholder="Short description..." required></textarea>
+            </div>
 
-            <div class="form-group">
-              <label>Image URL</label>
-              <input type="url" id="recipeImage" placeholder="Paste image URL" required />
-            </div>
+            <div class="form-group">
+              <label>Image URL</label>
+              <input type="url" id="recipeImage" placeholder="Paste image URL" required />
+            </div>
 
-            <button type="submit" class="submit-btn">
-              <i class="fa-solid fa-plus"></i> Add Recipe
-            </button>
-          </form>
+            <button type="submit" class="submit-btn">
+              <i class="fa-solid fa-plus"></i> Add Recipe
+            </button>
+          </form>
 
-          <!-- 🧁 Live Preview -->
-          <div class="preview-card" id="previewCard">
-            <img src="https://via.placeholder.com/300x200?text=Preview" id="previewImage" />
-            <div class="info">
-              <span class="tag" id="previewCategory">Category</span>
-              <h3 id="previewName">Recipe Name</h3>
-              <p id="previewTime">Prep Time: --</p>
-              <p id="previewDesc">Description will appear here...</p>
-            </div>
-          </div>
-        </div>
-      </section>
+                    <div class="preview-card" id="previewCard">
+            <img src="https://via.placeholder.com/300x200?text=Preview" id="previewImage" />
+            <div class="info">
+              <span class="tag" id="previewCategory">Category</span>
+              <h3 id="previewName">Recipe Name</h3>
+              <p id="previewTime">Prep Time: --</p>
+              <p id="previewDesc">Description will appear here...</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <!-- Success Modal -->
-      <div id="successModal" class="modal">
-        <div class="modal-content">
-          <i class="fa-solid fa-circle-check"></i>
-          <h2>Congratulations!</h2>
-          <p>Your recipe has been added successfully 🎉</p>
-          <button id="closeModal">OK</button>
-        </div>
-      </div>
+            <div id="successModal" class="modal">
+        <div class="modal-content">
+          <i class="fa-solid fa-circle-check"></i>
+          <h2>Congratulations!</h2>
+          <p>Your recipe has been added successfully 🎉</p>
+          <button id="closeModal">OK</button>
+        </div>
+      </div>
+        
+        <div id="editRecipeModal" class="modal">
+            <div class="modal-content">
+                <h2>Edit Recipe</h2>
+                <form id="editRecipeForm" class="recipe-form">
+                    <div class="form-group">
+                        <label>Recipe Name</label>
+                        <input type="text" id="editRecipeName" required />
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="editRecipeCategory">
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="dinner">Dinner</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="drinks">Drinks</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Preparation Time</label>
+                        <input type="text" id="editPrepTime" required />
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="editRecipeDesc" required></textarea>
+                    </div>
+    
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="editRecipeImage" required />
+                    </div>
+    
+                    <button type="submit" class="submit-btn save-btn">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                    </button>
+                    <button type="button" id="closeEditModal" class="cancel-btn">
+                        Cancel
+                    </button>
+                </form>
+            </div>
+        </div>
+                    <section id="profile" class="page">
+        <h2>Admin Profile</h2>
+        <p>Name: Precious</p>
+        <p>Email: admin@dishcovery.com</p>
+      </section>
 
-      <!-- Profile -->
-      <section id="profile" class="page">
-        <h2>Admin Profile</h2>
-        <p>Name: Precious</p>
-        <p>Email: admin@dishcovery.com</p>
-      </section>
+            <section id="settings" class="page">
+        <h2>Settings</h2>
+        <p>Coming soon...</p>
+      </section>
+    </main>
+  </div>
 
-      <!-- Settings -->
-      <section id="settings" class="page">
-        <h2>Settings</h2>
-        <p>Coming soon...</p>
-      </section>
-    </main>
-  </div>
-
-  <script src="admin.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>

@@ -1,35 +1,27 @@
-function checkFormValidity() {
-    const form = document.getElementById('signupForm');
-    const button = document.getElementById('signUpBtn');
-    
-    const inputs = form.querySelectorAll('input[required]');
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('loginForm');
+  const loginBtn = document.querySelector('.log-in_btn');
 
-    const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); // stop page reload
 
-    if (allFilled) {
-        button.classList.remove('inactive');
-        button.classList.add('active');
-        button.disabled = false;
-    } else {
-        button.classList.remove('active');
-        button.classList.add('inactive');
-        button.disabled = true;
-    }
-}
+    const email = form.querySelector('input[type="text"]').value.trim();
+    const password = form.querySelector('input[type="password"]').value.trim();
 
-function handleSignUp(event) {
-    event.preventDefault(); 
-
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (password !== confirmPassword) {
-        alert('Error: Passwords do not match. Please verify your entries.');
-        document.getElementById('password').focus();
-        return; 
+    if (email === "" || password === "") {
+      alert("Please fill in all fields.");
+      return;
     }
 
-    alert('Sign up successful! Welcome to DISHCOVERY.');
-}
+    // Disable button and show loading text
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Logging in...";
+    loginBtn.style.background = "#a33";
 
-document.addEventListener('DOMContentLoaded', checkFormValidity);
+    // Fake login delay for 2 seconds
+    setTimeout(() => {
+      alert("Login successful! Redirecting to Admin Dashboard...");
+      window.location.href = "../admin-dashboard/admin.html"; // ✅ correct path
+    }, 2000);
+  });
+});
