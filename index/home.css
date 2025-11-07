@@ -83,24 +83,8 @@ p {
 }
 
 .logo img {
-    height: 40px; /* Adjust as needed */
-    filter: brightness(0.6) sepia(1) hue-rotate(-25deg) saturate(3); /* Simple filter attempt to match logo color */
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--color-text-light);
-    font-weight: 500;
-    margin: 0 15px;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--color-primary);
-}
-
-.nav-actions button:first-child {
-    margin-right: 10px;
+    height: 40px; 
+    filter: brightness(0.6) sepia(1) hue-rotate(-25deg) saturate(3); 
 }
 
 /* --- Main Sections --- */
@@ -123,7 +107,7 @@ main {
 
 .hero-image {
     flex-shrink: 0;
-    width: 500px; /* Specific width based on image visual */
+    width: 500px;
 }
 
 .hero-image img {
@@ -165,7 +149,7 @@ main {
 
 /* --- Swish Divider (Visual element from image) --- */
 .swish-divider {
-    height: 50px; /* Height for the curve */
+    height: 50px; 
     background: linear-gradient(to bottom, var(--color-background-light) 50%, #fff 50%);
     margin-top: 5rem;
     position: relative;
@@ -185,26 +169,28 @@ main {
     z-index: 10;
 }
 
-/* --- Yellow Slanted Divider Line --- */
-.swish-divider::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10px; /* Thickness of the line */
-    background: var(--color-yellow); /* Using the yellow color variable */
-    z-index: 15; /* Above the white swish */
-    transform: skewY(-1.5deg); /* Creates the gentle downward slant */
-    transform-origin: 0% 100%;
-}
-
-/* --- 2. Recipes Resonance Section --- */
+/* --- 2. Recipes Resonance Section (Including the Strong Yellow Slant Line) --- */
 .recipes-resonance-section {
+    position: relative; /* Essential for positioning the yellow line */
     display: flex;
     gap: 5rem;
     padding: 6rem 0;
     background: var(--color-white); /* Section background */
+    margin-top: -50px; /* Pull the section up to overlap the swish divider */
+    z-index: 10; /* Ensure this section sits above the hero content */
+}
+
+/* New Highly Visible Yellow Slant Line */
+.recipes-resonance-section::before {
+    content: "";
+    position: absolute;
+    top: -10px; /* Position it slightly above the section */
+    left: -5%; /* Extend it off the edges */
+    width: 110%; /* Make it wider than the screen */
+    height: 30px; /* Give it significant height/thickness */
+    background: var(--color-yellow);
+    transform: skewY(-1.5deg); /* The slant effect */
+    z-index: 11; /* Ensure it's above the section content */
 }
 
 .resonance-content {
@@ -213,7 +199,7 @@ main {
 }
 
 .resonance-content h2 {
-    color: var(--color-primary); /* The visual uses the primary color here */
+    color: var(--color-primary); 
 }
 
 .resonance-images {
@@ -255,6 +241,7 @@ main {
 .popular-food-section {
     padding: 4rem 0 6rem;
     text-align: center;
+    background-color: var(--color-background-light); /* Ensure consistency */
 }
 
 .popular-food-section h2 {
@@ -301,7 +288,7 @@ main {
 
 .card-info {
     text-align: center;
-    margin-top: auto; /* Push info to the bottom */
+    margin-top: auto; 
 }
 
 .card-info h3 {
@@ -373,8 +360,8 @@ main {
 /* --- Footer --- */
 .footer {
     position: relative;
-    padding-top: 200px; /* Space for background image effect */
-    background: #444; /* Fallback for footer */
+    padding-top: 200px; 
+    background: #444; 
     color: #eee;
 }
 
@@ -387,7 +374,7 @@ main {
     background-image: url('https://via.placeholder.com/1920x250?text=Background+Recipe+Pattern');
     background-size: cover;
     background-position: center;
-    opacity: 0.2; /* Darkened effect */
+    opacity: 0.2; 
     z-index: 1;
 }
 
@@ -402,7 +389,7 @@ main {
 
 .footer-logo img {
     height: 40px;
-    filter: brightness(2); /* Lighten logo for dark background */
+    filter: brightness(2);
 }
 
 .footer-links {
@@ -457,53 +444,165 @@ main {
     font-size: 0.9rem;
 }
 
-/* --- Media Queries for basic responsiveness --- */
-@media (max-width: 1200px) {
-    h1 { font-size: 3rem; }
-    h2 { font-size: 2rem; }
-}
+/* ------------------------------------------------------------------- */
+/* --- RESPONSIVE MEDIA QUERIES --- */
+/* ------------------------------------------------------------------- */
 
+/* Tablet and Small Desktop Adjustments (max-width: 992px) */
 @media (max-width: 992px) {
-    .navbar { padding: 1rem 5%; }
-    main { padding: 0 5%; }
+    /* Base Layout & Text Scaling */
+    .navbar, .footer-content, .footer-bottom { 
+        padding-left: 5%; 
+        padding-right: 5%; 
+    }
+    main { 
+        padding: 0 5%; 
+    }
+    h1 { 
+        font-size: 2.8rem; 
+    }
+    h2 { 
+        font-size: 2rem; 
+    }
 
-    .hero-section, .recipes-resonance-section {
+    /* Hero Section Stacking */
+    .hero-section {
         flex-direction: column;
         text-align: center;
         padding: 3rem 0;
+        gap: 2rem;
     }
-    
-    .hero-image, .resonance-images {
+    .hero-image {
         width: 100%;
-        max-width: 600px;
+        max-width: 500px;
+        order: -1; 
+    }
+    .hero-stats { 
+        justify-content: center; 
+        gap: 1.5rem;
+    }
+    .stat-item {
+        padding-right: 1.5rem; /* Reduce padding */
+    }
+
+    /* Recipes Resonance Section Stacking */
+    .recipes-resonance-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 3rem;
+        padding: 4rem 0;
+    }
+    .recipes-resonance-section::before {
+        top: -15px; /* Adjust slant position for smaller screen */
+        height: 20px;
+    }
+
+    .resonance-content {
+        padding-right: 0;
+    }
+    .resonance-images {
+        grid-template-columns: 1fr; /* Stack columns */
+        max-width: 500px;
         margin: 0 auto;
     }
-    .hero-stats { justify-content: center; }
-
-    .recipes-resonance-section { background: var(--color-background-light); }
-    .resonance-images {
-        grid-template-columns: 1fr;
+    .sub-resonance-images {
+        flex-direction: row; 
+        gap: 15px;
+        justify-content: space-between;
     }
-    .main-resonance-image { grid-column: 1 / span 1; grid-row: auto; }
-    .sub-resonance-images { flex-direction: row; }
-    .sub-resonance-images img { height: 100px; }
-
-    .popular-food-cards { flex-wrap: wrap; }
-
-    .testimonial-grid { grid-template-columns: 1fr; }
+    .sub-resonance-images img {
+        height: 120px;
+        width: 30%; /* Make them fit three across */
+    }
     
+    /* Popular Food Section */
+    .popular-food-cards { 
+        flex-wrap: wrap; 
+        gap: 1.5rem;
+    }
+    .food-card {
+        width: 45%; /* Two cards per row */
+        height: 320px;
+    }
+
+    /* Testimonial Grid */
+    .testimonial-grid { 
+        grid-template-columns: 1fr; /* Stack testimonials vertically */
+        margin-top: 2rem;
+    }
+
+    /* Footer Stacking */
     .footer-content {
         flex-direction: column;
-        gap: 2rem;
-        text-align: center;
+        gap: 2.5rem;
+        text-align: left; 
     }
     .footer-links {
-        gap: 2rem;
-        justify-content: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1rem;
     }
     .footer-column { text-align: left; }
+    .footer-newsletter { width: 100%; }
+    .footer-newsletter form { display: flex; width: 100%; }
+    .footer-newsletter input[type="email"] { flex-grow: 1; width: auto; }
 }
 
-@media (max-width: 768px) {
-    .nav-links { display: none; }
+/* Mobile Phone Adjustments (max-width: 576px) */
+@media (max-width: 576px) {
+    /* Base Layout & Text Scaling */
+    .navbar, .footer-content, .footer-bottom { 
+        padding-left: 4%; 
+        padding-right: 4%; 
+    }
+    h1 { 
+        font-size: 2.2rem; 
+    }
+    h2 { 
+        font-size: 1.8rem; 
+    }
+    
+    /* Hero Stats Stacking */
+    .hero-stats {
+        flex-direction: column; /* Stack stats vertically */
+        gap: 1rem;
+        align-items: center;
+    }
+    .stat-item {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    /* Recipes Resonance Image Stacking */
+    .sub-resonance-images {
+        flex-direction: column; /* Stack small images vertically */
+    }
+    .sub-resonance-images img {
+        width: 100%; /* Full width */
+        height: 150px;
+    }
+
+    /* Popular Food */
+    .popular-food-cards { 
+        flex-direction: column; /* Stack food cards vertically */
+        align-items: center;
+    }
+    .food-card {
+        width: 90%;
+    }
+    .food-card img {
+        max-width: 150px; /* Shrink card image on mobile */
+        max-height: 150px;
+    }
+
+    /* Footer Links Stacking */
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .footer-column { text-align: center; }
+    .footer-newsletter input[type="email"] {
+        width: 60%; 
+    }
 }
