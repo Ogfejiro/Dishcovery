@@ -1,0 +1,389 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+html{
+  font-size: 42.5%;
+}
+@media(max-width:1200px){
+  html{
+  font-size: 42.5%;
+}
+}
+@media(max-width:1100px){
+  html{
+  font-size: 25.5%;
+}
+}
+body{
+  background: #FFFFFF;
+}
+
+/*header styling*/
+.dishcovery__hero--header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem ;
+  border-bottom: 1px solid #CFCFCF;
+  width: 100%;
+  background: #ffffff;
+}
+
+/*logo styling since I can't access the image so i can make the position flex display properly*/
+.hero__header--logo img{
+  width: 20rem;
+}
+
+
+.hero__header--nav{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header__nav--link{
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+.hero__header--btnContainer{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header__btn--primary{
+  color: #D84444;
+  border: 1px solid #D84444;
+  background: transparent;
+  padding: .5rem 2.2rem;
+  border-radius: .5rem;
+}
+.header__btn--secondary{
+  color: #fff;
+  border: 1px solid #D84444;
+  background: #D84444;
+  padding: .5rem 2.2rem;
+  border-radius: .5rem;
+}
+
+
+/* hero section1 primary styling beginning*/
+.section1__secondary{
+  padding: 10rem 5rem;
+}
+.section1__primary{
+  padding: 40rem 5rem;
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+/* intro styling beginning*/
+.section1__primary--intro{
+  width: 34%;
+  padding: 0rem 9rem 3rem 0;
+  margin-left: 20rem;
+}
+.section1__primary--intro h1{
+  font-size: 5rem;
+  margin-bottom: 3rem;
+}
+.section1__primary--intro p{
+  font-size: 1.8rem;
+  margin-bottom: 3rem;
+  color: #616161;
+  font-weight: 400;
+}
+.search__box{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50rem;
+  margin-bottom: 4rem;
+}
+.search__input--box{
+  width: 34rem;
+  height: 3rem;
+  border: 1px solid #D84444;
+  display: flex;
+  align-items: center;
+  border-radius: .5rem;
+}
+.search__box--input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: .5rem;
+  padding: .5rem 1rem;
+}
+.search__box--btn{
+  color: #fff;
+  background: #D84444;
+  border-radius: .5rem;
+  padding: .7rem 2rem;
+  border: none;
+}
+.search__input--box i{
+ 
+  font-size: 2.5rem;
+  color: #616161;
+}
+/*amount of cities and users*/
+.amount{
+  display: flex;
+  gap: 4rem;
+}
+.amount div h2{
+  font-size: 2rem;
+  color: #D84444;
+}
+.amount div span{
+  font-weight: 500;
+}
+/* intro styling ending*/
+
+/* section1 primary image styling */
+
+.section1__primary--image img{
+  width: 80rem;
+}
+
+/*seperator styling*/
+
+.hr1{
+  border: none;
+  width: 66rem;
+  background: #F8D148;
+  height: 2.5rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  margin: 2px auto;
+}
+
+/* section1__secondary styling beginning*/
+.section1__secondary{
+  padding: 8rem;
+  position: relative;
+  height: 120vh;
+  margin-bottom: 8rem;
+}
+.section1__secondary--image1 img{
+  height: 107rem;
+}
+.section1__secondary--image1{
+  position: absolute;
+  top: 8rem;
+  right: 10rem;
+}
+.section1__secondary--image2 img{
+  width: 52rem; 
+  height: 39rem;
+}
+.section1__secondary--image2{
+  position: absolute;
+  bottom: -2rem;
+  left: 115.2rem;
+  transform: translateX(-50%);
+}
+.section1__secondary--image3 img{
+   width: 52rem; 
+  height: 39rem;
+}
+.section1__secondary--image3{
+  position: absolute;
+  bottom: -2rem;
+  left: 55rem;
+  transform: translateX(-50%);
+}
+@media(max-width:1100px){
+ .section1__secondary--image2{
+  position: absolute;
+  bottom: 50rem;
+  left: 180rem;
+  transform: translateX(-50%);
+}
+.section1__secondary--image3{
+  position: absolute;
+  bottom: 50rem;
+  left: 55rem;
+  transform: translateX(-50%);
+}
+}
+.section1__secondary--intro{
+  width: 35%;
+  padding: 0rem 20rem 3rem 0;
+  margin-left: 20rem;
+}
+.section1__secondary--intro h1{
+  font-size: 5rem;
+  margin-bottom: 3rem;
+}
+.section1__secondary--intro p{
+  font-size: 1.7rem;
+  color: #616161;
+  font-weight: 400;
+  line-height: 1.3;
+}
+/*hero section1 primary styling ending*/
+
+
+/*hero section2 styling beginning*/
+.section2{
+  background: #FEFAEE;
+  padding: 4rem;
+}
+.popular__foods{
+  text-align: center;
+}
+.popular__foods--intro{
+  width: 45rem;
+  margin: 3rem auto;
+}
+.popular__foods--intro h1{
+  font-size: 4.5rem;
+  margin-bottom: 1rem;
+}
+.popular__foods--intro p{
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  color: #616161;
+  font-weight: 400;
+  line-height: 1.3;
+}
+.popular__foods--ratings{
+  display: flex;
+  justify-content: space-around;
+}
+.popular__ratings--container2,.popular__ratings--container3, .popular__ratings--container1{
+  width: 25rem;
+  height: 40rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 1rem;
+}
+.popular__ratings--container2{
+  margin-top: 20rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.popular__food--image{
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+}
+.food__rating{
+  background: transparent;
+  height: 8rem;
+  padding-top: 4rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+.reviews{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.review__intro{
+  width: 45rem;
+  margin: 3rem auto;
+  text-align: center;
+}
+.review__intro h1{
+  font-size: 4.5rem;
+  margin-bottom: 3rem;
+}
+.review__intro p{
+  font-size: 1.3rem;
+}
+.review__card1, .review__card2, .review__card3,.review__card4{
+  width: 45rem;
+  border-radius: 1rem;
+  padding: 4rem 1.67rem;
+}
+.review__card1{
+  background: #F8D148;
+}
+.review__card2{
+  background: #D84444;
+}
+.review__card3{
+  background: #518EF8;
+}
+.review__card4{
+  background: #27AE61;
+}
+.reviews__card--container{
+  display: grid;
+  grid-template-columns: repeat(2, 45rem);
+  gap: 3rem;
+}
+.customer__info{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  margin-bottom: 4rem;
+}
+.customer__image{
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.customer__image img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.customer__name{
+  font-size: 2rem;
+  font-weight: 600;
+}
+.customer__review{
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 600;
+}
+.hero__footer{
+  position: relative;
+  height: 50rem;
+  padding: 14rem 25em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.hero__footer::before{
+  content: " ";
+  position: absolute;
+  background-image: url(onboarding__footer__image.jpg);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.5;
+}
+.footer__logo img{
+  height: 10rem;
+}
+.footer__rights{
+  font-size: 1.5rem;
+  color: #616161;
+}
