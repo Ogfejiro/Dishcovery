@@ -10,7 +10,7 @@ body {
   background: #f9f9f9;
   color: #333;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll due to responsive elements */
 }
 
 /* === Layout === */
@@ -19,20 +19,22 @@ body {
   min-height: 100vh;
 }
 
-/* === Sidebar === */
+/* === Sidebar (Desktop) === */
 .sidebar {
   width: 250px;
   background: #f44336;
   color: #fff;
-  padding: 1rem 1rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* keeps back button at bottom */
+  justify-content: space-between;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
-  overflow: hidden; /* no scrolling */
+  overflow-y: auto; /* Allows scrolling if menu is long */
+  z-index: 10;
+  transition: transform 0.3s ease; /* For mobile toggle */
 }
 
 .sidebar .logo {
@@ -45,25 +47,26 @@ body {
 }
 
 .sidebar .logo img {
-  width: 120px; /* smaller logo to fit everything */
+  width: 120px;
   height: auto;
 }
 
 .sidebar .menu {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* reduce gap to fit all links */
+  gap: 0.5rem;
+  flex-grow: 1; /* Allows menu to occupy space */
 }
 
 .sidebar .menu-item {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 0.8rem;
+  padding: 0.8rem;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.8rem;
   transition: 0.3s;
   white-space: nowrap;
 }
@@ -74,12 +77,10 @@ body {
   color: #f44336;
 }
 
-/* === Back to Dishcovery Button === */
 .back-dashboard {
   background: #fff;
   color: #f44336;
-  text-decoration: none;
-  padding: 0.6rem 0.8rem;
+  padding: 0.8rem;
   border-radius: 8px;
   text-align: center;
   display: flex;
@@ -88,20 +89,19 @@ body {
   gap: 0.5rem;
   font-weight: 600;
   transition: 0.3s ease;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .back-dashboard:hover {
   background: #ffe2e2;
 }
 
-/* === Main Content === */
+/* === Main Content (Desktop) === */
 .main {
   flex: 1;
-  margin-left: 250px; /* account for fixed sidebar */
+  margin-left: 250px; /* Account for fixed sidebar */
   padding: 2rem;
   min-height: 100vh;
-  overflow-y: auto; /* main scrollable area */
 }
 
 h1, h2 {
@@ -148,9 +148,10 @@ h1, h2 {
 
 .recipe-table th,
 .recipe-table td {
-  padding: 0.6rem 0.8rem;
+  padding: 0.8rem;
   border-bottom: 1px solid #eee;
   text-align: left;
+  font-size: 1.4rem;
 }
 
 .recipe-table th {
@@ -171,29 +172,39 @@ h1, h2 {
   padding: 1rem;
 }
 
-/* === Add Page === */
+.action-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #f44336;
+  margin: 0 5px;
+  font-size: 1.1em;
+  padding: 0;
+}
+
+/* === Add Page Layout === */
 .add-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1.2fr; /* Slightly favor the form on desktop */
+  gap: 2rem;
   align-items: start;
   margin-top: 1rem;
 }
 
 .recipe-form {
   background: #fff;
-  padding: 1.2rem;
+  padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .form-group {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
 }
 
 .form-group label {
   font-weight: 500;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
   display: block;
 }
 
@@ -201,7 +212,7 @@ h1, h2 {
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
@@ -217,12 +228,14 @@ h1, h2 {
 .submit-btn {
   background: #f44336;
   color: #fff;
-  padding: 0.7rem 1rem;
+  padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   transition: background 0.3s;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .submit-btn:hover {
@@ -236,17 +249,16 @@ h1, h2 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   text-align: left;
-  margin-top: 1rem;
 }
 
 .preview-card img {
   width: 100%;
-  height: 180px;
+  height: 200px;
   object-fit: cover;
 }
 
 .preview-card .info {
-  padding: 0.8rem;
+  padding: 1rem;
 }
 
 .preview-card .tag {
@@ -270,27 +282,70 @@ h1, h2 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.6);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 200;
-  overflow-y: auto;
+  padding: 20px;
 }
 
 .modal.active {
   display: flex;
-  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
   background: #fff;
-  padding: 1.8rem;
+  padding: 2rem;
   border-radius: 12px;
   text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content i {
+  font-size: 3rem;
+  color: #4CAF50;
+  margin-bottom: 1rem;
+}
+
+.modal-content h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.modal-content p {
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+#closeModal, #closeEditModal, .cancel-btn {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+#closeModal {
+  background: #f44336;
+  color: white;
+}
+
+#closeModal:hover {
+  background: #d7372b;
+}
+
+.cancel-btn {
+  background: #ccc;
+  color: #333;
+  margin-left: 10px;
+}
+
+.cancel-btn:hover {
+  background: #aaa;
 }
 
 /* === Page Switching === */
@@ -302,34 +357,101 @@ h1, h2 {
   display: block;
 }
 
-.img {
-  width: 120px;
-  height: auto;
-}
+/* ========================================= */
+/* 📱 RESPONSIVE STYLES (Mobile First Approach) */
+/* ========================================= */
 
-/* === Responsive === */
-@media (max-width: 1024px) {
+/* Mobile (up to 768px) */
+@media (max-width: 768px) {
   .sidebar {
-    width: 220px;
-  }
-
-  .main {
-    margin-left: 220px;
-  }
-}
-
-@media (max-width: 800px) {
-  .add-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    width: 100%;
     position: relative;
-    padding-bottom: 1rem;
+    width: 100%;
+    height: auto;
+    bottom: auto;
+    padding: 1rem;
+  }
+
+  .sidebar .logo {
+    display: none;
+  }
+
+  .sidebar .menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar .menu-item {
+    flex: 1 1 auto;
+    justify-content: center;
+    font-size: 1.4rem;
+    padding: 0.6rem;
+  }
+
+  .back-dashboard {
+    width: 100%;
+    margin-top: 0.5rem;
   }
 
   .main {
     margin-left: 0;
+    padding: 1.5rem;
+  }
+
+  .stats {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    flex: 1 1 100%;
+  }
+
+  .recipe-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .recipe-table thead, .recipe-table tbody, .recipe-table tr {
+    display: block;
+  }
+
+  .recipe-table td, .recipe-table th {
+    white-space: nowrap;
+    min-width: 80px;
+  }
+
+  .add-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .preview-card {
+    order: -1;
+    margin-bottom: 1rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+  }
+}
+
+/* Tablet (768px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .main {
+    margin-left: 180px;
+    padding: 1.5rem;
+  }
+
+  .add-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
   }
 }

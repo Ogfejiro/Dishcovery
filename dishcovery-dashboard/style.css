@@ -265,10 +265,12 @@ body {
 }
 
 /* ===========================
-    RECIPE DETAIL PAGE STYLING
+    RECIPE DETAIL PAGE STYLING (UPDATED)
 =========================== */
 .recipe-detail {
     padding-top: 1rem;
+    max-width: 1200px; /* Optional: Constrain width for very large screens */
+    margin: 0 auto;
 }
 
 .recipe-detail-content {
@@ -278,24 +280,44 @@ body {
     align-items: flex-start;
     background: #fff;
     padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 15px; /* Slightly larger border-radius for the main card */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* More prominent shadow */
     position: relative;
+    margin-top: 1rem;
 }
 
+/* Back button styling (moved from JS inline style) */
+.recipe-detail .back-btn {
+    background: none;
+    border: none;
+    color: #f44336; /* Match main brand color */
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 10px 0 20px 0;
+    transition: color 0.2s;
+}
+.recipe-detail .back-btn:hover {
+    color: #e74c3c;
+}
+
+/* Image Container */
 .image-container {
     position: relative;
     grid-column: 1 / 2;
 }
-.recipe-detail img {
+
+.detail-img { /* Use the class from JS */
     width: 100%;
     height: 450px;
     border-radius: 10px;
     object-fit: cover;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 .image-dots {
     position: absolute;
-    bottom: 10px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -308,113 +330,134 @@ body {
     border-radius: 50%;
     opacity: 0.5;
     transition: 0.3s;
+    cursor: pointer;
 }
 .image-dots .dot.active {
     opacity: 1;
     background: #f44336;
 }
 
+/* Recipe Content */
 .recipe-text {
     grid-column: 2 / 3;
-    padding-top: 1rem;
+    padding-top: 0; /* Align top with image container */
 }
 
 .recipe-text h2 {
     color: #333;
-    font-size: 1.8rem;
+    font-size: 2rem;
     margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.tag { /* Re-use existing tag style, ensure it's on a button */
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.rating-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.star-rating i {
+    color: gold;
+    font-size: 1.1rem;
+}
+
+.rating-info .rating-value {
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.rating-info .rating-count {
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: 400;
 }
 
 .recipe-meta-data {
     display: flex;
     gap: 1.5rem;
-    margin: 0.5rem 0 0.5rem 0;
-    color: #555;
+    margin: 1rem 0 1.5rem 0;
     font-size: 0.95rem;
-    font-weight: 600;
-    text-transform: uppercase;
+    color: #555;
+    font-weight: 500;
 }
 .recipe-meta-data p {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    color: #333;
-}
-.recipe-meta-data p span {
-    color: #555;
-    font-weight: 400;
-    text-transform: none;
 }
 .recipe-meta-data i {
     color: #f44336;
     font-size: 1rem;
 }
 
-.rating-info {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 1rem;
-}
-.star-rating i {
-    color: gold;
-    font-size: 0.9rem;
-}
-.rating-info .rating-value {
-    color: #555;
-    font-size: 0.9rem;
-}
-.rating-info i.fa-bookmark {
-    color: #777;
-    cursor: pointer;
-    font-size: 1.2rem;
-    margin-left: 0.5rem;
-}
-
 .description-text {
     margin: 1rem 0 2rem 0;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #555;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
+/* Nutrition Card Styling (Right side, below description on mobile) */
 .nutrition-card {
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 8px;
+    border: 1px solid #eee;
+    padding: 1.5rem;
+    border-radius: 10px;
     background: #fefefe;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
     margin-top: 2rem;
     width: 100%;
-    margin-bottom: 2rem;
 }
 
 .nutrition-card h3 {
     margin-top: 0;
-    font-size: 1.1rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #f44336; /* Red line separator */
+    padding-bottom: 0.7rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #333;
 }
 .nutrition-details p {
     display: flex;
     justify-content: space-between;
-    padding: 0.3rem 0;
-    font-size: 0.9rem;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+    border-bottom: 1px dashed #eee;
+}
+.nutrition-details p:last-child {
+    border-bottom: none;
 }
 .nutrition-details span {
-    font-weight: 600;
+    font-weight: 700;
+    color: #f44336;
 }
 
 
-.recipe-text h3 {
-    margin-top: 2rem;
+/* Ingredients & Instructions Section (Main Column - Left on Desktop) */
+
+.detail-main-section {
+    grid-column: 1 / 3; /* Span both columns */
+    padding: 20px;
+}
+
+.detail-main-section h3 {
+    margin-top: 2.5rem;
     color: #333;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #eee;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
+/* Ingredients List */
 #detailIngredients {
     list-style: none;
     padding-left: 0;
@@ -423,64 +466,113 @@ body {
 .ingredient-item {
     display: flex;
     justify-content: space-between;
-    padding: 0.6rem 0;
+    padding: 0.8rem 0;
     border-bottom: 1px solid #eee;
     align-items: center;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 .ingredient-item:last-child {
     border-bottom: none;
 }
+.ingredient-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #444;
+}
+.ingredient-name input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+.ingredient-name input[type="checkbox"]:checked {
+    border-color: #f44336;
+    background-color: #f44336;
+}
+.ingredient-name input[type="checkbox"]:checked::after {
+    content: '\f00c'; /* Font Awesome checkmark */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .ingredient-item span {
     color: #333;
-    font-weight: 500;
-    min-width: 50px;
+    font-weight: 600;
+    min-width: 60px;
     text-align: right;
 }
 
+/* Instructions List */
 #detailInstructions {
     list-style: none;
     padding-left: 0;
 }
 .instruction-item {
-    padding: 0.8rem 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+.instruction-item:last-child {
     border-bottom: none;
 }
 .instruction-item p {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    font-size: 0.95rem;
+    gap: 1.2rem;
+    font-size: 1rem;
     color: #444;
-    line-height: 1.4;
+    line-height: 1.6;
 }
 
 .instruction-number {
     background-color: #f44336;
     color: #fff;
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    width: 30px; /* Slightly larger number bubble */
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 1rem;
     flex-shrink: 0;
     font-weight: 600;
     margin-top: 2px;
 }
 
-.you-might-like {
+/* You Might Also Like Section */
+.you-might-like-section {
+    grid-column: 1 / 3;
+    padding: 20px;
+}
+.you-might-like-section h3.you-might-like {
     font-size: 1.5rem;
-    margin: 3rem 0 1rem;
+    margin: 1rem 0 1rem;
     color: #333;
+    font-weight: 700;
+    border-bottom: none; /* Override section H3 style */
+    padding-bottom: 0;
 }
 .you-might-like-grid {
     margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
 }
 
+
 /* ===========================
-    Responsive
+    Responsive Overrides for Detail Page
 =========================== */
 @media (max-width: 1024px) {
     .main {
@@ -509,16 +601,16 @@ body {
         padding: 1rem;
     }
 
-    .recipe-detail img {
-        height: auto;
+    .image-container, .recipe-text, .detail-main-section, .you-might-like-section {
+        grid-column: 1 / -1; /* Full width for all sections */
     }
 
-    .recipe-text {
-        grid-column: 1 / -1;
+    .detail-img {
+        height: 300px; /* Adjust image height for smaller screens */
     }
+
     .nutrition-card {
-        width: 100%;
-        float: none;
+        margin-top: 1.5rem;
     }
 }
 
@@ -529,6 +621,12 @@ body {
     .filters {
         flex-wrap: wrap;
         justify-content: center;
+    }
+    .recipe-text h2 {
+        font-size: 1.6rem;
+    }
+    .detail-img {
+        height: 250px;
     }
 }
 
@@ -542,20 +640,7 @@ body {
     .recipe-text h2 {
         font-size: 1.4rem;
     }
-    .recipe-detail img {
+    .detail-img {
         height: 250px;
     }
-}
-
-.back-btn {
-    background-color: #f5f5f5;
-    border: none;
-    padding: 8px 16px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 5px;
-}
-.back-btn:hover {
-    background-color: #e0e0e0;
 }

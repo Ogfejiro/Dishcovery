@@ -1,14 +1,14 @@
 /* --- Base Styles --- */
 :root {
-    --color-primary: #FF5A5F; /* Closest to the red/coral used for buttons and highlights */
+    --color-primary: #FF5A5F;
     --color-text-dark: #333;
     --color-text-light: #666;
-    --color-background-light: #FFF8F0; /* Light background for the main sections */
+    --color-background-light: #FFF8F0;
     --color-white: #fff;
-    --color-yellow: #FFD25E; /* Testimonial Yellow */
-    --color-red: #FA6065;    /* Testimonial Red */
-    --color-blue: #6392FF;   /* Testimonial Blue */
-    --color-green: #90B384;  /* A neutral green for the text in the image */
+    --color-yellow: #FFD25E;
+    --color-red: #FA6065;
+    --color-blue: #6392FF;
+    --color-green: #90B384;
     --font-family: 'Poppins', sans-serif;
 }
 
@@ -147,7 +147,7 @@ main {
     color: var(--color-text-light);
 }
 
-/* --- Swish Divider (Visual element from image) --- */
+/* --- Swish Divider --- */
 .swish-divider {
     height: 50px; 
     background: linear-gradient(to bottom, var(--color-background-light) 50%, #fff 50%);
@@ -164,84 +164,88 @@ main {
     width: 120%;
     height: 100%;
     background: var(--color-white);
-    transform: skewY(-2deg); /* Creates the gentle upward curve effect */
+    transform: skewY(-2deg);
     transform-origin: 0% 100%;
     z-index: 10;
 }
 
-/* --- 2. Recipes Resonance Section (Including the Strong Yellow Slant Line) --- */
+/* --- 2. Recipes Resonance Section --- */
 .recipes-resonance-section {
-    position: relative; /* Essential for positioning the yellow line */
     display: flex;
     gap: 5rem;
     padding: 6rem 0;
-    background: var(--color-white); /* Section background */
-    margin-top: -50px; /* Pull the section up to overlap the swish divider */
-    z-index: 10; /* Ensure this section sits above the hero content */
+    background: var(--color-white);
+    position: relative;
+    z-index: 10;
 }
 
-/* New Highly Visible Yellow Slant Line */
 .recipes-resonance-section::before {
     content: "";
     position: absolute;
-    top: -10px; /* Position it slightly above the section */
-    left: -5%; /* Extend it off the edges */
-    width: 110%; /* Make it wider than the screen */
-    height: 30px; /* Give it significant height/thickness */
+    top: -10px;
+    left: -5%;
+    width: 110%;
+    height: 30px;
     background: var(--color-yellow);
-    transform: skewY(-1.5deg); /* The slant effect */
-    z-index: 11; /* Ensure it's above the section content */
+    transform: skewY(-1.5deg);
+    z-index: 11;
 }
 
 .resonance-content {
     flex: 1;
-    padding-right: 4rem;
+    padding-right: 2rem; /* reduce padding so text and images are balanced */
 }
 
 .resonance-content h2 {
     color: var(--color-primary); 
 }
 
-.resonance-images {
-    flex: 1.5;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
+.resonance-content p {
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 2rem;
 }
 
+/* Resonance images container */
+.resonance-images {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end; 
+    flex: 1; /* make width equal to text */
+}
+
+/* Main image */
 .main-resonance-image {
-    grid-column: 1 / 2;
-    grid-row: 1 / span 2;
+    flex: 1;
+    max-width: 400px;
 }
 
 .main-resonance-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    height: auto;
+    border-radius: 16px;
+    background: none;
 }
 
+/* Sub-images beside main image */
 .sub-resonance-images {
-    grid-column: 2 / 3;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
 .sub-resonance-images img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    width: 180px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
 }
 
 /* --- 3. Popular Food Section --- */
 .popular-food-section {
     padding: 4rem 0 6rem;
     text-align: center;
-    background-color: var(--color-background-light); /* Ensure consistency */
+    background-color: var(--color-background-light);
 }
 
 .popular-food-section h2 {
@@ -265,7 +269,7 @@ main {
     width: 250px;
     height: 350px;
     background: var(--color-white);
-    border-radius: 50% / 20%; /* Creates the curved top edge effect */
+    border-radius: 50% / 20%;
     border: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
@@ -280,15 +284,15 @@ main {
     max-width: 200px;
     max-height: 200px;
     object-fit: cover;
-    border-radius: 50%; /* Circular image */
+    border-radius: 50%;
     margin-bottom: 1rem;
-    transform: translateY(-20px); /* Lifts image slightly above the card edge */
+    transform: translateY(-20px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .card-info {
     text-align: center;
-    margin-top: auto; 
+    margin-top: auto;
 }
 
 .card-info h3 {
@@ -371,7 +375,6 @@ main {
     left: 0;
     width: 100%;
     height: 250px;
-    background-image: url('https://via.placeholder.com/1920x250?text=Background+Recipe+Pattern');
     background-size: cover;
     background-position: center;
     opacity: 0.2; 
@@ -444,165 +447,95 @@ main {
     font-size: 0.9rem;
 }
 
-/* ------------------------------------------------------------------- */
 /* --- RESPONSIVE MEDIA QUERIES --- */
-/* ------------------------------------------------------------------- */
-
-/* Tablet and Small Desktop Adjustments (max-width: 992px) */
 @media (max-width: 992px) {
-    /* Base Layout & Text Scaling */
-    .navbar, .footer-content, .footer-bottom { 
-        padding-left: 5%; 
-        padding-right: 5%; 
-    }
-    main { 
-        padding: 0 5%; 
-    }
-    h1 { 
-        font-size: 2.8rem; 
-    }
-    h2 { 
-        font-size: 2rem; 
-    }
+    main, .navbar, .footer-content, .footer-bottom { padding: 0 5%; }
+    h1 { font-size: 2.8rem; }
+    h2 { font-size: 2rem; }
 
-    /* Hero Section Stacking */
-    .hero-section {
-        flex-direction: column;
-        text-align: center;
-        padding: 3rem 0;
-        gap: 2rem;
-    }
-    .hero-image {
-        width: 100%;
-        max-width: 500px;
-        order: -1; 
-    }
-    .hero-stats { 
-        justify-content: center; 
-        gap: 1.5rem;
-    }
-    .stat-item {
-        padding-right: 1.5rem; /* Reduce padding */
-    }
+    .hero-section { flex-direction: column; text-align: center; gap: 2rem; }
+    .hero-image { width: 100%; max-width: 500px; order: -1; }
+    .hero-stats { justify-content: center; gap: 1.5rem; }
+    .stat-item { padding-right: 1.5rem; }
 
-    /* Recipes Resonance Section Stacking */
-    .recipes-resonance-section {
-        flex-direction: column;
-        text-align: center;
-        gap: 3rem;
-        padding: 4rem 0;
-    }
-    .recipes-resonance-section::before {
-        top: -15px; /* Adjust slant position for smaller screen */
-        height: 20px;
-    }
-
-    .resonance-content {
-        padding-right: 0;
-    }
-    .resonance-images {
-        grid-template-columns: 1fr; /* Stack columns */
-        max-width: 500px;
-        margin: 0 auto;
-    }
-    .sub-resonance-images {
-        flex-direction: row; 
-        gap: 15px;
-        justify-content: space-between;
-    }
-    .sub-resonance-images img {
-        height: 120px;
-        width: 30%; /* Make them fit three across */
-    }
-    
-    /* Popular Food Section */
-    .popular-food-cards { 
-        flex-wrap: wrap; 
-        gap: 1.5rem;
-    }
-    .food-card {
-        width: 45%; /* Two cards per row */
-        height: 320px;
-    }
-
-    /* Testimonial Grid */
-    .testimonial-grid { 
-        grid-template-columns: 1fr; /* Stack testimonials vertically */
-        margin-top: 2rem;
-    }
-
-    /* Footer Stacking */
-    .footer-content {
-        flex-direction: column;
-        gap: 2.5rem;
-        text-align: left; 
-    }
-    .footer-links {
-        justify-content: space-between;
-        width: 100%;
-        gap: 1rem;
-    }
-    .footer-column { text-align: left; }
-    .footer-newsletter { width: 100%; }
-    .footer-newsletter form { display: flex; width: 100%; }
-    .footer-newsletter input[type="email"] { flex-grow: 1; width: auto; }
+    .recipes-resonance-section { flex-direction: column; gap: 2rem; padding: 4rem 0; }
+    .resonance-content { padding-right: 0; text-align: center; }
+    .resonance-images { flex-direction: column; align-items: center; }
+    .sub-resonance-images { flex-direction: row; justify-content: center; gap: 15px; }
+    .sub-resonance-images img { height: 120px; width: auto; }
 }
 
-/* Mobile Phone Adjustments (max-width: 576px) */
 @media (max-width: 576px) {
-    /* Base Layout & Text Scaling */
-    .navbar, .footer-content, .footer-bottom { 
-        padding-left: 4%; 
-        padding-right: 4%; 
-    }
-    h1 { 
-        font-size: 2.2rem; 
-    }
-    h2 { 
-        font-size: 1.8rem; 
-    }
-    
-    /* Hero Stats Stacking */
-    .hero-stats {
-        flex-direction: column; /* Stack stats vertically */
-        gap: 1rem;
-        align-items: center;
-    }
-    .stat-item {
-        border-right: none;
-        padding-right: 0;
-    }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
 
-    /* Recipes Resonance Image Stacking */
-    .sub-resonance-images {
-        flex-direction: column; /* Stack small images vertically */
-    }
-    .sub-resonance-images img {
-        width: 100%; /* Full width */
-        height: 150px;
-    }
+    .hero-stats { flex-direction: column; align-items: center; gap: 1rem; }
+    .sub-resonance-images { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .sub-resonance-images img { width: 100px; height: auto; }
+    .popular-food-cards { flex-direction: column; align-items: center; }
+    .food-card { width: 90%; }
+    .footer-links { flex-direction: column; align-items: center; gap: 1.5rem; }
+}
 
-    /* Popular Food */
-    .popular-food-cards { 
-        flex-direction: column; /* Stack food cards vertically */
-        align-items: center;
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    .food-card {
-        width: 90%;
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
-    .food-card img {
-        max-width: 150px; /* Shrink card image on mobile */
-        max-height: 150px;
-    }
+}
 
-    /* Footer Links Stacking */
-    .footer-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-    .footer-column { text-align: center; }
-    .footer-newsletter input[type="email"] {
-        width: 60%; 
-    }
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes buttonHover {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Hero section */
+.hero-content h1,
+.hero-content p,
+.hero-stats,
+.btn-discover {
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+}
+
+/* Buttons hover */
+.btn:hover {
+    animation: buttonHover 0.4s ease forwards;
+}
+
+/* Stats count-up animation */
+.stat-number {
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+    animation-delay: 0.5s;
+}
+
+/* Popular food cards */
+.popular-food-cards .food-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.popular-food-cards .food-card:nth-child(1) { animation-delay: 0.2s; }
+.popular-food-cards .food-card:nth-child(2) { animation-delay: 0.4s; }
+.popular-food-cards .food-card:nth-child(3) { animation-delay: 0.6s; }
+
+/* Testimonials */
+.testimonial-card {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.3s;
 }
