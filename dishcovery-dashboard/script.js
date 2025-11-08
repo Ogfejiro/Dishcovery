@@ -1,5 +1,5 @@
 // ==============================
-// Dishcovery Dashboard JS (Updated for LocalStorage Sync & Auto-Refresh)
+// Dishcovery Dashboard JS (Full Code with Sync Fix)
 // ==============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -16,242 +16,164 @@ document.addEventListener("DOMContentLoaded", () => {
     const recipeDetailPage = document.getElementById("recipeDetailPage");
 
     // ===============================
-    // 💾 DATA LOADER: COMBINE STATIC AND ADMIN RECIPES
+    // 💾 DATA LOADER: 12 STATIC RECIPES (Must match Admin.js list exactly)
     // ===============================
 
-    // 1. Static Recipes (NOTE: Category values are converted to lowercase for filtering)
+    // NOTE: Category values are converted to lowercase for filtering
     const STATIC_RECIPES = [
         {
             _id: 1,
             name: "Pancakes",
-            category: "breakfast", // CONVERTED TO LOWERCASE
-            image:
-                "https://media.istockphoto.com/id/518525367/photo/breakfast-pancakes-and-syrup.webp?a=1&b=1&s=612x612&w=0&k=20&c=aU5gXk1huHPXP0tupPAvQP8-6tkxpQ28zziXIxyMOG4=",
+            category: "breakfast", 
+            image: "https://media.istockphoto.com/id/518525367/photo/breakfast-pancakes-and-syrup.webp?a=1&b=1&s=612x612&w=0&k=20&c=aU5gXk1huHPXP0tupPAvQP8-6tkxpQ28zziXIxyMOG4=",
             cookingTime: 15,
-            description:
-                "Fluffy pancakes served warm with syrup and fresh berries — the perfect breakfast treat.",
-            ingredients: [
-                "1 ½ cups flour", "1 tbsp sugar", "2 tsp baking powder", "1 cup milk", "1 egg", "2 tbsp butter, melted",
-            ],
-            instructions: [
-                "In a bowl, whisk flour, sugar, and baking powder.", "Add milk, egg, and melted butter; whisk until smooth.",
-                "Heat a nonstick pan and pour ¼ cup batter per pancake.", "Cook both sides until golden brown. Serve with syrup.",
-            ],
+            description: "Fluffy pancakes served warm with syrup and fresh berries — the perfect breakfast treat.",
+            ingredients: ["1 ½ cups flour", "1 tbsp sugar", "2 tsp baking powder", "1 cup milk", "1 egg", "2 tbsp butter, melted"],
+            instructions: ["In a bowl, whisk flour, sugar, and baking powder.", "Add milk, egg, and melted butter; whisk until smooth.", "Heat a nonstick pan and pour ¼ cup batter per pancake.", "Cook both sides until golden brown. Serve with syrup."],
         },
         {
             _id: 2,
             name: "Jollof Rice",
-            category: "lunch", // CONVERTED TO LOWERCASE
-            image:
-                "https://plus.unsplash.com/premium_photo-1694141252774-c937d97641da?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8am9sbG9mJTIwcmljZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
+            category: "lunch", 
+            image: "https://plus.unsplash.com/premium_photo-1694141252774-c937d97641da?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8am9sbG9mJTIwcmljZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 45,
-            description:
-                "A West African classic — spicy rice cooked with tomatoes, peppers, and seasoning.",
-            ingredients: [
-                "2 cups rice", "5 tomatoes", "1 red bell pepper", "1 onion", "Seasoning cubes and salt",
-            ],
-            instructions: [
-                "Blend tomatoes, pepper, and onion.", "Cook sauce with oil and seasoning until thick.",
-                "Add rice and water, cover, and simmer until done.",
-            ],
+            description: "A West African classic — spicy rice cooked with tomatoes, peppers, and seasoning.",
+            ingredients: ["2 cups rice", "5 tomatoes", "1 red bell pepper", "1 onion", "Seasoning cubes and salt"],
+            instructions: ["Blend tomatoes, pepper, and onion.", "Cook sauce with oil and seasoning until thick.", "Add rice and water, cover, and simmer until done."],
         },
         {
             _id: 3,
             name: "Puff Puff",
-            category: "snacks", // CONVERTED TO LOWERCASE
-            image:
-                "https://images.unsplash.com/photo-1664993085274-80c6ba725ccc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVmZiUyMHB1ZmZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
+            category: "snacks", 
+            image: "https://images.unsplash.com/photo-1664993085274-80c6ba725ccc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVmZiUyMHB1ZmZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 30,
-            description:
-                "Fluffy deep-fried dough balls — slightly sweet and addictive, perfect for snacks.",
-            ingredients: [
-                "2 cups flour", "½ cup sugar", "2 tsp yeast", "1 cup warm water", "Oil for frying",
-            ],
-            instructions: [
-                "Mix flour, sugar, yeast, and water into thick batter.", "Allow to rise for 1 hour.",
-                "Fry in hot oil until golden brown.",
-            ],
+            description: "Fluffy deep-fried dough balls — slightly sweet and addictive, perfect for snacks.",
+            ingredients: ["2 cups flour", "½ cup sugar", "2 tsp yeast", "1 cup warm water", "Oil for frying"],
+            instructions: ["Mix flour, sugar, yeast, and water into thick batter.", "Allow to rise for 1 hour.", "Fry in hot oil until golden brown."],
         },
         {
             _id: 4,
             name: "Grilled Chicken",
-            category: "dinner", // CONVERTED TO LOWERCASE
-            image:
-                "https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JpbGxlZCUyMGNoaWNrZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
+            category: "dinner", 
+            image: "https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JpbGxlZCUyMGNoaWNrZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 35,
-            description:
-                "Juicy grilled chicken marinated in herbs and spices — smoky and delicious.",
-            ingredients: [
-                "4 chicken pieces", "2 tbsp olive oil", "Garlic, pepper, salt", "1 tsp paprika",
-            ],
-            instructions: [
-                "Marinate chicken in all ingredients for 30 mins.", "Grill each side for 10–15 mins until golden brown.",
-            ],
+            description: "Juicy grilled chicken marinated in herbs and spices — smoky and delicious.",
+            ingredients: ["4 chicken pieces", "2 tbsp olive oil", "Garlic, pepper, salt", "1 tsp paprika"],
+            instructions: ["Marinate chicken in all ingredients for 30 mins.", "Grill each side for 10–15 mins until golden brown."],
         },
         {
             _id: 5,
             name: "Smoothie",
-            category: "drinks", // CONVERTED TO LOWERCASE
-            image:
-                "https://images.unsplash.com/photo-1615478503562-ec2d8aa0e24e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21vb3RoaWV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
+            category: "drinks", 
+            image: "https://images.unsplash.com/photo-1615478503562-ec2d8aa0e24e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21vb3RoaWV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 5,
-            description:
-                "A refreshing fruit smoothie packed with vitamins and a cool burst of energy.",
-            ingredients: [
-                "1 banana", "1 cup strawberries", "1 cup milk", "1 tbsp honey",
-            ],
+            description: "A refreshing fruit smoothie packed with vitamins and a cool burst of energy.",
+            ingredients: ["1 banana", "1 cup strawberries", "1 cup milk", "1 tbsp honey"],
             instructions: ["Blend all ingredients until smooth.", "Serve chilled."],
         },
         {
             _id: 6,
             name: "Avocado Toast",
-            category: "breakfast", // CONVERTED TO LOWERCASE
-            image:
-                "https://media.istockphoto.com/id/1518833009/photo/avocado-toast.webp?a=1&b=1&s=612x612&w=0&k=20&c=6m3ocHfARNgjtgykJ6nm2nP9ziHv_5bNA11G-XgEcs4=",
+            category: "breakfast", 
+            image: "https://media.istockphoto.com/id/1518833009/photo/avocado-toast.webp?a=1&b=1&s=612x612&w=0&k=20&c=6m3ocHfARNgjtgykJ6nm2nP9ziHv_5bNA11G-XgEcs4=",
             cookingTime: 10,
-            description:
-                "Toasted bread topped with creamy avocado and seasonings — simple and satisfying.",
-            ingredients: [
-                "2 slices bread", "1 avocado", "Salt, pepper, lemon juice",
-            ],
-            instructions: [
-                "Toast bread slices.", "Mash avocado and season with salt, pepper, and lemon.",
-                "Spread on toast and serve.",
-            ],
+            description: "Toasted bread topped with creamy avocado and seasonings — simple and satisfying.",
+            ingredients: ["2 slices bread", "1 avocado", "Salt, pepper, lemon juice"],
+            instructions: ["Toast bread slices.", "Mash avocado and season with salt, pepper, and lemon.", "Spread on toast and serve."],
         },
         {
             _id: 7,
             name: "Spaghetti Bolognese",
-            category: "lunch", // CONVERTED TO LOWERCASE
-            image:
-                "https://images.unsplash.com/photo-1598866594230-a7c12756260f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3BhZ2hldHRpJTIwYm9sb2duZXNlfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500",
+            category: "lunch", 
+            image: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3BhZ2hldHRpJTIwYm9sb2duZXNlfGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 40,
-            description:
-                "Classic Italian pasta with rich tomato meat sauce — comforting and hearty.",
-            ingredients: [
-                "200g spaghetti", "150g minced meat", "Tomato sauce", "Garlic, onion, salt",
-            ],
-            instructions: [
-                "Cook spaghetti and set aside.", "Sauté garlic, onion, and meat; add sauce and simmer.",
-                "Mix with spaghetti and serve warm.",
-            ],
+            description: "Classic Italian pasta with rich tomato meat sauce — comforting and hearty.",
+            ingredients: ["200g spaghetti", "150g minced meat", "Tomato sauce", "Garlic, onion, salt"],
+            instructions: ["Cook spaghetti and set aside.", "Sauté garlic, onion, and meat; add sauce and simmer.", "Mix with spaghetti and serve warm."],
         },
         {
             _id: 8,
             name: "Chicken Salad",
-            category: "dinner", // CONVERTED TO LOWERCASE
-            image:
-                "https://images.unsplash.com/photo-1605291535065-e1d52d2b264a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMHNhbGFkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500",
+            category: "dinner", 
+            image: "https://images.unsplash.com/photo-1605291535065-e1d52d2b264a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMHNhbGFkfGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 20,
-            description:
-                "Light and healthy — grilled chicken tossed with crisp vegetables and dressing.",
-            ingredients: [
-                "1 chicken breast", "Lettuce, tomato, cucumber", "Salad dressing",
-            ],
-            instructions: [
-                "Grill chicken and slice.", "Toss all ingredients with dressing.",
-            ],
+            description: "Light and healthy — grilled chicken tossed with crisp vegetables and dressing.",
+            ingredients: ["1 chicken breast", "Lettuce, tomato, cucumber", "Salad dressing"],
+            instructions: ["Grill chicken and slice.", "Toss all ingredients with dressing."],
         },
         {
             _id: 9,
             name: "Fried Rice",
-            category: "lunch", // CONVERTED TO LOWERCASE
-            image:
-                "https://media.istockphoto.com/id/2154268555/photo/asian-chicken-fried-rice-comfort-food-takeaway-food-top-down-rice-dish-photography.webp?a=1&b=1&s=612x612&w=0&k=20&c=Y2qaDNcEUamRMoa-vJw4Ulp_CE8fZFXyrkAw1vAIAdg=",
+            category: "lunch", 
+            image: "https://media.istockphoto.com/id/2154268555/photo/asian-chicken-fried-rice-comfort-food-takeaway-food-top-down-rice-dish-photography.webp?a=1&b=1&s=612x612&w=0&k=20&c=Y2qaDNcEUamRMoa-vJw4Ulp_CE8fZFXyrkAw1vAIAdg=",
             cookingTime: 35,
-            description:
-                "Colorful rice stir-fried with veggies and proteins — a Nigerian party favorite.",
-            ingredients: [
-                "2 cups rice", "Carrots, peas, sweetcorn", "Soy sauce", "Seasoning cubes",
-            ],
-            instructions: [
-                "Parboil rice and set aside.", "Stir-fry vegetables and add rice.", "Add soy sauce and seasoning, mix well.",
-            ],
+            description: "Colorful rice stir-fried with veggies and proteins — a Nigerian party favorite.",
+            ingredients: ["2 cups rice", "Carrots, peas, sweetcorn", "Soy sauce", "Seasoning cubes"],
+            instructions: ["Parboil rice and set aside.", "Stir-fry vegetables and add rice.", "Add soy sauce and seasoning, mix well."],
         },
         {
             _id: 10,
             name: "Chapman Drink",
-            category: "drinks", // CONVERTED TO LOWERCASE
-            image:
-                "https://images.unsplash.com/photo-1557935260-03ada3026d41?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hhcG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
+            category: "drinks", 
+            image: "https://images.unsplash.com/photo-1557935260-03ada3026d41?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hhcG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 5,
-            description:
-                "Popular Nigerian cocktail made with Fanta, Sprite, and bitters — sweet and zesty.",
-            ingredients: [
-                "Fanta, Sprite", "Angostura bitters", "Grenadine syrup", "Cucumber slices & ice",
-            ],
-            instructions: [
-                "Mix all ingredients in a tall glass.", "Add ice and cucumber slices to garnish.",
-            ],
+            description: "Popular Nigerian cocktail made with Fanta, Sprite, and bitters — sweet and zesty.",
+            ingredients: ["Fanta, Sprite", "Angostura bitters", "Grenadine syrup", "Cucumber slices & ice"],
+            instructions: ["Mix all ingredients in a tall glass.", "Add ice and cucumber slices to garnish."],
         },
         {
             _id: 11,
             name: "Suya",
-            category: "dinner", // CONVERTED TO LOWERCASE
-            image:
-                "https://media.istockphoto.com/id/2182713829/photo/nigerian-beef-suya-steak-served-at-a-party.webp?a=1&b=1&s=612x612&w=0&k=20&c=h_cPDQaG20hs0CZe1upzFpIMoHwXji97TwjRxojCKT8=",
+            category: "dinner", 
+            image: "https://media.istockphoto.com/id/2182713829/photo/nigerian-beef-suya-steak-served-at-a-party.webp?a=1&b=1&s=612x612&w=0&k=20&c=h_cPDQaG20hs0CZe1upzFpIMoHwXji97TwjRxojCKT8=",
             cookingTime: 25,
-            description:
-                "Spicy Nigerian street food — grilled beef skewers coated with yaji pepper mix.",
-            ingredients: [
-                "500g beef", "Suya spice (yaji)", "Groundnut oil, salt",
-            ],
-            instructions: [
-                "Cut beef into strips, season with suya spice.", "Thread on sticks and grill until cooked.",
-            ],
+            description: "Spicy Nigerian street food — grilled beef skewers coated with yaji pepper mix.",
+            ingredients: ["500g beef", "Suya spice (yaji)", "Groundnut oil, salt"],
+            instructions: ["Cut beef into strips, season with suya spice.", "Thread on sticks and grill until cooked."],
         },
         {
             _id: 12,
             name: "Fruit Parfait",
-            category: "snacks", // CONVERTED TO LOWERCASE
-            image:
-                "https://plus.unsplash.com/premium_photo-1669680784119-1f2ac0260295?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RnJ1aXQlMjBQYXJmYWl0fGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
+            category: "snacks", 
+            image: "https://plus.unsplash.com/premium_photo-1669680784119-1f2ac0260295?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RnJ1aXQlMjBQYXJmYWl0fGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 10,
-            description:
-                "Layered yogurt, fruits, and granola — delicious and refreshing.",
-            ingredients: [
-                "Greek yogurt", "Granola", "Assorted fruits",
-            ],
+            description: "Layered yogurt, fruits, and granola — delicious and refreshing.",
+            ingredients: ["Greek yogurt", "Granola", "Assorted fruits"],
             instructions: ["Layer yogurt, fruits, and granola in a glass."],
         },
     ];
 
     function loadAllRecipes() {
-        // Load recipes added via the Admin Dashboard from localStorage
+        // Load ALL recipes from the Admin Dashboard's localStorage
         const adminRecipesRaw = localStorage.getItem("recipes");
-        let adminRecipes = [];
+        let userAddedRecipes = [];
 
         if (adminRecipesRaw) {
             try {
-                // NOTE: We skip the first 12 recipes if they match the static list 
-                // to avoid duplicating static recipes that might have been automatically
-                // added by the admin.js initialization.
                 const storedRecipes = JSON.parse(adminRecipesRaw);
 
-                // If the stored list is larger than the static list, take the newer ones.
-                // This is a basic way to include admin-added recipes without duplicating static ones.
-                // A more robust solution would use unique IDs.
-                const recipesToDisplay = storedRecipes.length > STATIC_RECIPES.length
-                    ? storedRecipes.slice(STATIC_RECIPES.length) : [];
+                // FIX: Filter only the recipes that were explicitly added by the user
+                // (marked with 'user' source) to prevent duplicating the static list.
+                const newRecipes = storedRecipes.filter(r => r.source === 'user');
 
-                adminRecipes = recipesToDisplay.map((r, index) => ({
-                    _id: 'admin-' + Date.now() + index, // Unique ID
+                userAddedRecipes = newRecipes.map((r, index) => ({
+                    _id: 'user-' + Date.now() + index, // Unique ID
                     name: r.name,
-                    category: r.category ? r.category.toLowerCase() : 'uncategorized', // Ensure lowercase
+                    category: r.category ? r.category.toLowerCase() : 'uncategorized',
                     image: r.image,
                     cookingTime: parseInt(r.time ? r.time.replace(/[^0-9]/g, '') : 0) || 0,
                     description: r.desc,
-                    // Fallback detailed info for admin recipes since your admin page doesn't collect them
-                    ingredients: [r.ingredients || "Ingredients not detailed in admin panel."],
-                    instructions: [r.instructions || "Instructions not detailed in admin panel."],
+                    // Fallback detailed info for admin recipes
+                    ingredients: r.ingredients || ["Ingredients not detailed in admin panel."],
+                    instructions: r.instructions || ["Instructions not detailed in admin panel."],
                 }));
             } catch (e) {
                 console.error("Error parsing admin recipes from localStorage", e);
             }
         }
 
-        // Combine static recipes and new admin recipes
-        return [...STATIC_RECIPES, ...adminRecipes];
+        // Combine the 12 Dishcovery static recipes with the genuinely new user-added recipes
+        return [...STATIC_RECIPES, ...userAddedRecipes];
     }
 
     // This function will be called on load and on tab focus
@@ -280,8 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     filter === "all"
                         ? ALL_RECIPES
                         : ALL_RECIPES.filter(
-                            (r) => r.category.toLowerCase() === filter.toLowerCase()
-                        );
+                              (r) => r.category.toLowerCase() === filter.toLowerCase()
+                          );
                 renderRecipes(filtered, homeRecipes);
             };
         });

@@ -8,30 +8,39 @@
 body {
   background-color: #fff;
   color: #333;
+  /* Ensures NO SCROLLING on the body */
+  overflow: hidden; 
 }
 
 /* --- Layout --- */
 .sign {
   display: flex;
-  min-height: 100vh;
+  /* Ensures the main container takes full viewport height */
+  height: 100vh; 
 }
 
 /* Left side image */
 .sign img {
-  width: 50%;
-  height: auto;
+  /* Explicitly set to 45% */
+  width: 45%; 
+  height: 100%; 
   object-fit: cover;
 }
 
 /* Right side (form area) */
 .active {
-  flex: 1;
+  /* Explicitly set to 55% to ensure a perfect 100% split */
+  width: 55%; 
+  /* Removed flex: 1; as width is now set */
+  
   display: flex;
-  align-items: center;
+  align-items: center; 
   justify-content: center;
-  padding: 40px;
+  /* Reduced padding to create more vertical space */
+  padding: 20px 40px; 
   background-color: #fff;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  /* Removed box-shadow to prevent any 'line' effect */
+  box-shadow: none; 
 }
 
 .dish {
@@ -39,7 +48,9 @@ body {
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  /* Reduced gap to save vertical space */
+  gap: 20px; 
+  max-height: 100%; 
 }
 
 .dish__details {
@@ -48,7 +59,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  /* Reduced gap to save vertical space */
+  gap: 10px; 
+  flex-shrink: 0; 
 }
 
 .dish__details h1 {
@@ -57,27 +70,41 @@ body {
   letter-spacing: 1px;
 }
 
+/* Adjust paragraph size for better fit */
 .dish__details p {
-  font-size: 15px;
+  font-size: 14px;
   color: #555;
+}
+
+/* --- NON-SCROLL FIX: Ensure the form container shrinks --- */
+.dish__fills {
+  flex-grow: 1; 
+  /* Removed internal scrolling */
+  overflow-y: hidden; 
+  padding-right: 0; 
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Form section */
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  /* Reduced gap between form elements to save space */
+  gap: 10px; 
 }
 
 label {
-  font-size: 14px;
+  font-size: 13px; /* Reduced font size for tighter packing */
   font-weight: 600;
   color: #333;
 }
 
 input {
   width: 100%;
-  height: 40px;
+  height: 35px; /* Reduced input height to save space */
   border-radius: 8px;
   border: 1px solid #ccc;
   padding: 0 10px;
@@ -92,8 +119,8 @@ input:focus {
 
 /* Button */
 button {
-  margin-top: 15px;
-  height: 40px;
+  margin-top: 10px; /* Reduced top margin */
+  height: 38px; /* Reduced button height */
   font-weight: 700;
   border-radius: 8px;
   border: none;
@@ -101,6 +128,7 @@ button {
   color: #fff;
   transition: 0.3s ease;
   cursor: pointer;
+  flex-shrink: 0; 
 }
 
 button:hover {
@@ -108,10 +136,12 @@ button:hover {
   color: #000;
 }
 
-/* Login  text */
+/* Login  text */
 .acc-log {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 5px; /* Reduced top margin to pull it closer */
+  font-size: 13px; /* Reduced font size */
+  text-align: center; /* Center the login text */
+  flex-shrink: 0; 
 }
 
 a {
@@ -128,21 +158,37 @@ a:hover {
 @media (max-width: 900px) {
   .sign {
     flex-direction: column;
+    /* Allow scrolling on mobile layout */
+    height: auto; 
+    min-height: 100vh;
+    overflow: auto; 
   }
 
+  body {
+    overflow-y: auto;
+  }
+  
   .sign img {
+    /* Reset width for mobile */
     width: 100%;
     height: 300px;
   }
 
   .active {
-    width: 100%;
+    /* Reset width for mobile */
+    width: 100%; 
     box-shadow: none;
     padding: 30px 20px;
   }
 
   .dish {
-    gap: 30px;
+    gap: 20px;
+    max-height: unset; 
+    padding: 0;
+  }
+
+  .dish__fills {
+    overflow-y: visible; 
   }
 
   .dish__details h1 {

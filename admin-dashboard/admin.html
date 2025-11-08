@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="dashboard">
-        <aside class="sidebar">
+    <aside class="sidebar">
       <div class="logo">
        <img class="img" src="../images/Frame 13.png" alt="Dishcovery Logo">       </div>
 
@@ -39,9 +39,8 @@
   </a>
     </aside>
 
-        <main class="main">
-            <section id="dashboard" class="page active-page">
-        <h1>Welcome Back, Admin 👋</h1>
+    <main class="main">
+        <section id="dashboard" class="page">         <h1>Welcome Back, Admin 👋</h1>
         <p>Here's an overview of your recipes.</p>
         <div class="stats">
           <div class="stat-card">
@@ -52,25 +51,27 @@
         </div>
       </section>
 
-            <section id="manage" class="page">
-        <h2>Manage Recipes</h2>
-        <table class="recipe-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Prep Time</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="recipeList">
-            <tr><td colspan="5" class="empty">No recipes added yet.</td></tr>
-          </tbody>
-        </table>
+        <section id="manage" class="page active-page">         <h2>Manage Recipes</h2>
+        <div class="table-container"> 
+            <table class="recipe-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Prep Time</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="recipeList">
+                    <tr><td colspan="6" class="empty">Loading recipes...</td></tr>
+                </tbody>
+            </table>
+        </div>
       </section>
 
-            <section id="add" class="page">
+        <section id="add" class="page">
         <h2>Add New Recipe</h2>
         <div class="add-layout">
           <form id="addRecipeForm" class="recipe-form">
@@ -110,7 +111,7 @@
             </button>
           </form>
 
-                    <div class="preview-card" id="previewCard">
+          <div class="preview-card" id="previewCard">
             <img src="https://via.placeholder.com/300x200?text=Preview" id="previewImage" />
             <div class="info">
               <span class="tag" id="previewCategory">Category</span>
@@ -122,7 +123,7 @@
         </div>
       </section>
 
-            <div id="successModal" class="modal">
+        <div id="successModal" class="modal">
         <div class="modal-content">
           <i class="fa-solid fa-circle-check"></i>
           <h2>Congratulations!</h2>
@@ -134,11 +135,11 @@
         <div id="editRecipeModal" class="modal">
             <div class="modal-content">
                 <h2>Edit Recipe</h2>
+                <button type="button" id="closeEditModal" class="close-btn">&times;</button>
                 <form id="editRecipeForm" class="recipe-form">
-                    <div class="form-group">
+                    <input type="hidden" id="editRecipeId" value="">                     <div class="form-group">
                         <label>Recipe Name</label>
                         <input type="text" id="editRecipeName" required />
-                    </div>
     
                     <div class="form-group">
                         <label>Category</label>
@@ -168,9 +169,6 @@
     
                     <button type="submit" class="submit-btn save-btn">
                         <i class="fa-solid fa-floppy-disk"></i> Save Changes
-                    </button>
-                    <button type="button" id="closeEditModal" class="cancel-btn">
-                        Cancel
                     </button>
                 </form>
             </div>
