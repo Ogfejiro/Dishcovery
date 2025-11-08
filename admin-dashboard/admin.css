@@ -10,7 +10,7 @@ body {
   background: #f9f9f9;
   color: #333;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden; 
 }
 
 /* === Layout === */
@@ -19,7 +19,11 @@ body {
   min-height: 100vh;
 }
 
-/* === Sidebar (Desktop) === */
+/* ========================================= */
+/* 💻 DESKTOP/TABLET STYLES (Default/Large Screen) */
+/* ========================================= */
+
+/* === Sidebar === */
 .sidebar {
   width: 250px;
   background: #f44336;
@@ -32,9 +36,8 @@ body {
   top: 0;
   left: 0;
   height: 100vh;
-  overflow-y: hidden;
   z-index: 10;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, width 0.3s ease;
 }
 
 .sidebar .logo {
@@ -57,8 +60,8 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   flex-grow: 1;
-  overflow-y: auto;
-  padding-right: 5px;
+  overflow-y: auto; 
+  padding-right: 5px; 
 }
 
 .sidebar .menu-item {
@@ -100,12 +103,18 @@ body {
   background: #ffe2e2;
 }
 
-/* === Main Content (Desktop) === */
+/* === Main Content === */
 .main {
   flex: 1;
   margin-left: 250px;
   padding: 2rem;
   min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+/* Hide the toggle button on large screens */
+.menu-toggle {
+  display: none;
 }
 
 h1, h2 {
@@ -144,6 +153,7 @@ h1, h2 {
 .table-container {
   overflow-x: auto;
   width: 100%;
+  position: relative;
 }
 
 .recipe-table {
@@ -153,6 +163,7 @@ h1, h2 {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border-radius: 8px;
   overflow: hidden;
+  min-width: 600px;
 }
 
 .recipe-table th,
@@ -167,6 +178,8 @@ h1, h2 {
 .recipe-table th {
   background: #f44336;
   color: #fff;
+  position: sticky;
+  top: 0;
 }
 
 .recipe-table img {
@@ -182,33 +195,58 @@ h1, h2 {
   padding: 1rem;
 }
 
-.action-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #f44336;
-  margin: 0 5px;
-  font-size: 1.1em;
-  padding: 0;
+/* Action buttons improvements for mobile */
+.action-buttons {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
 }
 
-/* 🔑 CRITICAL FIX: Locking style for dummy data */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-radius: 4px;
+  background: #f44336;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+  text-decoration: none;
+  border: none;
+}
+
+.action-btn:hover {
+  background: #d32f2f;
+}
+
+.action-btn .btn-text {
+  display: inline;
+}
+
+.locked-icon {
+  color: #666;
+  font-size: 1rem;
+}
+
+.recipe-table td:last-child {
+  text-align: center;
+}
+
+/* Padlock style for protected items */
 .action-protected {
   color: #aaa;
-  cursor: default !important; /* Stops the pointer (hand) icon */
+  cursor: default !important;
   font-size: 1.1em;
   padding: 0 10px; 
   display: inline-block; 
   width: 100%;
-  text-align: center; /* Centers the icon in the action column */
+  text-align: center;
 }
 
-/* Ensure the table cell containing actions is centered */
-.recipe-table td:last-child {
-    text-align: center;
-}
-
-/* === Add Page Layout === */
+/* === Add Page Layout (Flex/Grid) === */
 .add-layout {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
@@ -383,108 +421,126 @@ h1, h2 {
   display: block;
 }
 
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ========================================= */
-/* 📱 RESPONSIVE STYLES */
+/* 📱 MOBILE SPECIFIC STYLES (Toggle Logic) */
 /* ========================================= */
 
-/* Mobile (up to 768px) */
 @media (max-width: 768px) {
-  .dashboard {
-    flex-direction: column;
-  }
-
+  /* 1. Sidebar Positioning and Slide-out (Mobile Navigation) */
   .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    bottom: auto;
-    padding: 1rem;
-    overflow-y: visible;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    z-index: 20;
+    transform: translateX(-100%);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    overflow-y: auto;
   }
 
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
   .sidebar .logo {
-    display: none;
+    display: flex;
+    text-align: center;
   }
-
-  .sidebar .menu {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    overflow-y: visible;
-  }
-
-  .sidebar .menu-item {
-    flex: 1 1 auto;
-    justify-content: center;
-    font-size: 0.9rem;
-    padding: 0.6rem;
-  }
-
-  .back-dashboard {
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-
+  
   .main {
     margin-left: 0;
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .menu-toggle {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 30;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
   }
   
   .stats {
     flex-direction: column;
+    gap: 0.8rem;
   }
 
-  .stat-card {
-    flex: 1 1 100%;
-  }
-
-  /* Table responsiveness */
-  .table-container { 
-    overflow-x: auto; 
-    width: 100%;
-  }
-
-  .recipe-table {
-    min-width: 650px; 
-  }
-
-  .recipe-table th, .recipe-table td {
-    white-space: nowrap;
-    font-size: 0.85rem;
-    padding: 0.6rem;
-  }
-  
-  .recipe-table td:last-child {
-      text-align: center;
-  }
-
-
-  /* Add/Edit Layout responsiveness */
   .add-layout {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-
+  
   .preview-card {
     order: -1;
-    margin-bottom: 1rem;
   }
 
-  .modal-content {
-    padding: 1.5rem;
+  .table-container { 
+    overflow-x: auto;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+
+  .recipe-table {
+    min-width: 700px;
+  }
+
+  .recipe-table th, .recipe-table td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .recipe-table img {
+    width: 40px;
+    height: 25px;
+  }
+  
+  /* Hide text on very small screens, show only icons */
+  .action-btn .btn-text {
+    display: none;
+  }
+  
+  .action-btn {
+    padding: 0.5rem;
+    min-width: 40px;
+    justify-content: center;
+  }
+  
+  .back-dashboard {
+      margin-top: 1rem;
   }
 }
 
-/* Tablet (768px to 1024px) */
+/* Tablet (769px to 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   .sidebar {
-    width: 180px;
+    width: 220px;
   }
 
   .main {
-    margin-left: 180px;
+    margin-left: 220px;
     padding: 1.5rem;
   }
 
@@ -492,10 +548,241 @@ h1, h2 {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
+  
+  .recipe-table {
+    min-width: 800px;
+  }
+}
 
+/* Large Desktop Screens */
+@media (min-width: 1440px) {
+  .sidebar {
+    width: 280px;
+  }
+  
+  .main {
+    margin-left: 280px;
+    padding: 3rem;
+  }
+  
+  .add-layout {
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+  }
+}
+
+/* Mobile Devices (480px - 600px) */
+@media (max-width: 600px) {
+  .main {
+    padding: 1rem;
+  }
+  
+  .menu-toggle {
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin-top: 3rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .stat-card {
+    padding: 1rem 0.8rem;
+  }
+  
+  .stat-card i {
+    font-size: 1.5rem;
+  }
+  
+  .stat-card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .recipe-form {
+    padding: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.7rem;
+  }
+  
+  .submit-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .preview-card .info {
+    padding: 0.8rem;
+  }
+  
+  .modal-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .table-container {
+    margin: 0 -0.8rem;
+    padding: 0 0.8rem;
+  }
+  
+  .recipe-table {
+    min-width: 600px;
+  }
+  
   .recipe-table th,
   .recipe-table td {
-    padding: 0.7rem; 
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .recipe-table img {
+    width: 35px;
+    height: 25px;
+  }
+}
+
+/* Small Mobile Devices (320px - 479px) */
+@media (max-width: 479px) {
+  .main {
+    padding: 0.8rem;
+  }
+  
+  .menu-toggle {
+    top: 10px;
+    left: 10px;
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.6rem;
+    margin-top: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  .recipe-table {
+    min-width: 550px;
+  }
+  
+  .recipe-table th,
+  .recipe-table td {
+    padding: 0.4rem;
+    font-size: 0.75rem;
+  }
+  
+  .recipe-table img {
+    width: 30px;
+    height: 20px;
+  }
+  
+  .modal-content {
+    margin: 0.5rem;
+    padding: 1.2rem;
+  }
+  
+  .modal-content h2 {
+    font-size: 1.4rem;
+  }
+  
+  .back-dashboard {
+    padding: 0.6rem;
     font-size: 0.9rem;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .menu-item {
+    padding: 1rem 0.8rem;
+    min-height: 44px;
+  }
+  
+  .action-btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .submit-btn {
+    min-height: 44px;
+  }
+  
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+/* Backdrop for mobile sidebar */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 15;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+}
+
+/* Ensure sidebar scrolls properly on mobile */
+.sidebar {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+}
+
+/* Scroll indicator for tables on mobile */
+.table-container::after {
+  content: "← Scroll →";
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: #666;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .table-container::after {
+    display: block;
   }
 }

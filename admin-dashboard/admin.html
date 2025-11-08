@@ -12,9 +12,9 @@
 </head>
 <body>
   <div class="dashboard">
-    <aside class="sidebar">
-      <div class="logo">
-       <img class="img" src="../images/Frame 13.png" alt="Dishcovery Logo">       </div>
+    <aside class="sidebar" id="sidebar">       <div class="logo">
+       <img class="img" src="../images/Frame 13.png" alt="Dishcovery Logo">
+      </div>
 
       <nav class="menu">
         <a href="#" class="menu-item active" data-page="dashboard">
@@ -39,8 +39,10 @@
   </a>
     </aside>
 
-    <main class="main">
-        <section id="dashboard" class="page">         <h1>Welcome Back, Admin 👋</h1>
+    <main class="main" id="main-content"> <button id="menuToggle" class="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+                <section id="dashboard" class="page active-page">         <h1>Welcome Back, Admin 👋</h1>
         <p>Here's an overview of your recipes.</p>
         <div class="stats">
           <div class="stat-card">
@@ -51,25 +53,24 @@
         </div>
       </section>
 
-        <section id="manage" class="page active-page">         <h2>Manage Recipes</h2>
-        <div class="table-container"> 
-            <table class="recipe-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
+       <section id="manage" class="page">
+    <h2>Manage Recipes</h2>
+    <div class="table-container"> 
+        <table class="recipe-table">
+            <thead>
+                <tr>
                     <th>Image</th>
                     <th>Name</th>
                     <th>Category</th>
                     <th>Prep Time</th>
                     <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="recipeList">
-                    <tr><td colspan="6" class="empty">Loading recipes...</td></tr>
+                </tr>
+            </thead>
+            <tbody id="recipeList">
                 </tbody>
-            </table>
-        </div>
-      </section>
+        </table>
+    </div>
+</section>
 
         <section id="add" class="page">
         <h2>Add New Recipe</h2>
@@ -122,8 +123,8 @@
           </div>
         </div>
       </section>
-
-        <div id="successModal" class="modal">
+        
+                <div id="successModal" class="modal">
         <div class="modal-content">
           <i class="fa-solid fa-circle-check"></i>
           <h2>Congratulations!</h2>
@@ -135,11 +136,13 @@
         <div id="editRecipeModal" class="modal">
             <div class="modal-content">
                 <h2>Edit Recipe</h2>
-                <button type="button" id="closeEditModal" class="close-btn">&times;</button>
+                <button type="button" id="closeEditModal" class="close-btn">&times;</button>
                 <form id="editRecipeForm" class="recipe-form">
-                    <input type="hidden" id="editRecipeId" value="">                     <div class="form-group">
+                    <input type="hidden" id="editRecipeId" value="">
+                    <div class="form-group">
                         <label>Recipe Name</label>
                         <input type="text" id="editRecipeName" required />
+                    </div>
     
                     <div class="form-group">
                         <label>Category</label>
