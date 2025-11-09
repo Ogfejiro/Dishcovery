@@ -10,13 +10,15 @@ body {
   background: #f9f9f9;
   color: #333;
   min-height: 100vh;
-  overflow-x: hidden; 
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* === Layout === */
 .dashboard {
   display: flex;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 /* ========================================= */
@@ -38,6 +40,7 @@ body {
   height: 100vh;
   z-index: 10;
   transition: transform 0.3s ease, width 0.3s ease;
+  overflow: hidden;
 }
 
 .sidebar .logo {
@@ -48,6 +51,7 @@ body {
   font-weight: 600;
   margin-bottom: 1rem;
   flex-shrink: 0;
+  height: auto;
 }
 
 .sidebar .logo img {
@@ -60,8 +64,8 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   flex-grow: 1;
-  overflow-y: auto; 
-  padding-right: 5px; 
+  overflow: visible;
+  padding-right: 0;
 }
 
 .sidebar .menu-item {
@@ -75,6 +79,7 @@ body {
   gap: 0.8rem;
   transition: 0.3s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .sidebar .menu-item:hover,
@@ -95,7 +100,7 @@ body {
   gap: 0.5rem;
   font-weight: 600;
   transition: 0.3s ease;
-  margin-top: 1.5rem;
+  margin-top: auto;
   flex-shrink: 0;
 }
 
@@ -110,6 +115,7 @@ body {
   padding: 2rem;
   min-height: 100vh;
   transition: margin-left 0.3s ease;
+  overflow-x: hidden;
 }
 
 /* Hide the toggle button on large screens */
@@ -246,22 +252,66 @@ h1, h2 {
   text-align: center;
 }
 
-/* === Add Page Layout (Flex/Grid) === */
+/* === Add Recipe Page Flex Layout === */
 .add-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  display: flex;
   gap: 2rem;
-  align-items: start;
+  align-items: flex-start;
   margin-top: 1rem;
 }
 
 .recipe-form {
+  flex: 1;
   background: #fff;
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-width: 0;
 }
 
+.preview-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  text-align: left;
+  min-width: 0;
+  max-width: 400px;
+}
+
+.preview-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.preview-card .info {
+  padding: 1rem;
+}
+
+.preview-card .tag {
+  display: inline-block;
+  background: #f44336;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.preview-card h3 {
+  margin: 0.3rem 0;
+  font-size: 1.2rem;
+}
+
+.preview-card p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Form elements */
 .form-group {
   margin-bottom: 1.2rem;
 }
@@ -304,39 +354,6 @@ h1, h2 {
 
 .submit-btn:hover {
   background: #d7372b;
-}
-
-/* === Preview Card === */
-.preview-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  text-align: left;
-}
-
-.preview-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.preview-card .info {
-  padding: 1rem;
-}
-
-.preview-card .tag {
-  display: inline-block;
-  background: #f44336;
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  margin-bottom: 0.3rem;
-}
-
-.preview-card h3 {
-  margin: 0.3rem 0;
 }
 
 /* === Modal === */
@@ -449,7 +466,7 @@ h1, h2 {
     z-index: 20;
     transform: translateX(-100%);
     box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-    overflow-y: auto;
+    overflow-y: hidden;
   }
 
   .sidebar.open {
@@ -461,9 +478,15 @@ h1, h2 {
     text-align: center;
   }
   
+  .sidebar .menu {
+    overflow: visible;
+    max-height: calc(100vh - 200px);
+  }
+  
   .main {
     margin-left: 0;
     padding: 1rem;
+    overflow-y: auto;
   }
   
   .menu-toggle {
@@ -488,13 +511,24 @@ h1, h2 {
     gap: 0.8rem;
   }
 
+  /* Add Recipe Page Mobile */
   .add-layout {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 1.5rem;
   }
   
   .preview-card {
     order: -1;
+    max-width: 100%;
+  }
+  
+  .recipe-form,
+  .preview-card {
+    width: 100%;
+  }
+  
+  .preview-card img {
+    height: 200px;
   }
 
   .table-container { 
@@ -545,8 +579,19 @@ h1, h2 {
   }
 
   .add-layout {
-    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+  }
+  
+  .recipe-form {
+    padding: 1.25rem;
+  }
+  
+  .preview-card img {
+    height: 180px;
+  }
+  
+  .preview-card .info {
+    padding: 0.8rem;
   }
   
   .recipe-table {
@@ -566,8 +611,19 @@ h1, h2 {
   }
   
   .add-layout {
-    grid-template-columns: 1fr 1.5fr;
     gap: 3rem;
+  }
+  
+  .recipe-form {
+    padding: 2rem;
+  }
+  
+  .preview-card {
+    max-width: 450px;
+  }
+  
+  .preview-card img {
+    height: 250px;
   }
 }
 
@@ -683,6 +739,26 @@ h1, h2 {
     font-size: 1.3rem;
   }
   
+  .add-layout {
+    gap: 1rem;
+  }
+  
+  .recipe-form {
+    padding: 1rem;
+  }
+  
+  .preview-card .info {
+    padding: 0.8rem;
+  }
+  
+  .preview-card h3 {
+    font-size: 1.1rem;
+  }
+  
+  .preview-card p {
+    font-size: 0.85rem;
+  }
+  
   .recipe-table {
     min-width: 550px;
   }
@@ -753,37 +829,68 @@ h1, h2 {
   display: block;
 }
 
-/* Ensure sidebar scrolls properly on mobile */
-.sidebar {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.3) transparent;
-}
-
+/* Remove scrollbars from sidebar */
 .sidebar::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.3);
-  border-radius: 2px;
-}
-
-/* Scroll indicator for tables on mobile */
-.table-container::after {
-  content: "← Scroll →";
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.8rem;
-  color: #666;
   display: none;
 }
 
-@media (max-width: 768px) {
-  .table-container::after {
-    display: block;
+.sidebar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Adjust for very short screens */
+@media (max-height: 600px) {
+  .sidebar .menu {
+    gap: 0.3rem;
+  }
+  
+  .sidebar .menu-item {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .sidebar .logo {
+    margin-bottom: 0.5rem;
+  }
+  
+  .sidebar .logo img {
+    width: 100px;
   }
 }
 
+/* Ensure form and preview card have equal heights on large screens */
+@media (min-width: 768px) {
+  .add-layout {
+    align-items: stretch;
+  }
+  
+  .recipe-form,
+  .preview-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .recipe-form {
+    justify-content: space-between;
+  }
+}
+
+/* Smooth transitions */
+.add-layout,
+.recipe-form,
+.preview-card {
+  transition: all 0.3s ease;
+}
+
+/* Focus states for accessibility */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.1);
+}
+
+/* Real-time preview updates animation */
+.preview-card.updating {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
