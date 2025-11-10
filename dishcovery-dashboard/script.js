@@ -71,44 +71,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update My Recipes page
     function updateMyRecipesPage() {
-        // RELOAD ALL RECIPES FROM STORAGE (Critical Fix!)
-    loadAllRecipes(); 
+        const savedRecipeIds = savedRecipes;
+        const savedRecipeData = ALL_RECIPES.filter(recipe => savedRecipeIds.includes(recipe._id));
+        
+        // Update stats
+        document.getElementById('totalSaved').textContent = savedRecipeData.length;
+        document.getElementById('breakfastCount').textContent = savedRecipeData.filter(r => r.category === 'breakfast').length;
+        document.getElementById('lunchCount').textContent = savedRecipeData.filter(r => r.category === 'lunch').length;
+        document.getElementById('dinnerCount').textContent = savedRecipeData.filter(r => r.category === 'dinner').length;
 
-    const savedRecipeIds = JSON.parse(localStorage.getItem('savedRecipes')) || [];
-    const savedRecipeData = ALL_RECIPES.filter(recipe => savedRecipeIds.includes(recipe._id));
-
-    // Update stats
-    document.getElementById('totalSaved').textContent = savedRecipeData.length;
-    document.getElementById('breakfastCount').textContent = savedRecipeData.filter(r => r.category === 'breakfast').length;
-    document.getElementById('lunchCount').textContent = savedRecipeData.filter(r => r.category === 'lunch').length;
-    document.getElementById('dinnerCount').textContent = savedRecipeData.filter(r => r.category === 'dinner').length;
-
-    const savedRecipesContainer = document.getElementById('savedRecipes');
-    if (!savedRecipesContainer) return;
-
-    // Clear previous content (except empty state)
-    savedRecipesContainer.innerHTML = '';
-
-    if (savedRecipeData.length === 0) {
-        savedRecipesContainer.innerHTML = `
-            <div class="empty-state" id="emptySavedRecipes">
-                <i class="far fa-bookmark"></i>
-                <h3>No Saved Recipes Yet</h3>
-                <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
-            </div>
-        `;
-    } else {
-        savedRecipeData.forEach(recipe => {
-            const card = createRecipeCard(recipe);
-            const saveBtn = card.querySelector('.save-btn');
-            if (saveBtn) {
-                saveBtn.classList.add('saved');
-                saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
-            }
-            savedRecipesContainer.appendChild(card);
-        });
-    }
-}
+        // Update recipes display
+        const savedRecipesContainer = document.getElementById('savedRecipes');
+        if (!savedRecipesContainer) return;
+        
+        if (savedRecipeData.length === 0) {
+            savedRecipesContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="far fa-bookmark"></i>
+                    <h3>No Saved Recipes Yet</h3>
+                    <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
+                </div>
+            `;
+        } else {
+            savedRecipesContainer.innerHTML = '';
+            savedRecipeData.forEach(recipe => {
+                const card = createRecipeCard(recipe);
+                const saveBtn = card.querySelector('.save-btn');
+                if (saveBtn) {
+                    saveBtn.classList.add('saved');
+                    saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+                }
+                savedRecipesContainer.appendChild(card);
+            });
+        }
     }
 
     // ===============================
