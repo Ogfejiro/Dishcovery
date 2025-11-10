@@ -1,5 +1,5 @@
 // ==============================
-// Dishcovery Dashboard JS (Full Code with Sync Fix)
+// Dishcovery Dashboard JS with Recipe Sync Fix
 // ==============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,18 +8,113 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.querySelector(".sidebar");
     const overlay = document.querySelector(".overlay");
     const toggleSidebarBtn = document.getElementById("toggleSidebar");
-    const closeSidebarBtn = document.getElementById("closeSidebar");
     const homeRecipes = document.getElementById("homeRecipes");
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
     const categoryButtons = document.querySelectorAll(".filter-btn");
     const recipeDetailPage = document.getElementById("recipeDetailPage");
+    const savedRecipesContainer = document.getElementById("savedRecipes");
 
     // ===============================
-    // 💾 DATA LOADER: 12 STATIC RECIPES (Must match Admin.js list exactly)
+    // 💾 SAVE RECIPE FUNCTIONALITY
     // ===============================
 
-    // NOTE: Category values are converted to lowercase for filtering
+    // Initialize saved recipes from localStorage
+    let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+    let ALL_RECIPES = [];
+
+    // Save recipe function
+    function saveRecipe(recipeId) {
+        if (!savedRecipes.includes(recipeId)) {
+            savedRecipes.push(recipeId);
+            localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+            updateSaveButton(recipeId, true);
+            updateMyRecipesPage();
+            return true;
+        }
+        return false;
+    }
+
+    // Unsave recipe function
+    function unsaveRecipe(recipeId) {
+        savedRecipes = savedRecipes.filter(id => id !== recipeId);
+        localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+        updateSaveButton(recipeId, false);
+        updateMyRecipesPage();
+        return true;
+    }
+
+    // Toggle save recipe
+    function toggleSaveRecipe(recipeId) {
+        if (savedRecipes.includes(recipeId)) {
+            unsaveRecipe(recipeId);
+        } else {
+            saveRecipe(recipeId);
+        }
+    }
+
+    // Update save button appearance
+    function updateSaveButton(recipeId, isSaved) {
+        const saveBtns = document.querySelectorAll(`[data-recipe-id="${recipeId}"] .save-btn`);
+        saveBtns.forEach(saveBtn => {
+            if (saveBtn) {
+                if (isSaved) {
+                    saveBtn.classList.add('saved');
+                    saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+                } else {
+                    saveBtn.classList.remove('saved');
+                    saveBtn.innerHTML = '<i class="far fa-bookmark"></i>';
+                }
+            }
+        });
+    }
+
+    // Update My Recipes page
+    function updateMyRecipesPage() {
+        // RELOAD ALL RECIPES FROM STORAGE (Critical Fix!)
+    loadAllRecipes(); 
+
+    const savedRecipeIds = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+    const savedRecipeData = ALL_RECIPES.filter(recipe => savedRecipeIds.includes(recipe._id));
+
+    // Update stats
+    document.getElementById('totalSaved').textContent = savedRecipeData.length;
+    document.getElementById('breakfastCount').textContent = savedRecipeData.filter(r => r.category === 'breakfast').length;
+    document.getElementById('lunchCount').textContent = savedRecipeData.filter(r => r.category === 'lunch').length;
+    document.getElementById('dinnerCount').textContent = savedRecipeData.filter(r => r.category === 'dinner').length;
+
+    const savedRecipesContainer = document.getElementById('savedRecipes');
+    if (!savedRecipesContainer) return;
+
+    // Clear previous content (except empty state)
+    savedRecipesContainer.innerHTML = '';
+
+    if (savedRecipeData.length === 0) {
+        savedRecipesContainer.innerHTML = `
+            <div class="empty-state" id="emptySavedRecipes">
+                <i class="far fa-bookmark"></i>
+                <h3>No Saved Recipes Yet</h3>
+                <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
+            </div>
+        `;
+    } else {
+        savedRecipeData.forEach(recipe => {
+            const card = createRecipeCard(recipe);
+            const saveBtn = card.querySelector('.save-btn');
+            if (saveBtn) {
+                saveBtn.classList.add('saved');
+                saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+            }
+            savedRecipesContainer.appendChild(card);
+        });
+    }
+}
+    }
+
+    // ===============================
+    // 💾 DATA LOADER: FIXED RECIPE SYNC
+    // ===============================
+
     const STATIC_RECIPES = [
         {
             _id: 1,
@@ -55,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
             _id: 4,
             name: "Grilled Chicken",
             category: "dinner", 
-            image: "https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JpbGxlZCUyMGNoaWNrZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
+            image: "https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JpbGxlZCUyMGNoaWNrZW58ZW58MHx8MHx8fDA%3D%3D&auto=format&fit=crop&q=60&w=500",
             cookingTime: 35,
             description: "Juicy grilled chicken marinated in herbs and spices — smoky and delicious.",
             ingredients: ["4 chicken pieces", "2 tbsp olive oil", "Garlic, pepper, salt", "1 tsp paprika"],
@@ -143,41 +238,44 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     ];
 
+    // FIXED: Load all recipes with proper sync from admin dashboard
     function loadAllRecipes() {
-        // Load ALL recipes from the Admin Dashboard's localStorage
-        const adminRecipesRaw = localStorage.getItem("recipes");
+        console.log("Loading recipes from localStorage...");
+        
+        // Get recipes from admin dashboard storage
+        const adminRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
+        console.log("Admin recipes found:", adminRecipes.length);
+        
         let userAddedRecipes = [];
 
-        if (adminRecipesRaw) {
-            try {
-                const storedRecipes = JSON.parse(adminRecipesRaw);
-
-                // FIX: Filter only the recipes that were explicitly added by the user
-                // (marked with 'user' source) to prevent duplicating the static list.
-                const newRecipes = storedRecipes.filter(r => r.source === 'user');
-
-                userAddedRecipes = newRecipes.map((r, index) => ({
-                    _id: 'user-' + Date.now() + index, // Unique ID
-                    name: r.name,
-                    category: r.category ? r.category.toLowerCase() : 'uncategorized',
-                    image: r.image,
-                    cookingTime: parseInt(r.time ? r.time.replace(/[^0-9]/g, '') : 0) || 0,
-                    description: r.desc,
-                    // Fallback detailed info for admin recipes
-                    ingredients: r.ingredients || ["Ingredients not detailed in admin panel."],
-                    instructions: r.instructions || ["Instructions not detailed in admin panel."],
-                }));
-            } catch (e) {
-                console.error("Error parsing admin recipes from localStorage", e);
-            }
+        if (adminRecipes.length > 0) {
+            // Filter only user-added recipes (not static ones)
+            const userRecipes = adminRecipes.filter(r => r.source === 'user');
+            console.log("User recipes found:", userRecipes.length);
+            
+            userAddedRecipes = userRecipes.map((r, index) => ({
+                _id: 'user-' + (r._id || Date.now() + index), // Use existing ID or create new
+                name: r.name,
+                category: r.category ? r.category.toLowerCase() : 'uncategorized',
+                image: r.image,
+                cookingTime: parseInt(r.cookingTime || r.time || 30),
+                description: r.description || r.desc,
+                ingredients: r.ingredients || ["Ingredients added by user"],
+                instructions: r.instructions || ["Instructions added by user"],
+                source: 'user'
+            }));
         }
 
-        // Combine the 12 Dishcovery static recipes with the genuinely new user-added recipes
-        return [...STATIC_RECIPES, ...userAddedRecipes];
+        // Combine static recipes with user-added recipes
+        ALL_RECIPES = [...STATIC_RECIPES, ...userAddedRecipes];
+        console.log("Total recipes loaded:", ALL_RECIPES.length);
+        
+        return ALL_RECIPES;
     }
 
     // This function will be called on load and on tab focus
     function initializeDashboard() {
+        console.log("Initializing dashboard...");
         const ALL_RECIPES = loadAllRecipes();
 
         // Initial render for the home page
@@ -188,12 +286,11 @@ document.addEventListener("DOMContentLoaded", () => {
             renderRecipes(ALL_RECIPES, searchResults);
         }
 
-        // --- Update Event Listeners to use ALL_RECIPES scope ---
-        // We redefine the filter and search logic here so they always use the fresh ALL_RECIPES array
+        // Update My Recipes page
+        updateMyRecipesPage();
 
-        // Category filter logic using the fresh ALL_RECIPES
+        // Category filter logic
         categoryButtons.forEach((btn) => {
-            // We use the same click listener, but its logic now relies on ALL_RECIPES
             btn.onclick = () => {
                 categoryButtons.forEach((b) => b.classList.remove("active"));
                 btn.classList.add("active");
@@ -208,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
-        // Search logic using the fresh ALL_RECIPES
+        // Search logic
         if (searchInput) {
             searchInput.oninput = (e) => {
                 const query = e.target.value.toLowerCase();
@@ -223,29 +320,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ===============================
-    // END DATA LOADER
-    // ===============================
-
-
-    // ===============================
-    // 🧭 PAGE NAVIGATION LOGIC (FIXED)
+    // 🧭 PAGE NAVIGATION LOGIC
     // ===============================
     navLinks.forEach((link) => {
         link.addEventListener("click", (e) => {
-
-            // NEW FIX: If the link has a target URL (not just '#'), let the browser navigate
             if (link.getAttribute('href') !== '#') {
-                // Allow link to navigate to its href (e.g., inactive.html)
                 return;
             }
 
-            e.preventDefault(); // ONLY prevent default if the link is handled internally
+            e.preventDefault();
 
-            // 1. Update active nav link
+            // Update active nav link
             navLinks.forEach((l) => l.classList.remove("active"));
             link.classList.add("active");
 
-            // 2. Determine target page ID and switch page view
+            // Determine target page ID and switch page view
             const targetPageId = link.dataset.page + "Page";
             pages.forEach((p) => p.classList.remove("active-page"));
             const targetPage = document.getElementById(targetPageId);
@@ -253,35 +342,36 @@ document.addEventListener("DOMContentLoaded", () => {
             if (targetPage) {
                 targetPage.classList.add("active-page");
 
-                // When navigating to the search page, ensure results area is cleared/ready
+                // Hide filters on search page, show on home page
+                const filters = document.querySelector('.filters');
                 if (link.dataset.page === "search") {
+                    filters.style.display = 'none';
                     searchResults.innerHTML = "";
                     searchInput.value = "";
-                    // Re-initialize the dashboard to ensure search results use fresh data
                     initializeDashboard();
+                } else {
+                    filters.style.display = 'flex';
+                }
+                
+                // Update My Recipes page when navigating to it
+                if (link.dataset.page === "my-recipes") {
+                    updateMyRecipesPage();
                 }
             }
 
-            // 3. Close sidebar on mobile after navigation
+            // Close sidebar on mobile after navigation
             sidebar.classList.remove("active");
             overlay.classList.remove("active");
         });
     });
 
     // ===============================
-    // SIDEBAR TOGGLE LOGIC (For Mobile/Toggle Button)
+    // SIDEBAR TOGGLE LOGIC
     // ===============================
     if (toggleSidebarBtn) {
         toggleSidebarBtn.addEventListener('click', () => {
             sidebar.classList.add('active');
             overlay.classList.add('active');
-        });
-    }
-
-    if (closeSidebarBtn) {
-        closeSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
         });
     }
 
@@ -292,14 +382,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    // Render recipe cards
+    // Render recipe cards with save button
     function createRecipeCard(recipe) {
         const card = document.createElement("div");
         card.classList.add("recipe-card");
         card.dataset.id = recipe._id;
+        card.dataset.recipeId = recipe._id;
+
+        const isSaved = savedRecipes.includes(recipe._id);
+        const saveIcon = isSaved ? 'fas fa-bookmark' : 'far fa-bookmark';
+        const saveClass = isSaved ? 'saved' : '';
 
         card.innerHTML = `
+            <button class="save-btn ${saveClass}" onclick="event.stopPropagation(); toggleSaveRecipe('${recipe._id}')">
+                <i class="${saveIcon}"></i>
+            </button>
             <img src="${recipe.image}" alt="${recipe.name}" />
             <div class="recipe-info">
                 <button class="tag">${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</button>
@@ -321,16 +418,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Show recipe detail (UPDATED to match the new design)
+    // Show recipe detail
     function showRecipeDetail(recipe) {
         pages.forEach((p) => p.classList.remove("active-page"));
         recipeDetailPage.classList.add("active-page");
 
-        // --- DUMMY DATA FOR VISUAL DESIGN (As this data is missing from your JSON) ---
         const rating = 5.0; 
         const reviewCount = 234;
         const prepTime = 10;
-        const cookTime = recipe.cookingTime || 15; // Use recipe time or default
+        const cookTime = recipe.cookingTime || 15;
         const servings = 4; 
         
         const nutritionData = {
@@ -339,15 +435,12 @@ document.addEventListener("DOMContentLoaded", () => {
             Carbs: '40g',
             Protein: '12g'
         };
-        // --------------------------------------------------------------------------
 
-        // Check if recipe has detailed ingredients/instructions or use fallback for admin recipes
         const hasDetailedIngredients = recipe.ingredients && !recipe.ingredients.includes("Ingredients not detailed in admin panel.");
         const ingredientsList = hasDetailedIngredients 
             ? recipe.ingredients.map((i, index) => {
-                // Basic approximation to display both name and amount for visual effect
                 const parts = i.split(',').map(s => s.trim());
-                const amount = parts[0].match(/(\d+\s*[\w\.\s]*)/)?.[0] || '1 unit'; // Tries to grab a quantity
+                const amount = parts[0].match(/(\d+\s*[\w\.\s]*)/)?.[0] || '1 unit';
                 const name = parts.length > 1 ? parts[1] : parts[0].replace(amount, '').trim() || parts[0]; 
                 
                 return `
@@ -374,10 +467,8 @@ document.addEventListener("DOMContentLoaded", () => {
             `).join("")
             : `<li class="instruction-item" style="text-align: center; color: #E74C3C;">Instructions not fully available for this recipe.</li>`;
 
-        // Dummy "You Might Also Like" section (excluding current recipe and prioritizing variety)
         const mightLikeRecipes = STATIC_RECIPES.filter(r => r._id !== recipe._id).slice(0, 3);
         
-        // Create the HTML structure
         recipeDetailPage.innerHTML = `
             <button class="back-btn">
                 &larr; Back to Dashboard
@@ -402,7 +493,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             ${Array(5).fill(0).map((_, i) => `<i class="fa-solid fa-star"></i>`).join('')}
                         </div>
                         <p class="rating-value">${rating.toFixed(1)} <span class="rating-count">(${reviewCount} reviews)</span></p>
-                        <i class="fa-regular fa-bookmark"></i>
+                        <button class="save-btn ${savedRecipes.includes(recipe._id) ? 'saved' : ''}" onclick="toggleSaveRecipe('${recipe._id}')" style="position: static; background: transparent;">
+                            <i class="${savedRecipes.includes(recipe._id) ? 'fas' : 'far'} fa-bookmark"></i>
+                        </button>
                     </div>
                     
                     <div class="recipe-meta-data">
@@ -448,11 +541,9 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-        // Populate "You Might Also Like" section using the existing card creator
         const mightLikeGrid = recipeDetailPage.querySelector(".you-might-like-grid");
         mightLikeRecipes.forEach(r => mightLikeGrid.appendChild(createRecipeCard(r)));
 
-        // Re-attach the back button event listener
         recipeDetailPage
           .querySelector(".back-btn")
           .addEventListener("click", () => {
@@ -464,16 +555,188 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ===============================
-    // 🚦 FINAL INITIALIZATION & SYNC FIX
+    // 🚦 FINAL INITIALIZATION
     // ===============================
 
     // 1. Initial Load
     initializeDashboard();
 
-    // 2. Auto-Refresh Fix: Reload data when the browser tab is refocused
+    // 2. Auto-Refresh Fix
     window.addEventListener('focus', () => {
         console.log("Tab focus detected. Reloading recipes from localStorage...");
         initializeDashboard();
     });
 
+    // Make toggleSaveRecipe available globally for onclick events
+    window.toggleSaveRecipe = toggleSaveRecipe;
+
 });
+
+// Auth form functions
+function showAuthForm(type) {
+    document.getElementById('loginForm').classList.remove('active');
+    document.getElementById('signupForm').classList.remove('active');
+    
+    if (type === 'login') {
+        document.getElementById('loginForm').classList.add('active');
+    } else {
+        document.getElementById('signupForm').classList.add('active');
+    }
+}
+
+
+
+
+
+
+
+
+function showRecipeDetail(recipe) {
+    // -----------------------------------------------------------------
+    // 1. Switch to the detail page
+    // -----------------------------------------------------------------
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active-page"));
+    document.getElementById("recipeDetailPage").classList.add("active-page");
+
+    // -----------------------------------------------------------------
+    // 2. Static data that matches the screenshot
+    // -----------------------------------------------------------------
+    const prepTime   = 5;                     // mins
+    const cookTime   = 15;                    // mins
+    const rating     = 5.0;
+    const reviews    = 234;
+    const nutrition  = {
+        Calories: "227",
+        Protein : "6g",
+        Carbs   : "28g",
+        Fat     : "9g",
+        Fiber   : "1g",
+        Sugar   : "7g"
+    };
+
+    // -----------------------------------------------------------------
+    // 3. Build ingredient rows (checkbox + amount on the right)
+    // -----------------------------------------------------------------
+    const ingredientsHTML = recipe.ingredients.map(i => {
+        // Split "1 ½ cups flour" → amount = "1 ½ cups", name = "flour"
+        const parts   = i.split(/,\s*/);
+        const amount  = parts[0].trim();
+        const name    = parts.slice(1).join(", ").trim() || parts[0];
+        return `
+            <li class="ingredient-item">
+                <label class="ingredient-name">
+                    <input type="checkbox">
+                    ${name}
+                </label>
+                <span>${amount}</span>
+            </li>`;
+    }).join("");
+
+    // -----------------------------------------------------------------
+    // 4. Build instruction rows (red circle + text)
+    // -----------------------------------------------------------------
+    const instructionsHTML = recipe.instructions.map((step, idx) => `
+        <li class="instruction-item">
+            <p>
+                <span class="instruction-number">${idx + 1}</span>
+                ${step}
+            </p>
+        </li>`).join("");
+
+    // -----------------------------------------------------------------
+    // 5. “You Might Also Like” – pick 2 other static recipes
+    // -----------------------------------------------------------------
+    const mightLike = STATIC_RECIPES
+        .filter(r => r._id !== recipe._id)
+        .slice(0, 2);
+
+    const mightLikeHTML = mightLike.map(r => {
+        const card = createRecipeCard(r);          // reuse your existing card maker
+        card.querySelector(".save-btn").remove(); // hide save button in “might like”
+        return card.outerHTML;
+    }).join("");
+
+    // -----------------------------------------------------------------
+    // 6. Final markup (exact match with the screenshot)
+    // -----------------------------------------------------------------
+    document.getElementById("recipeDetailPage").innerHTML = `
+        <button class="back-btn">← Back to Dashboard</button>
+
+        <div class="recipe-detail-content">
+
+            <!-- ==== IMAGE + DOTS ==== -->
+            <div class="image-container">
+                <img src="${recipe.image}" alt="${recipe.name}" class="detail-img">
+                <div class="image-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- ==== TEXT AREA ==== -->
+            <div class="recipe-text">
+                <button class="tag">${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</button>
+                <h2>${recipe.name}</h2>
+
+                <div class="rating-info">
+                    <div class="star-rating">
+                        ${Array(5).fill(`<i class="fa-solid fa-star"></i>`).join("")}
+                    </div>
+                    <p class="rating-value">${rating} <span class="rating-count">(${reviews} reviews)</span></p>
+                    <button class="save-btn ${savedRecipes.includes(recipe._id) ? "saved" : ""}"
+                            onclick="toggleSaveRecipe('${recipe._id}')">
+                        <i class="${savedRecipes.includes(recipe._id) ? "fas" : "far"} fa-bookmark"></i>
+                    </button>
+                </div>
+
+                <div class="recipe-meta-data">
+                    <p><i class="fa-regular fa-clock"></i> Prep Time: <span>${prepTime} mins</span></p>
+                    <p><i class="fa-solid fa-fire-burner"></i> Cook Time: <span>${cookTime} mins</span></p>
+                    <p><i class="fa-solid fa-user-group"></i> Servings: <span>4</span></p>
+                </div>
+
+                <p class="description-text">${recipe.description}</p>
+
+                <div class="nutrition-card">
+                    <h3>Nutrition Information</h3>
+                    <div class="nutrition-details">
+                        <p>Calories <span>${nutrition.Calories}</span></p>
+                        <p>Protein <span>${nutrition.Protein}</span></p>
+                        <p>Carbs <span>${nutrition.Carbs}</span></p>
+                        <p>Fat <span>${nutrition.Fat}</span></p>
+                        <p>Fiber <span>${nutrition.Fiber}</span></p>
+                        <p>Sugar <span>${nutrition.Sugar}</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==== INGREDIENTS ==== -->
+            <div class="detail-main-section">
+                <h3>Ingredients</h3>
+                <ul id="detailIngredients">${ingredientsHTML}</ul>
+
+                <h3>Instructions</h3>
+                <ul id="detailInstructions">${instructionsHTML}</ul>
+            </div>
+
+            <!-- ==== YOU MIGHT ALSO LIKE ==== -->
+            <div class="you-might-like-section">
+                <h3 class="you-might-like">You Might Also Like</h3>
+                <div class="recipe-grid you-might-like-grid">
+                    ${mightLikeHTML}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // -----------------------------------------------------------------
+    // 7. Back-button behaviour
+    // -----------------------------------------------------------------
+    document.querySelector(".back-btn").addEventListener("click", () => {
+        document.getElementById("recipeDetailPage").classList.remove("active-page");
+        const activeNav = document.querySelector(".nav-link.active");
+        const backId = activeNav ? activeNav.dataset.page + "Page" : "homePage";
+        document.getElementById(backId).classList.add("active-page");
+    });
+}
