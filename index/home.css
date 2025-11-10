@@ -1,958 +1,556 @@
-/* --- Base Styles --- */
-:root {
-    --color-primary: #FF5A5F;
-    --color-text-dark: #333;
-    --color-text-light: #666;
-    --color-background-light: #FFF8F0;
-    --color-white: #fff;
-    --color-yellow: #FFD25E;
-    --color-red: #FA6065;
-    --color-blue: #6392FF;
-    --color-green: #90B384;
-    --font-family: 'Poppins', sans-serif;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: var(--font-family);
-    color: var(--color-text-dark);
-    background-color: var(--color-background-light);
-    line-height: 1.6;
-}
-
-h1, h2, h3, h4 {
-    color: var(--color-text-dark);
-    font-weight: 700;
-}
-
-h1 {
-    font-size: 3.5rem;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-}
-
-h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-p {
-    color: var(--color-text-light);
-    margin-bottom: 1.5rem;
-}
-
-.btn {
-    padding: 10px 25px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn-login {
-    background: transparent;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-}
-
-.btn-signup, .btn-discover, .btn-view-all {
-    background: var(--color-primary);
-    color: var(--color-white);
-}
-
-.btn-signup:hover, .btn-discover:hover, .btn-view-all:hover {
-    background: #d44d51;
-}
-
-/* --- Navigation Bar --- */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 8%;
-    background: var(--color-white);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.logo img {
-    height: 40px; 
-    filter: brightness(0.6) sepia(1) hue-rotate(-25deg) saturate(3); 
-}
-
-/* --- Main Sections --- */
-main {
-    padding: 0 8%;
-}
-
-/* --- 1. Hero Section --- */
-.hero-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4rem 0 0;
-    gap: 3rem;
-}
-
-.hero-content {
-    flex: 1;
-}
-
-.hero-image {
-    flex-shrink: 0;
-    width: 500px;
-}
-
-.hero-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.hero-stats {
-    display: flex;
-    gap: 2rem;
-    margin: 2rem 0;
-}
-
-.stat-item {
-    text-align: left;
-    padding-right: 2rem;
-    border-right: 1px solid #ddd;
-}
-
-.stat-item:last-child {
-    border-right: none;
-    padding-right: 0;
-}
-
-.stat-number {
-    display: block;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-.stat-label {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--color-text-light);
-}
-
-/* --- Swish Divider --- */
-.swish-divider {
-    height: 50px; 
-    background: linear-gradient(to bottom, var(--color-background-light) 50%, #fff 50%);
-    margin-top: 5rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.swish-divider::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -10%;
-    width: 120%;
-    height: 100%;
-    background: var(--color-white);
-    transform: skewY(-2deg);
-    transform-origin: 0% 100%;
-    z-index: 10;
-}
-
-/* --- 2. Recipes Resonance Section --- */
-.recipes-resonance-section {
-    display: flex;
-    gap: 5rem;
-    padding: 6rem 0;
-    background: var(--color-white);
-    position: relative;
-    z-index: 10;
-}
-
-.recipes-resonance-section::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: -5%;
-    width: 110%;
-    height: 30px;
-    background: var(--color-yellow);
-    transform: skewY(-1.5deg);
-    z-index: 11;
-}
-
-.resonance-content {
-    flex: 1;
-    padding-right: 2rem; /* reduce padding so text and images are balanced */
-}
-
-.resonance-content h2 {
-    color: var(--color-primary); 
-}
-
-.resonance-content p {
-    line-height: 1.7;
-    max-width: 500px;
-    margin-bottom: 2rem;
-}
-
-/* Resonance images container */
-.resonance-images {
-    display: flex;
-    gap: 20px;
-    align-items: flex-end; 
-    flex: 1; /* make width equal to text */
-}
-
-/* Main image */
-.main-resonance-image {
-    flex: 1;
-    max-width: 400px;
-}
-
-.main-resonance-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 16px;
-    background: none;
-}
-
-/* Sub-images beside main image */
-.sub-resonance-images {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.sub-resonance-images img {
-    width: 180px;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-}
-
-/* --- 3. Popular Food Section --- */
-.popular-food-section {
-    padding: 4rem 0 6rem;
-    text-align: center;
-    background-color: var(--color-background-light);
-}
-
-.popular-food-section h2 {
-    color: var(--color-green);
-    margin-bottom: 0.5rem;
-}
-
-.popular-food-section p {
-    max-width: 600px;
-    margin: 0 auto 3rem;
-}
-
-.popular-food-cards {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-}
-
-.food-card {
-    position: relative;
-    width: 250px;
-    height: 350px;
-    background: var(--color-white);
-    border-radius: 50% / 20%;
-    border: 1px solid #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.5rem;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-}
-
-.food-card img {
-    width: 100%;
-    height: 100%;
-    max-width: 200px;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-    transform: translateY(-20px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.card-info {
-    text-align: center;
-    margin-top: auto;
-}
-
-.card-info h3 {
-    margin: 0.5rem 0;
-}
-
-.rating {
-    color: var(--color-primary);
-    font-weight: 500;
-}
-
-.rating i {
-    font-size: 0.8rem;
-}
-
-/* --- 4. Guest Say Section --- */
-.guest-say-section {
-    padding: 3rem 0 6rem;
-    text-align: center;
-}
-
-.testimonial-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    margin-top: 3rem;
-}
-
-.testimonial-card {
-    padding: 2rem;
-    border-radius: 20px;
-    text-align: left;
-    color: var(--color-white);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial-card.color-yellow { background: var(--color-yellow); }
-.testimonial-card.color-red { background: var(--color-red); }
-.testimonial-card.color-blue { background: var(--color-blue); }
-.testimonial-card.color-green { background: var(--color-green); }
-
-.author-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.author-info img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
-    border: 3px solid var(--color-white);
-}
-
-.author-info h4 {
-    color: var(--color-white);
-    font-weight: 600;
-}
-
-.testimonial-card p {
-    color: var(--color-white);
-    font-style: italic;
-    font-size: 0.95rem;
-    margin-bottom: 0;
-}
-
-/* --- Footer --- */
-.footer {
-    position: relative;
-    padding-top: 200px; 
-    background: #444; 
-    color: #eee;
-}
-
-.footer-background-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 250px;
-    background-size: cover;
-    background-position: center;
-    opacity: 0.2; 
-    z-index: 1;
-}
-
-.footer-content {
-    position: relative;
-    z-index: 5;
-    display: flex;
-    justify-content: space-between;
-    padding: 3rem 8%;
-    border-bottom: 1px solid #555;
-}
-
-.footer-logo img {
-    height: 40px;
-    filter: brightness(2);
-}
-
-.footer-links {
-    display: flex;
-    gap: 4rem;
-}
-
-.footer-column h4 {
-    color: var(--color-white);
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.footer-column ul {
-    list-style: none;
-}
-
-.footer-column ul li a {
-    color: #bbb;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 0.5rem;
-    transition: color 0.3s;
-}
-
-.footer-column ul li a:hover {
-    color: var(--color-primary);
-}
-
-.footer-newsletter input[type="email"] {
-    padding: 10px;
-    border: none;
-    border-radius: 5px 0 0 5px;
-    outline: none;
-    width: 200px;
-}
-
-.footer-newsletter button {
-    padding: 10px 15px;
-    border: none;
-    background: var(--color-primary);
-    color: var(--color-white);
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    margin-left: -5px;
-}
-
-.footer-bottom {
-    text-align: center;
-    padding: 1rem 8%;
-    background: #333;
-    font-size: 0.9rem;
-}
-
-/* --- RESPONSIVE MEDIA QUERIES --- */
-@media (max-width: 992px) {
-    main, .navbar, .footer-content, .footer-bottom { padding: 0 5%; }
-    h1 { font-size: 2.8rem; }
-    h2 { font-size: 2rem; }
-
-    .hero-section { flex-direction: column; text-align: center; gap: 2rem; }
-    .hero-image { width: 100%; max-width: 500px; order: -1; }
-    .hero-stats { justify-content: center; gap: 1.5rem; }
-    .stat-item { padding-right: 1.5rem; }
-
-    .recipes-resonance-section { flex-direction: column; gap: 2rem; padding: 4rem 0; }
-    .resonance-content { padding-right: 0; text-align: center; }
-    .resonance-images { flex-direction: column; align-items: center; }
-    .sub-resonance-images { flex-direction: row; justify-content: center; gap: 15px; }
-    .sub-resonance-images img { height: 120px; width: auto; }
-}
-
-@media (max-width: 576px) {
-    h1 { font-size: 2.2rem; }
-    h2 { font-size: 1.8rem; }
-
-    .hero-stats { flex-direction: column; align-items: center; gap: 1rem; }
-    .sub-resonance-images { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-    .sub-resonance-images img { width: 100px; height: auto; }
-    .popular-food-cards { flex-direction: column; align-items: center; }
-    .food-card { width: 90%; }
-    .footer-links { flex-direction: column; align-items: center; gap: 1.5rem; }
-}
-
-/* ===== Animations ===== */
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-@keyframes buttonHover {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-/* Hero section */
-.hero-content h1,
-.hero-content p,
-.hero-stats,
-.btn-discover {
-    animation: fadeInUp 1s ease forwards;
-    opacity: 0;
-}
-
-/* Buttons hover */
-.btn:hover {
-    animation: buttonHover 0.4s ease forwards;
-}
-
-/* Stats count-up animation */
-.stat-number {
-    opacity: 0;
-    animation: fadeIn 1.5s ease forwards;
-    animation-delay: 0.5s;
-}
-
-/* Popular food cards */
-.popular-food-cards .food-card {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.8s ease forwards;
-}
-
-.popular-food-cards .food-card:nth-child(1) { animation-delay: 0.2s; }
-.popular-food-cards .food-card:nth-child(2) { animation-delay: 0.4s; }
-.popular-food-cards .food-card:nth-child(3) { animation-delay: 0.6s; }
-
-/* Testimonials */
-.testimonial-card {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.3s;
-}
-
-
-/* ===== Enhanced Responsive Design ===== */
-
-/* Large Desktop (1200px and above) */
-@media (min-width: 1200px) {
-    .hero-section,
-    .recipes-resonance-section,
-    .popular-food-section,
-    .guest-say-section {
-        padding-left: 10%;
-        padding-right: 10%;
-    }
-}
-
-/* Tablet and Small Desktop (992px - 1199px) */
-@media (max-width: 992px) {
-    .navbar {
-        padding: 1.5rem 5%;
-    }
-    
-    main {
-        padding: 0 5%;
-    }
-    
-    .hero-section {
-        gap: 2rem;
-        padding-top: 2rem;
-    }
-    
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
-    
-    .hero-image {
-        width: 400px;
-    }
-    
-    .recipes-resonance-section {
-        gap: 3rem;
-        padding: 4rem 0;
-    }
-    
-    .resonance-images {
-        gap: 15px;
-    }
-    
-    .main-resonance-image {
-        max-width: 300px;
-    }
-    
-    .sub-resonance-images img {
-        width: 140px;
-    }
-    
-    .popular-food-cards {
-        gap: 2rem;
-    }
-    
-    .food-card {
-        width: 220px;
-        height: 320px;
-    }
-    
-    .testimonial-grid {
-        gap: 20px;
-    }
-    
-    .footer-content {
-        flex-wrap: wrap;
-        gap: 2rem;
-    }
-    
-    .footer-links {
-        gap: 3rem;
-    }
-}
-
-/* Tablet (768px - 991px) */
-@media (max-width: 768px) {
-    .navbar {
-        padding: 1rem 5%;
-    }
-    
-    .logo img {
-        height: 35px;
-    }
-    
-    .hero-section {
-        flex-direction: column;
-        text-align: center;
-        padding-top: 1rem;
-    }
-    
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-    
-    .hero-image {
-        width: 100%;
-        max-width: 400px;
-        order: -1;
-    }
-    
-    .hero-stats {
-        justify-content: center;
-        gap: 1.5rem;
-    }
-    
-    .stat-item {
-        padding-right: 1.5rem;
-    }
-    
-    .stat-number {
-        font-size: 1.5rem;
-    }
-    
-    .swish-divider {
-        margin-top: 3rem;
-    }
-    
-    .recipes-resonance-section {
-        flex-direction: column;
-        gap: 2rem;
-        padding: 3rem 0;
-    }
-    
-    .resonance-content {
-        padding-right: 0;
-        text-align: center;
-    }
-    
-    .resonance-content p {
-        margin: 0 auto 2rem;
-    }
-    
-    .resonance-images {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-    
-    .sub-resonance-images {
-        flex-direction: row;
-        justify-content: center;
-        gap: 15px;
-    }
-    
-    .sub-resonance-images img {
-        width: 120px;
-        height: auto;
-    }
-    
-    .main-resonance-image {
-        max-width: 350px;
-    }
-    
-    .popular-food-section {
-        padding: 3rem 0 4rem;
-    }
-    
-    .popular-food-cards {
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-    }
-    
-    .food-card {
-        width: 280px;
-        height: 350px;
-    }
-    
-    .testimonial-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        max-width: 500px;
-        margin: 2rem auto 0;
-    }
-    
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 2.5rem;
-    }
-    
-    .footer-links {
-        justify-content: center;
-        gap: 2rem;
-    }
-    
-    .footer-newsletter form {
-        justify-content: center;
-    }
-}
-
-/* Mobile (576px - 767px) */
-@media (max-width: 576px) {
-    .navbar {
-        padding: 1rem;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .nav-actions {
-        width: 100%;
-        text-align: center;
-    }
-    
-    h1 {
-        font-size: 2rem;
-        line-height: 1.2;
-    }
-    
-    h2 {
-        font-size: 1.6rem;
-    }
-    
-    .hero-content h1 {
-        font-size: 1.8rem;
-    }
-    
-    .hero-content p {
-        font-size: 0.9rem;
-    }
-    
-    .hero-stats {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .stat-item {
-        padding-right: 0;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 1rem;
-    }
-    
-    .stat-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-    
-    .stat-number {
-        font-size: 1.3rem;
-    }
-    
-    .btn {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-    }
-    
-    .recipes-resonance-section {
-        padding: 2rem 0;
-    }
-    
-    .resonance-content h2 {
-        font-size: 1.5rem;
-        line-height: 1.3;
-    }
-    
-    .sub-resonance-images {
-        flex-wrap: wrap;
-    }
-    
-    .sub-resonance-images img {
-        width: 100px;
-    }
-    
-    .main-resonance-image {
-        max-width: 280px;
-    }
-    
-    .popular-food-section,
-    .guest-say-section {
-        padding: 2rem 0 3rem;
-    }
-    
-    .guest-say-section h2 {
-        font-size: 1.5rem;
-        line-height: 1.3;
-    }
-    
-    .food-card {
-        width: 100%;
-        max-width: 280px;
-        height: 320px;
-    }
-    
-    .food-card img {
-        max-width: 180px;
-        max-height: 180px;
-    }
-    
-    .testimonial-card {
-        padding: 1.5rem;
-    }
-    
-    .author-info {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.5rem;
-    }
-    
-    .author-info img {
-        margin-right: 0;
-    }
-    
-    .footer {
-        padding-top: 150px;
-    }
-    
-    .footer-content {
-        padding: 2rem 1rem;
-    }
-    
-    .footer-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-    
-    .footer-newsletter form {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .footer-newsletter input[type="email"] {
-        width: 100%;
-        border-radius: 5px;
-        margin-bottom: 0.5rem;
-    }
-    
-    .footer-newsletter button {
-        border-radius: 5px;
-        margin-left: 0;
-        width: 100%;
-    }
-    
-    .footer-bottom {
-        padding: 1rem;
-    }
-}
-
-/* Small Mobile (480px and below) */
-@media (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 1.6rem;
-    }
-    
-    .resonance-content h2,
-    .guest-say-section h2 {
-        font-size: 1.4rem;
-    }
-    
-    .popular-food-section h2 {
-        font-size: 1.4rem;
-    }
-    
-    .sub-resonance-images img {
-        width: 80px;
-    }
-    
-    .main-resonance-image {
-        max-width: 250px;
-    }
-    
-    .food-card {
-        height: 300px;
-    }
-    
-    .food-card img {
-        max-width: 160px;
-        max-height: 160px;
-    }
-    
-    .testimonial-card {
-        padding: 1.25rem;
-    }
-    
-    .testimonial-card p {
-        font-size: 0.9rem;
-    }
-}
-
-/* Touch device improvements */
-@media (hover: none) and (pointer: coarse) {
-    .btn:hover {
-        transform: none;
-        animation: none;
-    }
-    
-    .food-card:hover {
-        transform: none;
-    }
-}
-
-/* High DPI screens */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .logo img,
-    .footer-logo img {
-        image-rendering: -webkit-optimize-contrast;
-    }
-}
-
-/* Print styles */
-@media print {
-    .navbar,
-    .footer,
-    .btn {
-        display: none;
-    }
-    
-    body {
-        background: white;
-        color: black;
-    }
-}
+ /* --- Base Styles --- */
+        :root {
+            --color-primary: #FF5A5F;
+            --color-text-dark: #333;
+            --color-text-light: #666;
+            --color-background-light: #FFF8F0;
+            --color-white: #fff;
+            --color-yellow: #FFD25E;
+            --color-red: #FA6065;
+            --color-blue: #6392FF;
+            --color-green: #90B384;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--color-text-dark);
+            background-color: var(--color-background-light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-text-dark);
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: var(--color-text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+
+        .btn-signup, .btn-discover, .btn-view-all {
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-signup:hover, .btn-discover:hover, .btn-view-all:hover {
+            background: #d44d51;
+        }
+
+        /* --- Navigation Bar --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 8%;
+            background: var(--color-white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo img {
+            height: 40px; 
+            filter: brightness(0.6) sepia(1) hue-rotate(-25deg) saturate(3); 
+        }
+
+        /* Navigation styles */
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        nav li {
+            list-style: none;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--color-text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--color-primary);
+        }
+
+        /* --- Main Sections --- */
+        main {
+            padding: 0 8%;
+        }
+
+        /* --- 1. Hero Section --- */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4rem 0 0;
+            gap: 3rem;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex-shrink: 0;
+            width: 500px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-item {
+            text-align: left;
+            padding-right: 2rem;
+            border-right: 1px solid #ddd;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+
+        /* --- Swish Divider (CORRECTED) --- */
+        .swish-divider {
+            height: 4px;
+            background: var(--color-yellow);
+            margin: 5rem auto;
+            width: 60%;
+            transform: none;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .swish-divider::before {
+            display: none;
+        }
+
+        /* --- 2. Recipes Resonance Section --- */
+        .recipes-resonance-section {
+            display: flex;
+            gap: 5rem;
+            padding: 6rem 0;
+            background: var(--color-white);
+            position: relative;
+            z-index: 10;
+        }
+
+        .recipes-resonance-section::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -5%;
+            width: 110%;
+            height: 30px;
+            background: var(--color-yellow);
+            transform: skewY(-1.5deg);
+            z-index: 11;
+        }
+
+        .resonance-content {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .resonance-content h2 {
+            color: var(--color-primary); 
+        }
+
+        .resonance-content p {
+            line-height: 1.7;
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+
+        /* Resonance images container */
+        .resonance-images {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end; 
+            flex: 1;
+        }
+
+        /* Main image */
+        .main-resonance-image {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .main-resonance-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            background: none;
+        }
+
+        /* Sub-images beside main image */
+        .sub-resonance-images {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sub-resonance-images img {
+            width: 180px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+        }
+
+        /* --- 3. Popular Food Section --- */
+        .popular-food-section {
+            padding: 4rem 0 6rem;
+            text-align: center;
+            background-color: var(--color-background-light);
+        }
+
+        .popular-food-section h2 {
+            color: var(--color-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .popular-food-section p {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .popular-food-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .food-card {
+            position: relative;
+            width: 250px;
+            height: 350px;
+            background: var(--color-white);
+            border-radius: 50% / 20%;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 100%;
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            transform: translateY(-20px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-info {
+            text-align: center;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .card-info h3 {
+            margin: 0.5rem 0;
+        }
+
+        .rating {
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        .rating i {
+            font-size: 0.8rem;
+        }
+
+        /* --- 4. Guest Say Section --- */
+        .guest-say-section {
+            padding: 3rem 0 6rem;
+            text-align: center;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: left;
+            color: var(--color-white);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-card.color-yellow { background: var(--color-yellow); }
+        .testimonial-card.color-red { background: var(--color-red); }
+        .testimonial-card.color-blue { background: var(--color-blue); }
+        .testimonial-card.color-green { background: var(--color-green); }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .author-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 3px solid var(--color-white);
+        }
+
+        .author-info h4 {
+            color: var(--color-white);
+            font-weight: 600;
+        }
+
+        .testimonial-card p {
+            color: var(--color-white);
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            position: relative;
+            padding-top: 200px; 
+            background: #444; 
+            color: #eee;
+        }
+
+        .footer-background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2; 
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 5;
+            display: flex;
+            justify-content: space-between;
+            padding: 3rem 8%;
+            border-bottom: 1px solid #555;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            filter: brightness(2);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .footer-column h4 {
+            color: var(--color-white);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-newsletter input[type="email"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            width: 200px;
+        }
+
+        .footer-newsletter button {
+            padding: 10px 15px;
+            border: none;
+            background: var(--color-primary);
+            color: var(--color-white);
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            margin-left: -5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 1rem 8%;
+            background: #333;
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 992px) {
+            main, .navbar, .footer-content, .footer-bottom { padding: 0 5%; }
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2rem; }
+
+            .hero-section { flex-direction: column; text-align: center; gap: 2rem; }
+            .hero-image { width: 100%; max-width: 500px; order: -1; }
+            .hero-stats { justify-content: center; gap: 1.5rem; }
+            .stat-item { padding-right: 1.5rem; }
+
+            .recipes-resonance-section { flex-direction: column; gap: 2rem; padding: 4rem 0; }
+            .resonance-content { padding-right: 0; text-align: center; }
+            .resonance-images { flex-direction: column; align-items: center; }
+            .sub-resonance-images { flex-direction: row; justify-content: center; gap: 15px; }
+            .sub-resonance-images img { height: 120px; width: auto; }
+        }
+
+        @media (max-width: 576px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+
+            .hero-stats { flex-direction: column; align-items: center; gap: 1rem; }
+            .sub-resonance-images { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .sub-resonance-images img { width: 100px; height: auto; }
+            .popular-food-cards { flex-direction: column; align-items: center; }
+            .food-card { width: 90%; }
+            .footer-links { flex-direction: column; align-items: center; gap: 1.5rem; }
+        }
+
+        /* ===== Animations ===== */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes buttonHover {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hero section */
+        .hero-content h1,
+        .hero-content p,
+        .hero-stats,
+        .btn-discover {
+            animation: fadeInUp 1s ease forwards;
+            opacity: 0;
+        }
+
+        /* Buttons hover */
+        .btn:hover {
+            animation: buttonHover 0.4s ease forwards;
+        }
+
+        /* Stats count-up animation */
+        .stat-number {
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Popular food cards */
+        .popular-food-cards .food-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .popular-food-cards .food-card:nth-child(1) { animation-delay: 0.2s; }
+        .popular-food-cards .food-card:nth-child(2) { animation-delay: 0.4s; }
+        .popular-food-cards .food-card:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Testimonials */
+        .testimonial-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
