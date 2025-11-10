@@ -28,7 +28,52 @@
             <button class="btn btn-signup">Get Started</button>
             </a>
         </div>
+
+        <!-- Add this inside your navbar, after the existing nav-actions div -->
+<div class="menu-toggle" id="mobile-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav" id="mobile-nav">
+    <ul>
+        <li><a href="#">Recipe</a></li>
+        <li><a href="#">Discovery</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">About</a></li>
+    </ul>
+    <div class="nav-actions">
+        <a href="./dishcovery-dashboard/index.html">
+            <button class="btn btn-signup">Get Started</button>
+        </a>
+    </div>
+</div>
+
+ <!-- Mobile Menu Toggle -->
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </header>
+
+      <!-- Mobile Navigation - MOVED OUTSIDE NAVBAR -->
+    <div class="mobile-nav" id="mobile-nav">
+        <ul>
+            <li><a href="#">Recipe</a></li>
+            <li><a href="#">Discovery</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="./dishcovery-dashboard/index.html">
+                <button class="btn btn-signup">Get Started</button>
+            </a>
+            </div>
+    </div>
+</div>
 
     <main>
         <section class="hero-section">
@@ -62,7 +107,7 @@
 
         <section class="recipes-resonance-section">
             <div class="resonance-content">
-                <h2>Recipes That<br>resonate with<br>you.</h2>
+                <h2>Recipes That<br>resonance with<br>you.</h2>
                 <p>
               From finding amazing recipes, to being able too add your spark of recipes for everyoneto learn from you.
                 </p>
@@ -204,5 +249,7 @@
             <p>&copy; 2023 Dishcovery. All rights reserved.</p>
         </div>
     </footer>
+
+    <script src="home.js"></script>
 </body>
 </html>
