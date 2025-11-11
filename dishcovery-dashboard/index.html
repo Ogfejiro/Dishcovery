@@ -4,1348 +4,707 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dishcovery Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* =======================
-    Global Styles
-======================= */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
+    /* ────────────────────── GLOBAL ────────────────────── */
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+    body{background:#f9f9f9;color:#333;overflow-x:hidden;}
+    .container{display:flex;min-height:100vh;position:relative;}
+
+    /* ────────────────────── SIDEBAR ────────────────────── */
+    .sidebar{
+      width:240px;background:#fff;border-right:1px solid #eee;padding:1rem;
+      display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;
+      z-index:20;transition:transform .4s;transform:translateX(-100%);
     }
+    .sidebar.active{transform:translateX(0);}
+    .sidebar .logo img{width:140px;}
+    .menu{display:flex;flex-direction:column;gap:.5rem;margin-top:2rem;}
+    .menu a{text-decoration:none;color:#555;padding:.8rem 1rem;border-radius:8px;
+            display:flex;align-items:center;gap:.7rem;font-size:.95rem;transition:.3s;}
+    .menu a i{width:20px;color:#f44336;}
+    .menu a:hover,.menu a.active{background:#f44336;color:#fff;}
+    .menu a:hover i,.menu a.active i{color:#fff;}
 
-    body {
-        background-color: #f9f9f9;
-        color: #333;
-        overflow-x: hidden;
+    /* ────────────────────── OVERLAY & MAIN ────────────────────── */
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:15;opacity:0;transition:opacity .3s;}
+    .overlay.active{display:block;opacity:1;}
+    .main{flex:1;padding:2rem;width:100%;transition:padding-left .4s;}
+
+    /* ────────────────────── TOPBAR ────────────────────── */
+    .topbar{
+      display:flex;flex-direction:column;align-items:center;gap:1rem;
+      margin-bottom:2rem;border-bottom:1px solid #eee;padding-bottom:1rem;
+      position:relative;
     }
-
-    .container {
-        display: flex;
-        min-height: 100vh;
+    .toggle-sidebar{
+      background:#f44336;color:#fff;border:none;padding:.6rem 1rem;
+      border-radius:6px;cursor:pointer;font-size:1.2rem;
+      position:absolute;left:0;top:0;transform:translateY(-50%);
+      display:block;               /* always visible */
     }
-
-    /* =======================
-    Sidebar
-======================= */
-    .sidebar {
-        width: 240px;
-        background: #fff;
-        border-right: 1px solid #eee;
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        z-index: 20;
-        transition: transform 0.4s ease;
-    }
-
-    .sidebar .logo {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0.5rem 0;
-    }
-
-    .sidebar .logo img {
-        width: 140px;
-        height: auto;
-    }
-
-    .menu {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        margin-top: 2rem;
-    }
-
-    .menu a {
-        text-decoration: none;
-        color: #555;
-        padding: 0.8rem 1rem;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-        font-size: 0.95rem;
-        transition: 0.3s;
-    }
-
-    .menu a i {
-        width: 20px;
-        color: #f44336; /* Red icons */
-    }
-
-    .menu a:hover,
-    .menu a.active {
-        background-color: #f44336;
-        color: #fff;
-    }
-
-    .menu a:hover i,
-    .menu a.active i {
-        color: #fff; /* White icons on hover/active */
-    }
-
-    /* =======================
-    Overlay & Main Content Alignment
-======================= */
-    .overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 15;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .main {
-        flex: 1;
-        padding: 2rem;
-        padding-left: calc(240px + 2rem);
-        width: 100%;
-    }
-
-    /* =======================
-    Topbar & Filters - HOME PAGE ONLY
-======================= */
-    .topbar {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 1rem;
-    }
-
-    .toggle-sidebar {
-        display: none;
-        background: #f44336;
-        color: #fff;
-        border: none;
-        padding: 0.6rem 1rem;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1.2rem;
-        align-self: flex-start;
-    }
-
-    .filters {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .filters button {
-        background: #fff;
-        border: 1px solid #f44336; /* Red border */
-        border-radius: 20px;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 0.9rem;
-    }
-
-    .filters button.active,
-    .filters button:hover {
-        background: #f44336;
-        color: #fff;
-        border-color: #f44336;
-    }
-
-    /* Hide filters on search page */
-    #searchPage .filters {
-        display: none;
-    }
-
-    /* =======================
-    Recipe Grid & Cards
-======================= */
-    .recipe-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .recipe-card {
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .recipe-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .recipe-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-    }
-
-    .recipe-info {
-        padding: 1rem;
-    }
-
-    .tag {
-        background: #f44336;
-        color: #fff;
-        font-size: 0.8rem;
-        padding: 3px 10px;
-        border-radius: 12px;
-        border: none;
-        margin-bottom: 0.5rem;
-        display: inline-block;
-    }
-
-    .recipe-info h3 {
-        margin-top: 0.5rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
-
-    .meta {
-        color: #777;
-        font-size: 0.9rem;
-        margin: 0.4rem 0;
-    }
-
-    .desc {
-        font-size: 0.9rem;
-        color: #555;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    /* Save Button */
-    .save-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 1.2rem;
-        color: #777;
-        z-index: 10;
-    }
-
-    .save-btn:hover {
-        background: rgba(255, 255, 255, 1);
-        transform: scale(1.1);
-    }
-
-    .save-btn.saved {
-        color: #f44336;
-    }
-
-    .save-btn.saved i {
-        animation: bounce 0.5s ease;
-    }
-
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.3); }
-    }
-
-    /* =======================
-    Search Page - CUSTOM STYLES
-======================= */
-   
-    
-    
-  
-   
-    /* =======================
-Search Page - CUSTOM STYLES
-======================= */
-/* =======================
-Search Page - CUSTOM STYLES
-======================= */
-/* =======================
-Search Page - CUSTOM STYLES (FIXED)
-======================= */
-
-/* Ensure the parent page container is visible and allows content flow */
-#searchPage {
-    /* If #searchPage has a display property like 'grid' or 'flex', 
-       ensure it's not hiding content. 'display: block;' is a safe default for content flow. */
-    display: block; 
-    padding: 20px; /* Add base padding to ensure content isn't flush with the edge */
-}
-
-/* Search Bar Container (Used to be centered, now strictly left-aligned) */
-.search-area {
-    position: relative;
-    /* Ensure strict left alignment */
-    margin: 0 0 2rem 0; 
-    width: 100%;
-    /* Keep the reduced length */
-    max-width: 600px; 
-    display: block; 
-}
-
-.search-area input {
-    width: 100%;
-    padding: 0.9rem 1rem 0.9rem 3rem;
-    border: 1px solid #ccc;
-    border-radius: 50px;
-    outline: none;
-    font-size: 1rem;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    background-color: #fff;
-}
-
-.search-area i {
-    position: absolute;
-    left: 18px;
-    right: auto;
-    color: #999;
-    font-size: 1.2rem;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-/* Recent Searches Header and Container (Strictly left-aligned) */
-.search-section-header,
-.recent-searches {
-    /* Ensure strict left alignment by setting margins to 0 and keeping max-width */
-    max-width: 600px; 
-    margin-left: 0;
-    margin-right: 0;
-}
-
-.search-section-header {
-    font-size: 1.25rem;
-    color: #333;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.recent-searches {
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-}
-
-.recent-searches-list {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-/* Recent Search Tags (with Icons) */
-.recent-search-tag {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 0.9rem;
-    color: #555;
-    display: flex; 
-    align-items: center;
-    gap: 0.5rem; 
-}
-
-.recent-search-tag i {
-    color: #f44336; 
-    font-size: 0.9rem;
-    position: static;
-    transform: none;
-}
-
-.recent-search-tag:hover {
-    background: #f4f4f4;
-}
-
-/* Recent Search Tags */
-
-
-/* Search Results Grid Alignment */
-#searchResults {
-    /* If this is a grid, ensure items start from the left */
-    justify-content: start; 
-}
-    .search-card .tag {
-        background: #e0e0e0;
-        color: #555;
-        font-size: 0.75rem;
-        padding: 2px 8px;
-        border-radius: 4px;
-        margin-bottom: 0.2rem;
-    }
-    
-    .search-card .desc {
-        -webkit-line-clamp: 1;
-        color: #777;
-        font-size: 0.85rem;
-    }
-    
-    .search-card .recipe-info h3 {
-        margin-top: 0;
-    }
-    
-    #searchPage .recipe-grid {
-        margin-top: 1rem;
-    }
-
-    /* My Recipes Page */
-    .my-recipes-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .my-recipes-stats {
-        display: flex;
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        flex: 1;
-    }
-
-    .stat-number {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #f44336;
-        display: block;
-    }
-
-    .stat-label {
-        color: #777;
-        font-size: 0.9rem;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #777;
-        grid-column: 1 / -1;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        color: #ddd;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-        margin-bottom: 0.5rem;
-        color: #555;
-    }
-
-    /* Add Recipe Page Styles */
-    .auth-form-container {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 2rem auto;
-        text-align: center;
-    }
-
-    .auth-form-container h2 {
-        color: #f44336;
-        margin-bottom: 1.5rem;
-    }
-
-    .auth-options {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .auth-btn {
-        flex: 1;
-        padding: 0.8rem;
-        border: 2px solid #f44336;
-        background: #fff;
-        color: #f44336;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-    .auth-btn:hover {
-        background: #f44336;
-        color: #fff;
-    }
-
-    .auth-form {
-        display: none;
-    }
-
-    .auth-form.active {
-        display: block;
-    }
-
-    .form-group {
-        margin-bottom: 1rem;
-        text-align: left;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #555;
-        font-weight: 500;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 0.8rem;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 1rem;
-    }
-
-    .submit-btn {
-        width: 100%;
-        padding: 0.8rem;
-        background: #f44336;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .submit-btn:hover {
-        background: #e53935;
-    }
-
-    .page {
-        display: none;
-    }
-
-    .active-page {
-        display: block;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(5px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===========================
-    Responsive Overrides 
-=========================== */
-    @media (max-width: 1024px) {
-        .main {
-            padding-left: 2rem;
-        }
-
-        .sidebar {
-            transform: translateX(-100%);
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .overlay.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .toggle-sidebar {
-            display: block;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .recipe-grid {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        }
-        .my-recipes-stats {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .topbar {
-            flex-direction: column;
-            align-items: center;
-        }
-        .toggle-sidebar {
-            align-self: flex-start;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .recipe-grid {
-            grid-template-columns: 1fr;
-        }
-        .recent-searches-list {
-            justify-content: center;
-        }
-        .filters {
-            justify-content: center;
-            gap: 0.3rem;
-            flex-wrap: wrap;
-        }
-        .filters button {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-        }
-        .auth-options {
-            flex-direction: column;
-        }
+    .filters{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;width:100%;}
+    .filters button{background:#fff;border:1px solid #f44336;border-radius:10px;
+                    padding:.5rem 1rem;cursor:pointer;transition:.3s;font-size:.9rem;}
+    .filters button.active,.filters button:hover{background:#f44336;color:#fff;border-color:#f44336;}
+    #searchPage .filters{display:none;}
+
+    /* ────────────────────── RECIPE CARD ────────────────────── */
+    .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+    .recipe-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);
+                transition:transform .2s;cursor:pointer;position:relative;}
+    .recipe-card:hover{transform:translateY(-5px);}
+    .recipe-card img{width:100%;height:180px;object-fit:cover;}
+    .recipe-info{padding:1rem;}
+    .tag{background:#f44336;color:#fff;font-size:.8rem;padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:.5rem;}
+    .recipe-info h3{margin-top:.5rem;font-size:1.1rem;font-weight:600;}
+    .meta{color:#777;font-size:.9rem;margin:.4rem 0;}
+    .desc{font-size:.9rem;color:#555;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .save-btn{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.9);border:none;
+              border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+              cursor:pointer;transition:.3s;font-size:1.2rem;color:#777;z-index:10;}
+    .save-btn:hover{background:#fff;transform:scale(1.1);}
+    .save-btn.saved{color:#f44336;}
+    .save-btn.saved i{animation:bounce .5s;}
+    @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+    /* ────────────────────── SEARCH PAGE ────────────────────── */
+    .search-area{position:relative;width:100%;display:flex;align-items:center;justify-content:flex-start;}
+    .search-area input{width:70%;max-width:600px;padding:.9rem 1rem .9rem 3rem;border:1px solid #ccc;
+                       border-radius:50px;outline:none;font-size:1rem;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+    .search-area i{position:absolute;left:18px;color:#999;font-size:1.2rem;}
+    .search-section-header{font-size:1.25rem;color:#333;margin-bottom:1rem;font-weight:600;}
+    .recent-searches,.popular-searches{margin-top:2rem;}
+    .recent-searches-list{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .recent-search-tag{background:#fff;border:1px solid #ddd;border-radius:6px;padding:.5rem 1rem;
+                       cursor:pointer;transition:.3s;font-size:.9rem;color:#555;display:flex;align-items:center;gap:.5rem;}
+    .recent-search-tag i{color:#f44336;font-size:.9rem;}
+    .recent-search-tag:hover{background:#f4f4f4;}
+
+    /* ────────────────────── MY RECIPES ────────────────────── */
+    .my-recipes-stats{display:flex;gap:2rem;margin-bottom:2rem;}
+    .stat-card{background:#fff;padding:1.5rem;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);
+               text-align:center;flex:1;}
+    .stat-number{font-size:2rem;font-weight:bold;color:#f44336;display:block;}
+    .stat-label{color:#777;font-size:.9rem;}
+    .empty-state{text-align:center;padding:3rem;color:#777;grid-column:1/-1;}
+    .empty-state i{font-size:4rem;color:#ddd;margin-bottom:1rem;}
+
+    /* ────────────────────── RECIPE DETAIL ────────────────────── */
+    .recipe-detail{padding:1rem;max-width:1200px;margin:0 auto;}
+    .back-btn{background:none;border:none;color:#f44336;font-size:1rem;cursor:pointer;
+             margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;padding:.5rem 0;}
+    .back-btn:hover{color:#d32f2f;}
+    .recipe-detail-content{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden;}
+    .image-container{position:relative;width:100%;}
+    .detail-img{width:100%;height:400px;object-fit:cover;}
+    .image-dots{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);
+                display:flex;gap:8px;}
+    .image-dots .dot{width:8px;height:8px;background:#fff;border-radius:50%;opacity:.5;transition:.3s;}
+    .image-dots .dot.active{opacity:1;background:#f44336;}
+    .recipe-text{padding:1.5rem;}
+    .recipe-text .tag{background:#f44336;color:#fff;font-size:.8rem;padding:4px 12px;border-radius:12px;margin-bottom:1rem;display:inline-block;}
+    .recipe-text h2{color:#333;font-size:1.8rem;margin-bottom:1rem;font-weight:600;}
+    .rating-info{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+    .star-rating{display:flex;gap:2px;}
+    .star-rating i{color:gold;font-size:1.1rem;}
+    .rating-value{color:#333;font-weight:600;}
+    .rating-count{color:#777;font-size:.9rem;}
+    .recipe-meta-data{display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+    .recipe-meta-data p{display:flex;align-items:center;gap:.5rem;color:#555;font-size:.95rem;}
+    .recipe-meta-data i{color:#f44336;width:16px;}
+    .description-text{color:#555;line-height:1.6;margin-bottom:1.5rem;font-size:1rem;}
+    .nutrition-card{background:#f8f9fa;padding:1.5rem;border-radius:8px;margin-top:1.5rem;}
+    .nutrition-card h3{color:#333;margin-bottom:1rem;font-size:1.2rem;font-weight:600;}
+    .nutrition-details p{display:flex;justify-content:space-between;padding:.5rem 0;
+                        border-bottom:1px solid #e9ecef;color:#555;}
+    .nutrition-details p:last-child{border-bottom:none;}
+    .nutrition-details span{font-weight:600;color:#333;}
+    .detail-main-section{padding:1.5rem;border-top:1px solid #eee;}
+    .detail-main-section h3{color:#333;font-size:1.3rem;margin-bottom:1rem;font-weight:600;}
+    #detailIngredients{list-style:none;padding:0;margin-bottom:2rem;}
+    .ingredient-item{display:flex;justify-content:space-between;align-items:center;
+                     padding:.8rem 0;border-bottom:1px solid #f0f0f0;}
+    .ingredient-item:last-child{border-bottom:none;}
+    .ingredient-name{display:flex;align-items:center;gap:.8rem;color:#333;flex:1;}
+    .ingredient-name input[type=checkbox]{width:18px;height:18px;border:2px solid #ddd;
+                                         border-radius:4px;cursor:pointer;}
+    .ingredient-name input[type=checkbox]:checked{background:#f44336;border-color:#f44336;}
+    .ingredient-item span{color:#666;font-weight:500;min-width:80px;text-align:right;}
+    #detailInstructions{list-style:none;padding:0;}
+    .instruction-item{padding:1rem 0;border-bottom:1px solid #f0f0f0;}
+    .instruction-item:last-child{border-bottom:none;}
+    .instruction-item p{display:flex;align-items:flex-start;gap:1rem;color:#333;
+                        line-height:1.6;margin:0;}
+    .instruction-number{background:#f44336;color:#fff;border-radius:50%;width:24px;height:24px;
+                        display:flex;align-items:center;justify-content:center;font-size:.9rem;
+                        font-weight:600;flex-shrink:0;margin-top:2px;}
+    .you-might-like-section{padding:1.5rem;border-top:1px solid #eee;}
+    .you-might-like-section h3{color:#333;font-size:1.3rem;margin-bottom:1rem;font-weight:600;}
+    .you-might-like-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
+    .recipe-text .save-btn{background:transparent;border:none;color:#777;font-size:1.2rem;
+                           cursor:pointer;padding:.5rem;border-radius:50%;transition:.3s;}
+    .recipe-text .save-btn:hover{background:rgba(244,67,54,.1);color:#f44336;}
+    .recipe-text .save-btn.saved{color:#f44336;}
+
+    .page{display:none;}
+    .active-page{display:block;animation:fadeIn .3s;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ────────────────────── RESPONSIVE ────────────────────── */
+    @media (max-width:1024px){
+      .main{padding-left:2rem;}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar" id="sidebar">
-      <div class="logo">
-        <img src="../images/Frame 13.png" alt="Dishcovery Logo" /> 
+<div class="container">
+  <!-- ====================== SIDEBAR ====================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo"><img src="../images/Frame 13.png" alt="Dishcovery Logo"></div>
+    <nav class="menu">
+      <a href="#" class="nav-link active" data-page="home"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="#" class="nav-link" data-page="search"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
+      <a href="../sign-up page/sign-up.html" class="nav-link" data-page="add-recipe"><i class="fa-solid fa-plus"></i> Add Recipe</a>
+      <a href="#" class="nav-link" data-page="my-recipes"><i class="fa-solid fa-book"></i> My Recipes</a>
+      <a href="#" class="nav-link" data-page="more"><i class="fa-solid fa-ellipsis"></i> More</a>
+      <a href="../index.html">Go Back To home</a>
+    </nav>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ====================== MAIN ====================== -->
+  <main class="main">
+    <header class="topbar">
+      <button class="toggle-sidebar" id="toggleSidebar"><i class="fa-solid fa-bars"></i></button>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="breakfast">Breakfast</button>
+        <button class="filter-btn" data-filter="lunch">Lunch</button>
+        <button class="filter-btn" data-filter="dinner">Dinner</button>
+        <button class="filter-btn" data-filter="snacks">Snacks</button>
+        <button class="filter-btn" data-filter="drinks">Drinks</button>
+      </div>
+    </header>
+
+    <!-- ====================== HOME ====================== -->
+    <section id="homePage" class="page active-page">
+      <section class="recipe-grid" id="homeRecipes"></section>
+    </section>
+
+    <!-- ====================== SEARCH ====================== -->
+    <section id="searchPage" class="page">
+      <div class="search-area">
+        <input type="text" id="searchInput" placeholder="Search recipes, cuisine, or snacks..." />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <hr style="margin:1.5rem 0;border:0;border-top:1px solid #eee;">
+      <div class="recent-searches">
+        <h2 class="search-section-header">Recent Searches</h2>
+        <div class="recent-searches-list">
+          <div class="recent-search-tag"><i class="fa-solid fa-drumstick-bite"></i> Chicken curry</div>
+          <div class="recent-search-tag"><i class="fa-solid fa-bowl-food"></i> Pepper soup</div>
+          <div class="recent-search-tag"><i class="fa-solid fa-pizza-slice"></i> Pepperoni pizza</div>
+          <div class="recent-search-tag"><i class="fa-solid fa-bowl-rice"></i> Native rice</div>
+          <div class="recent-search-tag"><i class="fa-solid fa-plate-wheat"></i> Indomie stir-fry</div>
+        </div>
+      </div>
+      <div class="popular-searches">
+        <h2 class="search-section-header">Popular Searches</h2>
+        <section class="recipe-grid" id="searchResults"></section>
+      </div>
+    </section>
+
+    <!-- ====================== MY RECIPES ====================== -->
+    <section id="myRecipesPage" class="page">
+      <div class="my-recipes-header"><h2>My Saved Recipes</h2></div>
+      <div class="my-recipes-stats">
+        <div class="stat-card"><span class="stat-number" id="totalSaved">0</span><span class="stat-label">Total Saved</span></div>
+        <div class="stat-card"><span class="stat-number" id="breakfastCount">0</span><span class="stat-label">Breakfast</span></div>
+        <div class="stat-card"><span class="stat-number" id="lunchCount">0</span><span class="stat-label">Lunch</span></div>
+        <div class="stat-card"><span class="stat-number" id="dinnerCount">0</span><span class="stat-label">Dinner</span></div>
+      </div>
+      <section class="recipe-grid" id="savedRecipes">
+        <div class="empty-state" id="emptySavedRecipes">
+          <i class="far fa-bookmark"></i>
+          <h3>No Saved Recipes Yet</h3>
+          <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- ====================== RECIPE DETAIL ====================== -->
+    <section id="recipeDetailPage" class="page recipe-detail">
+      <p style="text-align:center;color:#777;margin-top:30px;">Click a recipe card to view details.</p>
+    </section>
+  </main>
+</div> <!-- ← THIS CLOSING DIV WAS MISSING BEFORE! -->
+
+<script>
+/* ============================== DATA ============================== */
+// const STATIC_RECIPES = [
+  /* ============================== DATA ============================== */
+/* ============================== DATA ============================== */
+const STATIC_RECIPES = [
+  {
+    _id:1,
+    name:"Pancakes",
+    category:"breakfast",
+    image:"https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:15,
+    description:"Fluffy pancakes served warm with syrup and fresh berries — the perfect breakfast treat.",
+    ingredients:[
+      "1 ½ cups All-purpose flour",
+      "3½ tsp Baking powder",
+      "1 tsp Salt",
+      "1 tbsp White sugar",
+      "1¼ cups Milk",
+      "1 large Egg",
+      "3 tbsp Butter, melted",
+      "1 tsp Vanilla extract",
+      "Maple syrup (for serving) to taste"
+    ],
+    instructions:[
+      "In a large bowl, stir together the flour, baking powder, salt and sugar. Make a hole in the center.",
+      "Pour the milk, egg, melted butter, and vanilla extract into the well. Mix until smooth. The batter should be slightly lumpy.",
+      "Heat a lightly oiled griddle or frying pan over medium-high heat.",
+      "Pour or scoop the batter into the griddle, using approximately ¼ cup for each pancake.",
+      "Cook until bubbles form on the surface and the edges look dry, about 2-3 minutes.",
+      "Flip and cook until golden brown on the other side, about 2 minutes more.",
+      "Serve hot with butter and maple syrup, or your favorite toppings."
+    ]
+  },
+  {
+    _id:2,
+    name:"Jollof Rice",
+    category:"lunch",
+    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2jT5vwT7cMO-MWPUx1Th6hNZH8N1wh5GzRQ&s",
+    cookingTime:45,
+    description:"A West African classic — spicy rice cooked with tomatoes, peppers, and seasoning.",
+    ingredients:["2 cups rice","5 tomatoes","1 red bell pepper","1 onion","Seasoning cubes and salt"],
+    instructions:["Blend tomatoes, pepper, and onion.","Cook sauce with oil and seasoning until thick.","Add rice and water, cover, and simmer until done."]
+  },
+  {
+    _id:3,
+    name:"Puff Puff",
+    category:"snacks",
+    image:"https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:30,
+    description:"Fluffy deep-fried dough balls — slightly sweet and addictive, perfect for snacks.",
+    ingredients:["2 cups flour","½ cup sugar","2 tsp yeast","1 cup warm water","Oil for frying"],
+    instructions:["Mix flour, sugar, yeast, and water into thick batter.","Allow to rise for 1 hour.","Fry in hot oil until golden brown."]
+  },
+  {
+    _id:4,
+    name:"Grilled Chicken",
+    category:"dinner",
+    image:"https://images.pexels.com/photos/2338407/pexels-photo-2338407.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:35,
+    description:"Juicy grilled chicken marinated in herbs and spices — smoky and delicious.",
+    ingredients:["1 kg chicken","2 tbsp olive oil","1 tsp garlic powder","1 tsp paprika","Salt and pepper"],
+    instructions:["Marinate chicken with oil and spices for 30 mins.","Grill on medium heat for 15-20 mins per side.","Serve hot."]
+  },
+  {
+    _id:5,
+    name:"Smoothie",
+    category:"drinks",
+    image:"https://images.pexels.com/photos/109275/pexels-photo-109275.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:5,
+    description:"A refreshing fruit smoothie packed with vitamins and a cool burst of energy.",
+    ingredients:["1 banana","1 cup mixed berries","1 cup yogurt","½ cup milk","1 tbsp honey"],
+    instructions:["Blend all ingredients until smooth.","Pour into a glass and enjoy!"]
+  },
+  {
+    _id:6,
+    name:"Avocado Toast",
+    category:"breakfast",
+    image:"https://www.eatingwell.com/thmb/PM3UlLhM0VbE6dcq9ZFwCnMyWHI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/EatingWell-April-Avocado-Toast-Directions-04-5b5b86524a3d4b35ac4c57863f6095dc.jpg",
+    cookingTime:10,
+    description:"Toasted bread topped with creamy avocado and seasonings — simple and satisfying.",
+    ingredients:["2 slices bread","1 ripe avocado","Salt, pepper, chili flakes","Lemon juice"],
+    instructions:["Toast bread.","Mash avocado with lemon, salt, pepper.","Spread on toast and sprinkle chili flakes."]
+  },
+  {
+    _id:7,
+    name:"Spaghetti Bolognese",
+    category:"lunch",
+    image:"https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:40,
+    description:"Classic Italian pasta with rich tomato meat sauce — comforting and hearty.",
+    ingredients:["300g spaghetti","500g minced beef","1 onion","2 garlic cloves","400g tomato sauce","Herbs"],
+    instructions:["Cook pasta.","Brown beef with onion and garlic.","Add sauce and simmer 20 mins.","Serve over pasta."]
+  },
+  {
+    _id:8,
+    name:"Chicken Salad",
+    category:"dinner",
+    image:"https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:20,
+    description:"Light and healthy — grilled chicken tossed with crisp vegetables and dressing.",
+    ingredients:["2 chicken breasts","Lettuce","Tomato","Cucumber","Olive oil dressing"],
+    instructions:["Grill chicken and slice.","Toss with veggies and dressing.","Serve fresh."]
+  },
+  {
+    _id:9,
+    name:"Fried Rice",
+    category:"lunch",
+    image:"https://images.pexels.com/photos/7363933/pexels-photo-7363933.jpeg?auto=compress&cs=tinysrgb&w=600",
+    cookingTime:35,
+    description:"Colorful rice stir-fried with veggies and proteins — a Nigerian party favorite.",
+    ingredients:["2 cups rice","Mixed veggies","Shrimp or chicken","Soy sauce","Seasoning"],
+    instructions:["Cook rice and cool.","Stir-fry protein and veggies.","Add rice and soy sauce, mix well."]
+  },
+  {
+    _id:10,
+    name:"Chapman Drink",
+    category:"drinks",
+    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTTTtw3YxLHmJjiXeRnGV_lY_KwsZwUXI8tA&s",
+    cookingTime:5,
+    description:"Popular Nigerian cocktail made with Fanta, Sprite, and bitters — sweet and zesty.",
+    ingredients:["Fanta","Sprite","Angostura bitters","Grenadine","Orange slice"],
+    instructions:["Mix equal parts Fanta and Sprite.","Add a dash of bitters and grenadine.","Garnish with orange."]
+  },
+  {
+    _id:11,
+    name:"Suya",
+    category:"dinner",
+    image:"https://cookingwithclaudy.com/wp-content/uploads/2024/05/FB_IMG_1714779479334.jpg",
+    cookingTime:25,
+    description:"Spicy Nigerian street food — grilled beef skewers coated with yaji pepper mix.",
+    ingredients:["500g beef","Yaji spice","Onion","Skewers","Oil"],
+    instructions:["Cut beef into strips.","Coat with yaji and oil.","Skewer and grill until charred."]
+  },
+  {
+    _id:12,
+    name:"Fruit Parfait",
+    category:"drinks",
+    image:"https://tatyanaseverydayfood.com/wp-content/uploads/2021/06/Easy-Fruit-Granola-Parfaits.jpg",
+    cookingTime:10,
+    description:"Layered yogurt, fruits, and granola — delicious and refreshing.",
+    ingredients:["Greek yogurt","Mixed fruits","Granola","Honey"],
+    instructions:["Layer yogurt, fruits, and granola in a glass.","Drizzle with honey.","Serve chilled."]
+  }
+];
+
+
+let ALL_RECIPES = [...STATIC_RECIPES];
+
+// Load savedRecipes from localStorage and ensure IDs are numbers
+let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+savedRecipes = savedRecipes.map(id => Number(id)).filter(id => !Number.isNaN(id));
+
+
+/* ============================== SAVE LOGIC ============================== */
+function toggleSaveRecipe(id){
+  const idx = savedRecipes.indexOf(id);
+  if (idx > -1) {
+    // If already saved, remove it
+    savedRecipes.splice(idx, 1);
+  } else {
+    // If not saved, add it
+    savedRecipes.push(id);
+  }
+
+  // Save to localStorage
+  localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+
+  // Update buttons and the My Recipes page
+  updateAllSaveButtons(id);
+  updateMyRecipesPage();
+}
+
+
+function updateAllSaveButtons(id) {
+  // Update all save buttons anywhere in the page
+  document.querySelectorAll(`.save-btn`).forEach(btn => {
+    // Check if this button belongs to the recipe
+    const parentCard = btn.closest('.recipe-card');
+    const btnId = parentCard ? Number(parentCard.dataset.recipeId) : Number(btn.dataset.recipeId);
+    if (btnId === id) {
+      const saved = savedRecipes.includes(id);
+      btn.classList.toggle('saved', saved);
+      btn.innerHTML = `<i class="${saved ? 'fas' : 'far'} fa-bookmark"></i>`;
+    }
+  });
+}
+
+
+
+
+/* ============================== CARD ============================== */
+function createRecipeCard(r){
+  const card = document.createElement('div');
+  card.className = 'recipe-card';
+  card.dataset.recipeId = r._id;
+  const saved = savedRecipes.includes(r._id);
+
+  // Use span for tag to avoid nested button markup issues
+  card.innerHTML = `
+    <button class="save-btn ${saved ? 'saved' : ''}" onclick="event.stopPropagation();toggleSaveRecipe(${r._id})">
+      <i class="${saved ? 'fas' : 'far'} fa-bookmark"></i>
+    </button>
+
+    <img src="${r.image}" alt="${r.name}">
+    <div class="recipe-info">
+      <span class="tag">${r.category.charAt(0).toUpperCase() + r.category.slice(1)}</span>
+      <h3>${r.name}</h3>
+      <p class="meta"><i class="fa-regular fa-clock"></i> ${r.cookingTime} mins</p>
+      <p class="desc">${r.description}</p>
+    </div>`;
+
+  card.addEventListener('click', () => showRecipeDetail(r));
+  return card;
+}
+
+
+/* ============================== RENDER ============================== */
+function renderRecipes(list, container){
+  container.innerHTML='';
+  list.forEach(r=>container.appendChild(createRecipeCard(r)));
+  if(!list.length) container.innerHTML='<p style="text-align:center;color:#777;margin-top:30px;grid-column:1/-1;">No recipes found.</p>';
+}
+
+/* ============================== DETAIL PAGE ============================== */
+/* ============================== DETAIL PAGE ============================== */
+/* ============================== DETAIL PAGE (FIXED) ============================== */
+function showRecipeDetail(recipe){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));
+  document.getElementById('recipeDetailPage').classList.add('active-page');
+
+  const prepTime=5, cookTime=15, rating=5.0, reviews=234;
+  const nutrition={Calories:"227",Protein:"6g",Carbs:"28g",Fat:"9g",Fiber:"1g",Sugar:"7g"};
+
+  const ingredientsHTML = recipe.ingredients.map(i=>{
+    const [amount,...rest] = i.split(/,\s*/);
+    const name = rest.join(', ') || amount;
+    return `<li class="ingredient-item">
+              <label class="ingredient-name"><input type="checkbox">${name}</label>
+              <span>${amount}</span>
+            </li>`;
+  }).join('');
+
+  const instructionsHTML = recipe.instructions.map((s,i)=>`
+    <li class="instruction-item">
+      <p><span class="instruction-number">${i+1}</span>${s}</p>
+    </li>`).join('');
+
+  const mightLike = STATIC_RECIPES.filter(r=>r._id!==recipe._id).slice(0,2);
+
+  // ---- BUILD THE WHOLE DETAIL PAGE ----
+  document.getElementById('recipeDetailPage').innerHTML = `
+    <button class="back-btn">Back to Dashboard</button>
+    <div class="recipe-detail-content">
+      <div class="image-container">
+        <img src="${recipe.image}" alt="${recipe.name}" class="detail-img">
+        <div class="image-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
       </div>
 
-      <nav class="menu">
-        <a href="#" class="nav-link active" data-page="home"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="#" class="nav-link" data-page="search"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
-        <a href="../sign-up page/sign-up.html" class="nav-link" data-page="add-recipe"><i class="fa-solid fa-plus"></i> Add Recipe</a>
-        <a href="#" class="nav-link" data-page="my-recipes"><i class="fa-solid fa-book"></i> My Recipes</a>
-        <a href="#" class="nav-link" data-page="more"><i class="fa-solid fa-ellipsis"></i> More</a>
-      </nav>
-    </aside>
+      <div class="recipe-text">
+        <button class="tag">${recipe.category.charAt(0).toUpperCase()+recipe.category.slice(1)}</button>
+        <h2>${recipe.name}</h2>
+        <div class="rating-info">
+          <div class="star-rating">${Array(5).fill('<i class="fa-solid fa-star"></i>').join('')}</div>
+          <p class="rating-value">${rating} <span class="rating-count">(${reviews} reviews)</span></p>
+          <button class="save-btn ${savedRecipes.includes(recipe._id)?'saved':''}" 
+        data-recipe-id="${recipe._id}" 
+        onclick="event.stopPropagation(); toggleSaveRecipe(${recipe._id})">
+  <i class="${savedRecipes.includes(recipe._id)?'fas':'far'} fa-bookmark"></i>
+</button>
 
-    <div class="overlay" id="overlay"></div>
 
-    <main class="main">
-      <header class="topbar">
-        <button class="toggle-sidebar" id="toggleSidebar"><i class="fa-solid fa-bars"></i></button>
-        <div class="filters">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="breakfast">Breakfast</button>
-          <button class="filter-btn" data-filter="lunch">Lunch</button>
-          <button class="filter-btn" data-filter="dinner">Dinner</button>
-          <button class="filter-btn" data-filter="snacks">Snacks</button>
-          <button class="filter-btn" data-filter="drinks">Drinks</button>
+
         </div>
-      </header>
-
-      <section id="homePage" class="page active-page">
-        <section class="recipe-grid" id="homeRecipes">
-          <!-- Recipes will be loaded dynamically -->
-        </section>
-      </section>
-
-      <section id="searchPage" class="page">
-        <!-- Search page content - NO FILTERS -->
-        <div class="search-area">
-          <input type="text" id="searchInput" placeholder="Search recipes, cuisine, or snacks..." />
-          <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="recipe-meta-data">
+          <p><i class="fa-regular fa-clock"></i> Prep Time: <span>${prepTime} mins</span></p>
+          <p><i class="fa-solid fa-fire-burner"></i> Cook Time: <span>${cookTime} mins</span></p>
+          <p><i class="fa-solid fa-user-group"></i> Servings: <span>4</span></p>
         </div>
+        <p class="description-text">${recipe.description}</p>
 
-        <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #eee;">
-        
-        <div class="recent-searches">
-          <h2 class="search-section-header">Recent Searches</h2>
-          <div class="recent-searches-list">
-            <div class="recent-search-tag">Chicken curry</div>
-            <div class="recent-search-tag">Pepper soup</div>
-            <div class="recent-search-tag">Pepperoni pizza</div>
-            <div class="recent-search-tag">Native rice</div>
-            <div class="recent-search-tag">Indomie stir-fry</div>
+        <div class="nutrition-card">
+          <h3>Nutrition Information</h3>
+          <div class="nutrition-details">
+            <p>Calories <span>${nutrition.Calories}</span></p>
+            <p>Protein <span>${nutrition.Protein}</span></p>
+            <p>Carbs <span>${nutrition.Carbs}</span></p>
+            <p>Fat <span>${nutrition.Fat}</span></p>
+            <p>Fiber <span>${nutrition.Fiber}</span></p>
+            <p>Sugar <span>${nutrition.Sugar}</span></p>
           </div>
         </div>
+      </div>
 
-        <div class="popular-searches">
-          <h2 class="search-section-header">Popular Searches</h2>
-          <section class="recipe-grid" id="searchResults">
-            <!-- Search results will be loaded dynamically -->
-          </section>
-        </div>
-      </section>
+      <div class="detail-main-section">
+        <h3>Ingredients</h3>
+        <ul id="detailIngredients">${ingredientsHTML}</ul>
+        <h3>Instructions</h3>
+        <ul id="detailInstructions">${instructionsHTML}</ul>
+      </div>
 
-      <section id="addRecipePage" class="page">
-        <div class="auth-form-container">
-          <h2>Add Your Recipe</h2>
-          <p style="color: #777; margin-bottom: 1.5rem;">Please login or sign up to share your recipes</p>
-          
-          <div class="auth-options">
-            <button class="auth-btn" onclick="showAuthForm('login')">Login</button>
-            <button class="auth-btn" onclick="showAuthForm('signup')">Sign Up</button>
-          </div>
+      <div class="you-might-like-section">
+        <h3 class="you-might-like">You Might Also Like</h3>
+        <div class="recipe-grid you-might-like-grid" id="mightLikeGrid"></div>
+      </div>
+    </div>`;
 
-          <div id="loginForm" class="auth-form">
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input type="password" placeholder="Enter your password">
-            </div>
-            <button class="submit-btn">Login</button>
-          </div>
+  // ---- BACK BUTTON ----
+  document.querySelector('.back-btn').addEventListener('click',()=>{
+    document.getElementById('recipeDetailPage').classList.remove('active-page');
+    const active = document.querySelector('.nav-link.active');
+    document.getElementById((active?active.dataset.page:'home')+'Page').classList.add('active-page');
+  });
 
-          <div id="signupForm" class="auth-form">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input type="password" placeholder="Create a password">
-            </div>
-            <button class="submit-btn">Sign Up</button>
-          </div>
-        </div>
-      </section>
-
-      <section id="myRecipesPage" class="page">
-        <div class="my-recipes-header">
-          <h2>My Saved Recipes</h2>
-        </div>
-        
-        <div class="my-recipes-stats">
-          <div class="stat-card">
-            <span class="stat-number" id="totalSaved">0</span>
-            <span class="stat-label">Total Saved</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number" id="breakfastCount">0</span>
-            <span class="stat-label">Breakfast</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number" id="lunchCount">0</span>
-            <span class="stat-label">Lunch</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number" id="dinnerCount">0</span>
-            <span class="stat-label">Dinner</span>
-          </div>
-        </div>
-
-        <section class="recipe-grid" id="savedRecipes">
-          <!-- Saved recipes will appear here -->
-          <div class="empty-state" id="emptySavedRecipes">
-            <i class="far fa-bookmark"></i>
-            <h3>No Saved Recipes Yet</h3>
-            <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
-          </div>
-        </section>
-      </section>
-
-      <section id="recipeDetailPage" class="page recipe-detail">
-        <p style="text-align:center; color:#777; margin-top: 30px;">Click a recipe card to view details.</p>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    // ==============================
-    // Dishcovery Dashboard JS with Save Recipe Functionality
-    // ==============================
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const navLinks = document.querySelectorAll(".nav-link");
-        const pages = document.querySelectorAll(".page");
-        const sidebar = document.querySelector(".sidebar");
-        const overlay = document.querySelector(".overlay");
-        const toggleSidebarBtn = document.getElementById("toggleSidebar");
-        const homeRecipes = document.getElementById("homeRecipes");
-        const searchInput = document.getElementById("searchInput");
-        const searchResults = document.getElementById("searchResults");
-        const categoryButtons = document.querySelectorAll(".filter-btn");
-        const recipeDetailPage = document.getElementById("recipeDetailPage");
-        const savedRecipesContainer = document.getElementById("savedRecipes");
-
-        // ===============================
-        // 💾 SAVE RECIPE FUNCTIONALITY
-        // ===============================
-
-        // Initialize saved recipes from localStorage
-        let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
-        let ALL_RECIPES = [];
-
-        // Save recipe function
-        function saveRecipe(recipeId) {
-            if (!savedRecipes.includes(recipeId)) {
-                savedRecipes.push(recipeId);
-                localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
-                updateSaveButton(recipeId, true);
-                updateMyRecipesPage();
-                return true;
-            }
-            return false;
-        }
-
-        // Unsave recipe function
-        function unsaveRecipe(recipeId) {
-            savedRecipes = savedRecipes.filter(id => id !== recipeId);
-            localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
-            updateSaveButton(recipeId, false);
-            updateMyRecipesPage();
-            return true;
-        }
-
-        // Toggle save recipe
-        function toggleSaveRecipe(recipeId) {
-            if (savedRecipes.includes(recipeId)) {
-                unsaveRecipe(recipeId);
-            } else {
-                saveRecipe(recipeId);
-            }
-        }
-
-        // Update save button appearance
-        function updateSaveButton(recipeId, isSaved) {
-            const saveBtns = document.querySelectorAll(`[data-recipe-id="${recipeId}"] .save-btn`);
-            saveBtns.forEach(saveBtn => {
-                if (saveBtn) {
-                    if (isSaved) {
-                        saveBtn.classList.add('saved');
-                        saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
-                    } else {
-                        saveBtn.classList.remove('saved');
-                        saveBtn.innerHTML = '<i class="far fa-bookmark"></i>';
-                    }
-                }
-            });
-        }
-
-        // Update My Recipes page
-        function updateMyRecipesPage() {
-            const savedRecipeIds = savedRecipes;
-            const savedRecipeData = ALL_RECIPES.filter(recipe => savedRecipeIds.includes(recipe._id));
-            
-            // Update stats
-            document.getElementById('totalSaved').textContent = savedRecipeData.length;
-            document.getElementById('breakfastCount').textContent = savedRecipeData.filter(r => r.category === 'breakfast').length;
-            document.getElementById('lunchCount').textContent = savedRecipeData.filter(r => r.category === 'lunch').length;
-            document.getElementById('dinnerCount').textContent = savedRecipeData.filter(r => r.category === 'dinner').length;
-
-            // Update recipes display
-            const savedRecipesContainer = document.getElementById('savedRecipes');
-            if (!savedRecipesContainer) return;
-            
-            if (savedRecipeData.length === 0) {
-                savedRecipesContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="far fa-bookmark"></i>
-                        <h3>No Saved Recipes Yet</h3>
-                        <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
-                    </div>
-                `;
-            } else {
-                savedRecipesContainer.innerHTML = '';
-                savedRecipeData.forEach(recipe => {
-                    const card = createRecipeCard(recipe);
-                    const saveBtn = card.querySelector('.save-btn');
-                    if (saveBtn) {
-                        saveBtn.classList.add('saved');
-                        saveBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
-                    }
-                    savedRecipesContainer.appendChild(card);
-                });
-            }
-        }
-
-        // ===============================
-        // 💾 DATA LOADER: 12 STATIC RECIPES
-        // ===============================
-
-        const STATIC_RECIPES = [
-            {
-                _id: 1,
-                name: "Pancakes",
-                category: "breakfast", 
-                image: "https://media.istockphoto.com/id/518525367/photo/breakfast-pancakes-and-syrup.webp?a=1&b=1&s=612x612&w=0&k=20&c=aU5gXk1huHPXP0tupPAvQP8-6tkxpQ28zziXIxyMOG4=",
-                cookingTime: 15,
-                description: "Fluffy pancakes served warm with syrup and fresh berries — the perfect breakfast treat.",
-                ingredients: ["1 ½ cups flour", "1 tbsp sugar", "2 tsp baking powder", "1 cup milk", "1 egg", "2 tbsp butter, melted"],
-                instructions: ["In a bowl, whisk flour, sugar, and baking powder.", "Add milk, egg, and melted butter; whisk until smooth.", "Heat a nonstick pan and pour ¼ cup batter per pancake.", "Cook both sides until golden brown. Serve with syrup."],
-            },
-            {
-                _id: 2,
-                name: "Jollof Rice",
-                category: "lunch", 
-                image: "https://plus.unsplash.com/premium_photo-1694141252774-c937d97641da?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8am9sbG9mJTIwcmljZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 45,
-                description: "A West African classic — spicy rice cooked with tomatoes, peppers, and seasoning.",
-                ingredients: ["2 cups rice", "5 tomatoes", "1 red bell pepper", "1 onion", "Seasoning cubes and salt"],
-                instructions: ["Blend tomatoes, pepper, and onion.", "Cook sauce with oil and seasoning until thick.", "Add rice and water, cover, and simmer until done."],
-            },
-            {
-                _id: 3,
-                name: "Puff Puff",
-                category: "snacks", 
-                image: "https://images.unsplash.com/photo-1664993085274-80c6ba725ccc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVmZiUyMHB1ZmZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 30,
-                description: "Fluffy deep-fried dough balls — slightly sweet and addictive, perfect for snacks.",
-                ingredients: ["2 cups flour", "½ cup sugar", "2 tsp yeast", "1 cup warm water", "Oil for frying"],
-                instructions: ["Mix flour, sugar, yeast, and water into thick batter.", "Allow to rise for 1 hour.", "Fry in hot oil until golden brown."],
-            },
-            {
-                _id: 4,
-                name: "Grilled Chicken",
-                category: "dinner", 
-                image: "https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JpbGxlZCUyMGNoaWNrZW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 35,
-                description: "Juicy grilled chicken marinated in herbs and spices — smoky and delicious.",
-                ingredients: ["4 chicken pieces", "2 tbsp olive oil", "Garlic, pepper, salt", "1 tsp paprika"],
-                instructions: ["Marinate chicken in all ingredients for 30 mins.", "Grill each side for 10–15 mins until golden brown."],
-            },
-            {
-                _id: 5,
-                name: "Smoothie",
-                category: "drinks", 
-                image: "https://images.unsplash.com/photo-1615478503562-ec2d8aa0e24e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21vb3RoaWV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 5,
-                description: "A refreshing fruit smoothie packed with vitamins and a cool burst of energy.",
-                ingredients: ["1 banana", "1 cup strawberries", "1 cup milk", "1 tbsp honey"],
-                instructions: ["Blend all ingredients until smooth.", "Serve chilled."],
-            },
-            {
-                _id: 6,
-                name: "Avocado Toast",
-                category: "breakfast", 
-                image: "https://media.istockphoto.com/id/1518833009/photo/avocado-toast.webp?a=1&b=1&s=612x612&w=0&k=20&c=6m3ocHfARNgjtgykJ6nm2nP9ziHv_5bNA11G-XgEcs4=",
-                cookingTime: 10,
-                description: "Toasted bread topped with creamy avocado and seasonings — simple and satisfying.",
-                ingredients: ["2 slices bread", "1 avocado", "Salt, pepper, lemon juice"],
-                instructions: ["Toast bread slices.", "Mash avocado and season with salt, pepper, and lemon.", "Spread on toast and serve."],
-            },
-            {
-                _id: 7,
-                name: "Spaghetti Bolognese",
-                category: "lunch", 
-                image: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3BhZ2hldHRpJTIwYm9sb2duZXNlfGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 40,
-                description: "Classic Italian pasta with rich tomato meat sauce — comforting and hearty.",
-                ingredients: ["200g spaghetti", "150g minced meat", "Tomato sauce", "Garlic, onion, salt"],
-                instructions: ["Cook spaghetti and set aside.", "Sauté garlic, onion, and meat; add sauce and simmer.", "Mix with spaghetti and serve warm."],
-            },
-            {
-                _id: 8,
-                name: "Chicken Salad",
-                category: "dinner", 
-                image: "https://images.unsplash.com/photo-1605291535065-e1d52d2b264a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMHNhbGFkfGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 20,
-                description: "Light and healthy — grilled chicken tossed with crisp vegetables and dressing.",
-                ingredients: ["1 chicken breast", "Lettuce, tomato, cucumber", "Salad dressing"],
-                instructions: ["Grill chicken and slice.", "Toss all ingredients with dressing."],
-            },
-            {
-                _id: 9,
-                name: "Fried Rice",
-                category: "lunch", 
-                image: "https://media.istockphoto.com/id/2154268555/photo/asian-chicken-fried-rice-comfort-food-takeaway-food-top-down-rice-dish-photography.webp?a=1&b=1&s=612x612&w=0&k=20&c=Y2qaDNcEUamRMoa-vJw4Ulp_CE8fZFXyrkAw1vAIAdg=",
-                cookingTime: 35,
-                description: "Colorful rice stir-fried with veggies and proteins — a Nigerian party favorite.",
-                ingredients: ["2 cups rice", "Carrots, peas, sweetcorn", "Soy sauce", "Seasoning cubes"],
-                instructions: ["Parboil rice and set aside.", "Stir-fry vegetables and add rice.", "Add soy sauce and seasoning, mix well."],
-            },
-            {
-                _id: 10,
-                name: "Chapman Drink",
-                category: "drinks", 
-                image: "https://images.unsplash.com/photo-1557935260-03ada3026d41?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hhcG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 5,
-                description: "Popular Nigerian cocktail made with Fanta, Sprite, and bitters — sweet and zesty.",
-                ingredients: ["Fanta, Sprite", "Angostura bitters", "Grenadine syrup", "Cucumber slices & ice"],
-                instructions: ["Mix all ingredients in a tall glass.", "Add ice and cucumber slices to garnish."],
-            },
-            {
-                _id: 11,
-                name: "Suya",
-                category: "dinner", 
-                image: "https://media.istockphoto.com/id/2182713829/photo/nigerian-beef-suya-steak-served-at-a-party.webp?a=1&b=1&s=612x612&w=0&k=20&c=h_cPDQaG20hs0CZe1upzFpIMoHwXji97TwjRxojCKT8=",
-                cookingTime: 25,
-                description: "Spicy Nigerian street food — grilled beef skewers coated with yaji pepper mix.",
-                ingredients: ["500g beef", "Suya spice (yaji)", "Groundnut oil, salt"],
-                instructions: ["Cut beef into strips, season with suya spice.", "Thread on sticks and grill until cooked."],
-            },
-            {
-                _id: 12,
-                name: "Fruit Parfait",
-                category: "snacks", 
-                image: "https://plus.unsplash.com/premium_photo-1669680784119-1f2ac0260295?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RnJ1aXQlMjBQYXJmYWl0fGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500",
-                cookingTime: 10,
-                description: "Layered yogurt, fruits, and granola — delicious and refreshing.",
-                ingredients: ["Greek yogurt", "Granola", "Assorted fruits"],
-                instructions: ["Layer yogurt, fruits, and granola in a glass."],
-            },
-        ];
-
-        function loadAllRecipes() {
-            const adminRecipesRaw = localStorage.getItem("recipes");
-            let userAddedRecipes = [];
-
-            if (adminRecipesRaw) {
-                try {
-                    const storedRecipes = JSON.parse(adminRecipesRaw);
-                    const newRecipes = storedRecipes.filter(r => r.source === 'user');
-
-                    userAddedRecipes = newRecipes.map((r, index) => ({
-                        _id: 'user-' + Date.now() + index,
-                        name: r.name,
-                        category: r.category ? r.category.toLowerCase() : 'uncategorized',
-                        image: r.image,
-                        cookingTime: parseInt(r.time ? r.time.replace(/[^0-9]/g, '') : 0) || 0,
-                        description: r.desc,
-                        ingredients: r.ingredients || ["Ingredients not detailed in admin panel."],
-                        instructions: r.instructions || ["Instructions not detailed in admin panel."],
-                    }));
-                } catch (e) {
-                    console.error("Error parsing admin recipes from localStorage", e);
-                }
-            }
-
-            ALL_RECIPES = [...STATIC_RECIPES, ...userAddedRecipes];
-            return ALL_RECIPES;
-        }
-
-        // This function will be called on load and on tab focus
-        function initializeDashboard() {
-            const ALL_RECIPES = loadAllRecipes();
-
-            // Initial render for the home page
-            renderRecipes(ALL_RECIPES, homeRecipes);
-
-            // Initial render for the search page (if active)
-            if (document.getElementById("searchPage") && document.getElementById("searchPage").classList.contains("active-page")) {
-                renderRecipes(ALL_RECIPES, searchResults);
-            }
-
-            // Update My Recipes page
-            updateMyRecipesPage();
-
-            // Category filter logic
-            categoryButtons.forEach((btn) => {
-                btn.onclick = () => {
-                    categoryButtons.forEach((b) => b.classList.remove("active"));
-                    btn.classList.add("active");
-                    const filter = btn.dataset.filter;
-                    const filtered =
-                        filter === "all"
-                            ? ALL_RECIPES
-                            : ALL_RECIPES.filter(
-                                  (r) => r.category.toLowerCase() === filter.toLowerCase()
-                              );
-                    renderRecipes(filtered, homeRecipes);
-                };
-            });
-
-            // Search logic
-            if (searchInput) {
-                searchInput.oninput = (e) => {
-                    const query = e.target.value.toLowerCase();
-                    const results = ALL_RECIPES.filter(
-                        (r) =>
-                            r.name.toLowerCase().includes(query) ||
-                            r.description.toLowerCase().includes(query)
-                    );
-                    renderRecipes(results, searchResults);
-                };
-            }
-        }
-
-        // ===============================
-        // 🧭 PAGE NAVIGATION LOGIC
-        // ===============================
-        navLinks.forEach((link) => {
-            link.addEventListener("click", (e) => {
-                if (link.getAttribute('href') !== '#') {
-                    return;
-                }
-
-                e.preventDefault();
-
-                // Update active nav link
-                navLinks.forEach((l) => l.classList.remove("active"));
-                link.classList.add("active");
-
-                // Determine target page ID and switch page view
-                const targetPageId = link.dataset.page + "Page";
-                pages.forEach((p) => p.classList.remove("active-page"));
-                const targetPage = document.getElementById(targetPageId);
-
-                if (targetPage) {
-                    targetPage.classList.add("active-page");
-
-                    // Hide filters on search page, show on home page
-                    const filters = document.querySelector('.filters');
-                    if (link.dataset.page === "search") {
-                        filters.style.display = 'none';
-                        searchResults.innerHTML = "";
-                        searchInput.value = "";
-                        initializeDashboard();
-                    } else {
-                        filters.style.display = 'flex';
-                    }
-                    
-                    // Update My Recipes page when navigating to it
-                    if (link.dataset.page === "my-recipes") {
-                        updateMyRecipesPage();
-                    }
-                }
-
-                // Close sidebar on mobile after navigation
-                sidebar.classList.remove("active");
-                overlay.classList.remove("active");
-            });
-        });
-
-        // ===============================
-        // SIDEBAR TOGGLE LOGIC
-        // ===============================
-        if (toggleSidebarBtn) {
-            toggleSidebarBtn.addEventListener('click', () => {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-            });
-        }
-
-        if (overlay) {
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-            });
-        }
-
-        // Render recipe cards with save button
-        function createRecipeCard(recipe) {
-            const card = document.createElement("div");
-            card.classList.add("recipe-card");
-            card.dataset.id = recipe._id;
-            card.dataset.recipeId = recipe._id;
-
-            const isSaved = savedRecipes.includes(recipe._id);
-            const saveIcon = isSaved ? 'fas fa-bookmark' : 'far fa-bookmark';
-            const saveClass = isSaved ? 'saved' : '';
-
-            card.innerHTML = `
-                <button class="save-btn ${saveClass}" onclick="event.stopPropagation(); toggleSaveRecipe(${recipe._id})">
-                    <i class="${saveIcon}"></i>
-                </button>
-                <img src="${recipe.image}" alt="${recipe.name}" />
-                <div class="recipe-info">
-                    <button class="tag">${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</button>
-                    <h3>${recipe.name}</h3>
-                    <p class="meta"><i class="fa-regular fa-clock"></i> ${recipe.cookingTime} mins</p>
-                    <p class="desc">${recipe.description}</p>
-                </div>
-            `;
-
-            card.addEventListener("click", () => showRecipeDetail(recipe));
-            return card;
-        }
-
-        function renderRecipes(data, targetElement) {
-            targetElement.innerHTML = "";
-            data.forEach((r) => targetElement.appendChild(createRecipeCard(r)));
-            if (data.length === 0) {
-                targetElement.innerHTML = `<p style="text-align:center; color:#777; margin-top: 30px; grid-column: 1 / -1;">No recipes found.</p>`;
-            }
-        }
-
-        // Show recipe detail
-        function showRecipeDetail(recipe) {
-            pages.forEach((p) => p.classList.remove("active-page"));
-            recipeDetailPage.classList.add("active-page");
-
-            const rating = 5.0; 
-            const reviewCount = 234;
-            const prepTime = 10;
-            const cookTime = recipe.cookingTime || 15;
-            const servings = 4; 
-            
-            const nutritionData = {
-                Calories: '300 Kcal',
-                Fat: '10g',
-                Carbs: '40g',
-                Protein: '12g'
-            };
-
-            const hasDetailedIngredients = recipe.ingredients && !recipe.ingredients.includes("Ingredients not detailed in admin panel.");
-            const ingredientsList = hasDetailedIngredients 
-                ? recipe.ingredients.map((i, index) => {
-                    const parts = i.split(',').map(s => s.trim());
-                    const amount = parts[0].match(/(\d+\s*[\w\.\s]*)/)?.[0] || '1 unit';
-                    const name = parts.length > 1 ? parts[1] : parts[0].replace(amount, '').trim() || parts[0]; 
-                    
-                    return `
-                        <li class="ingredient-item">
-                            <label class="ingredient-name">
-                                <input type="checkbox"/>
-                                ${name.replace(/1\/2|½|1\s*cup|2\s*tsp|1\s*tbsp|\d+\s*g|\d+\s*kg|\d+/i, '').trim() || name}
-                            </label>
-                            <span>${amount}</span>
-                        </li>
-                    `;
-                }).join("")
-                : `<li class="ingredient-item" style="justify-content: center; color: #E74C3C; border-bottom: none;">Details not fully available for this recipe.</li>`;
-                
-            const hasDetailedInstructions = recipe.instructions && !recipe.instructions.includes("Instructions not detailed in admin panel.");
-            const instructionsList = hasDetailedInstructions 
-                ? recipe.instructions.map((s, index) => `
-                    <li class="instruction-item">
-                        <p>
-                            <span class="instruction-number">${index + 1}</span>
-                            ${s}
-                        </p>
-                    </li>
-                `).join("")
-                : `<li class="instruction-item" style="text-align: center; color: #E74C3C;">Instructions not fully available for this recipe.</li>`;
-
-            const mightLikeRecipes = STATIC_RECIPES.filter(r => r._id !== recipe._id).slice(0, 3);
-            
-            recipeDetailPage.innerHTML = `
-                <button class="back-btn">
-                    &larr; Back to Dashboard
-                </button>
-                <div class="recipe-detail-content">
-                    
-                    <div class="image-container">
-                        <img src="${recipe.image}" alt="${recipe.name}" class="detail-img"/>
-                        <div class="image-dots">
-                            <span class="dot active"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="recipe-text">
-                        <button class="tag">${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</button>
-                        <h2>${recipe.name}</h2>
-                        
-                        <div class="rating-info">
-                            <div class="star-rating">
-                                ${Array(5).fill(0).map((_, i) => `<i class="fa-solid fa-star"></i>`).join('')}
-                            </div>
-                            <p class="rating-value">${rating.toFixed(1)} <span class="rating-count">(${reviewCount} reviews)</span></p>
-                            <button class="save-btn ${savedRecipes.includes(recipe._id) ? 'saved' : ''}" onclick="toggleSaveRecipe(${recipe._id})" style="position: static; background: transparent;">
-                                <i class="${savedRecipes.includes(recipe._id) ? 'fas' : 'far'} fa-bookmark"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="recipe-meta-data">
-                            <p><i class="fa-regular fa-clock"></i> Prep Time: <span>${prepTime} mins</span></p>
-                            <p><i class="fa-solid fa-fire-burner"></i> Cook Time: <span>${cookTime} mins</span></p>
-                            <p><i class="fa-solid fa-user-group"></i> Servings: <span>${servings}</span></p>
-                        </div>
-                        
-                        <p class="description-text">
-                            ${recipe.description}
-                        </p>
-                        
-                        <div class="nutrition-card">
-                            <h3>Nutrition Information</h3>
-                            <div class="nutrition-details">
-                                <p>Calories <span>${nutritionData.Calories}</span></p>
-                                <p>Fat <span>${nutritionData.Fat}</span></p>
-                                <p>Carbs <span>${nutritionData.Carbs}</span></p>
-                                <p>Protein <span>${nutritionData.Protein}</span></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-main-section">
-                        
-                        <h3>Ingredients</h3>
-                        <ul id="detailIngredients">
-                            ${ingredientsList}
-                        </ul>
-                        
-                        <h3>Instructions</h3>
-                        <ul id="detailInstructions">
-                            ${instructionsList}
-                        </ul>
-                        
-                    </div>
-                    
-                    <div class="you-might-like-section">
-                        <h3 class="you-might-like">You Might Also Like</h3>
-                        <div class="recipe-grid you-might-like-grid">
-                            </div>
-                    </div>
-                </div>
-            `;
-
-            const mightLikeGrid = recipeDetailPage.querySelector(".you-might-like-grid");
-            mightLikeRecipes.forEach(r => mightLikeGrid.appendChild(createRecipeCard(r)));
-
-            recipeDetailPage
-              .querySelector(".back-btn")
-              .addEventListener("click", () => {
-                recipeDetailPage.classList.remove("active-page");
-                const activeNav = document.querySelector(".nav-link.active");
-                const backTargetId = activeNav ? activeNav.dataset.page + "Page" : "homePage";
-                document.getElementById(backTargetId).classList.add("active-page");
-              });
-        }
-
-        // ===============================
-        // 🚦 FINAL INITIALIZATION
-        // ===============================
-
-        // 1. Initial Load
-        initializeDashboard();
-
-        // 2. Auto-Refresh Fix
-        window.addEventListener('focus', () => {
-            console.log("Tab focus detected. Reloading recipes from localStorage...");
-            initializeDashboard();
-        });
-
-        // Make toggleSaveRecipe available globally for onclick events
-        window.toggleSaveRecipe = toggleSaveRecipe;
-
+  // ---- POPULATE "You Might Also Like" ----
+  const grid = document.getElementById('mightLikeGrid');
+  grid.innerHTML = '';                     // clear any old cards
+  mightLike.forEach(r => {
+    const card = createRecipeCard(r);      // reuse the normal card function
+    card.style.cursor = 'pointer';
+    card.querySelector('.save-btn')?.remove();   // hide save button in suggestions
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showRecipeDetail(r);                 // **CLICK → open its detail page**
     });
+    grid.appendChild(card);
+  });
+}
 
-    // Auth form functions
-    function showAuthForm(type) {
-        document.getElementById('loginForm').classList.remove('active');
-        document.getElementById('signupForm').classList.remove('active');
-        
-        if (type === 'login') {
-            document.getElementById('loginForm').classList.add('active');
-        } else {
-            document.getElementById('signupForm').classList.add('active');
-        }
+/* ============================== SEARCH ============================== */
+// document.getElementById('searchInput').oninput = e=>{
+//   const q = e.target.value.toLowerCase();
+//   const res = ALL_RECIPES.filter(r=>r.name.toLowerCase().includes(q)||r.description.toLowerCase().includes(q));
+//   renderRecipes(res, document.getElementById('searchResults'));
+// };
+
+
+/* ============================== SEARCH FUNCTION ============================== */
+const searchInput = document.getElementById('searchInput');
+const searchResultsContainer = document.getElementById('searchResults');
+
+searchInput.addEventListener('input', e => {
+  const query = e.target.value.trim().toLowerCase();
+
+  if (query === '') {
+    // If input is empty → clear the results
+    searchResultsContainer.innerHTML = '';
+    return;
+  }
+
+  // Filter recipes by name, description, or category
+  const results = ALL_RECIPES.filter(r =>
+    r.name.toLowerCase().includes(query) ||
+    r.description.toLowerCase().includes(query) ||
+    r.category.toLowerCase().includes(query)
+  );
+
+  // Render search results dynamically
+  renderRecipes(results, searchResultsContainer);
+});
+
+
+/* ============================== MY RECIPES ============================== */
+function updateMyRecipesPage(){
+  const saved = ALL_RECIPES.filter(r => savedRecipes.includes(r._id));
+
+  // Update stats
+  document.getElementById('totalSaved').textContent = saved.length;
+  document.getElementById('breakfastCount').textContent = saved.filter(r => r.category === 'breakfast').length;
+  document.getElementById('lunchCount').textContent = saved.filter(r => r.category === 'lunch').length;
+  document.getElementById('dinnerCount').textContent = saved.filter(r => r.category === 'dinner').length;
+
+  // Render saved recipes
+  const container = document.getElementById('savedRecipes');
+  if (!saved.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="far fa-bookmark"></i>
+        <h3>No Saved Recipes Yet</h3>
+        <p>Start saving your favorite recipes by clicking the bookmark icon!</p>
+      </div>`;
+  } else {
+    container.innerHTML = '';
+    saved.forEach(r => container.appendChild(createRecipeCard(r)));
+  }
+}
+
+
+/* ============================== SIDEBAR TOGGLE ============================== */
+document.getElementById('toggleSidebar').addEventListener('click', () => {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+document.getElementById('overlay').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('active');
+  document.getElementById('overlay').classList.remove('active');
+});
+
+/* ============================== INITIAL LOAD ============================== */
+renderRecipes(ALL_RECIPES, document.getElementById('homeRecipes'));
+updateMyRecipesPage();
+
+
+
+
+/* ============================== FILTER BUTTONS ============================== */
+const filterButtons = document.querySelectorAll('.filter-btn');
+
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Remove 'active' class from all buttons
+    filterButtons.forEach(b => b.classList.remove('active'));
+    // Add 'active' to the clicked one
+    btn.classList.add('active');
+
+    // Get category
+    const filter = btn.dataset.filter;
+
+    // Filter recipes
+    let filtered = [];
+    if (filter === 'all') {
+      filtered = ALL_RECIPES;
+    } else {
+      filtered = ALL_RECIPES.filter(r => r.category === filter);
     }
-  </script>
+
+    // Render filtered recipes to home grid
+    renderRecipes(filtered, document.getElementById('homeRecipes'));
+  });
+});
+
+
+/* ============================== PAGE NAVIGATION ============================== */
+const navLinks = document.querySelectorAll('.nav-link');
+
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    const targetPage = link.dataset.page;
+
+    // ✅ If the link is "Add Recipe", allow it to go to the signup page normally
+    if (targetPage === 'add-recipe') {
+      return; // don’t stop it — let it open the sign-up page
+    }
+
+    // For all other links, prevent the normal page refresh
+    e.preventDefault();
+
+    // update active link styles
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+
+    // show the clicked page
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+    document.getElementById(targetPage + 'Page').classList.add('active-page');
+  });
+});
+
+
+
+
+
+</script>
 </body>
 </html>
