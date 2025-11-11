@@ -1,194 +1,1244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dishcovery Admin Dashboard</title>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
-  <link rel="stylesheet" href="admin.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dishcovery Admin Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background: white;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .logo {
+      padding: 30px 20px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo img {
+      max-width: 150px;
+      height: auto;
+    }
+
+    .menu {
+      flex: 1;
+      padding: 20px 0;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 25px;
+      color: #666;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .menu-item:hover {
+      background: #f8f9fa;
+      color: #d84444;
+    }
+
+    .menu-item.active {
+      background: #fff5f5;
+      color: #d84444;
+      border-left-color: #d84444;
+    }
+
+    .menu-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .back-dashboard {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background: #f8f9fa;
+      color: #333;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    .back-dashboard:hover {
+      background: #e9ecef;
+      color: #d84444;
+    }
+
+    /* Main Content Styles */
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active-page {
+      display: block;
+    }
+
+    /* Button Styles */
+    .logout-btn {
+      background: #d84444;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s ease;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .logout-btn:hover {
+      background: #c13c3c;
+    }
+
+    .mobile-logout {
+      display: none;
+    }
+
+    /* User Welcome */
+    .user-welcome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    .user-welcome h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    /* Stats Cards */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card i {
+      font-size: 32px;
+      color: #d84444;
+      margin-bottom: 15px;
+    }
+
+    .stat-card h3 {
+      font-size: 32px;
+      margin: 10px 0;
+      color: #333;
+      font-weight: 700;
+    }
+
+    .stat-card p {
+      color: #666;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .recipe-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .recipe-table th,
+    .recipe-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .recipe-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .recipe-table img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* Button Styles */
+    .edit-btn, .delete-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .edit-btn {
+      background: #007bff;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background: #0056b3;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background: #c82333;
+    }
+
+    /* Form Styles */
+    .add-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .recipe-form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #d84444;
+    }
+
+    .form-group textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background: #d84444;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.3s ease;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .submit-btn:hover {
+      background: #c13c3c;
+    }
+
+    /* Preview Card */
+    .preview-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      height: fit-content;
+    }
+
+    .preview-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .preview-card .info {
+      padding: 20px;
+    }
+
+    .preview-card .tag {
+      background: #e9ecef;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .preview-card h3 {
+      margin: 15px 0 10px 0;
+      color: #333;
+      font-size: 18px;
+    }
+
+    .preview-card p {
+      color: #666;
+      font-size: 14px;
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .status-published {
+      background: #e8f5e8;
+      color: #2e7d32;
+    }
+
+    .status-draft {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 40px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .modal-content i {
+      font-size: 48px;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    .modal-content h2 {
+      margin: 10px 0;
+      color: #333;
+      font-size: 24px;
+    }
+
+    .modal-content p {
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+
+    /* Profile Info */
+    .profile-info {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+
+    .profile-info p {
+      margin: 15px 0;
+      font-size: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .profile-info strong {
+      color: #333;
+      min-width: 120px;
+      display: inline-block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .add-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .preview-card {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        transform: translateX(-100%);
+        height: 100vh;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .menu-toggle {
+        display: block;
+      }
+      
+      .mobile-logout {
+        display: inline-flex;
+      }
+      
+      .sidebar-logout {
+        display: none;
+      }
+      
+      .user-welcome {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .table-container {
+        overflow-x: auto;
+      }
+      
+      .recipe-table {
+        min-width: 800px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main {
+        padding: 15px;
+      }
+      
+      .recipe-form {
+        padding: 20px;
+      }
+      
+      .modal-content {
+        margin: 10% auto;
+        padding: 30px 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="dashboard">
-    <aside class="sidebar" id="sidebar">       <div class="logo">
-       <img class="img" src="../images/Frame 13.png" alt="Dishcovery Logo">
-      </div>
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">       
+      <div class="logo">
+       <img class="img" src="../images/Frame 13.png" alt="Dishcovery Logo">
+      </div>
 
-      <nav class="menu">
-        <a href="#" class="menu-item active" data-page="dashboard">
-          <i class="fa-solid fa-chart-line"></i> Dashboard
-        </a>
-        <a href="#" class="menu-item" data-page="manage">
-          <i class="fa-solid fa-list"></i> Manage Recipes
-        </a>
-        <a href="#" class="menu-item" data-page="add">
-          <i class="fa-solid fa-plus"></i> Add Recipe
-        </a>
-        <a href="#" class="menu-item" data-page="profile">
-          <i class="fa-solid fa-user"></i> Profile
-        </a>
-        <a href="#" class="menu-item" data-page="settings">
-          <i class="fa-solid fa-gear"></i> Settings
-        </a>
-      </nav>
+      <nav class="menu">
+        <a href="#" class="menu-item active" data-page="dashboard">
+          <i class="fa-solid fa-chart-line"></i> Dashboard
+        </a>
+        <a href="#" class="menu-item" data-page="manage">
+          <i class="fa-solid fa-list"></i> Manage Recipes
+        </a>
+        <a href="#" class="menu-item" data-page="add">
+          <i class="fa-solid fa-plus"></i> Add Recipe
+        </a>
+        <a href="#" class="menu-item" data-page="profile">
+          <i class="fa-solid fa-user"></i> Profile
+        </a>
+        <a href="#" class="menu-item" data-page="settings">
+          <i class="fa-solid fa-gear"></i> Settings
+        </a>
+      </nav>
 
-       <a href="../dishcovery-dashboard/index.html" class="menu-item back-dashboard">
-    <i class="fa-solid fa-arrow-left"></i> Back to Dishcovery
-  </a>
-    </aside>
-
-    <main class="main" id="main-content"> <button id="menuToggle" class="menu-toggle">
-            <i class="fa-solid fa-bars"></i>
+      <div class="sidebar-footer">
+        <a href="../dishcovery-dashboard/index.html" class="back-dashboard" id="backToDashboard">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dishcovery
+        </a>
+        <button class="logout-btn sidebar-logout" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
-                <section id="dashboard" class="page active-page">         <h1>Welcome Back, Admin 👋</h1>
-        <p>Here's an overview of your recipes.</p>
-        <div class="stats">
-          <div class="stat-card">
-            <i class="fa-solid fa-utensils"></i>
-            <h3 id="totalRecipes">0</h3>
-            <p>Total Recipes</p>
-          </div>
-        </div>
-      </section>
+      </div>
+    </aside>
 
-       <section id="manage" class="page">
-    <h2>Manage Recipes</h2>
-    <div class="table-container"> 
-        <table class="recipe-table">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Prep Time</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="recipeList">
-                </tbody>
-        </table>
-    </div>
-</section>
+    <main class="main" id="main-content"> 
+      <button id="menuToggle" class="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      
+      <section id="dashboard" class="page active-page">         
+        <div class="user-welcome">
+          <h1>Welcome Back, <span id="userFirstName">User</span> 👋</h1>
+          <button class="logout-btn mobile-logout" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+        <p>Here's an overview of your recipes and their visibility on the main Dishcovery dashboard.</p>
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <i class="fa-solid fa-utensils"></i>
+            <h3 id="totalRecipes">0</h3>
+            <p>Total Recipes</p>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-eye"></i>
+            <h3 id="publishedRecipes">0</h3>
+            <p>Published Recipes</p>
+          </div>
+          <div class="stat-card">
+            <i class="fa-solid fa-globe"></i>
+            <h3 id="dashboardRecipes">0</h3>
+            <p>On Main Dashboard</p>
+          </div>
+        </div>
+      </section>
 
-        <section id="add" class="page">
-        <h2>Add New Recipe</h2>
-        <div class="add-layout">
-          <form id="addRecipeForm" class="recipe-form">
-            <div class="form-group">
-              <label>Recipe Name</label>
-              <input type="text" id="recipeName" placeholder="Enter recipe name" required />
-            </div>
+      <section id="manage" class="page">
+        <h2>Manage Recipes</h2>
+        <p>Manage your recipes and control their visibility on the main Dishcovery dashboard.</p>
+        <div class="table-container"> 
+          <table class="recipe-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Prep Time</th>
+                <th>Status</th>
+                <th>Dashboard</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recipeList">
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-            <div class="form-group">
-              <label>Category</label>
-              <select id="recipeCategory">
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
-                <option value="snacks">Snacks</option>
-                <option value="drinks">Drinks</option>
-              </select>
-            </div>
+      <section id="add" class="page">
+        <h2>Add New Recipe</h2>
+        <p>Add a new recipe and choose whether to publish it to the main Dishcovery dashboard.</p>
+        <div class="add-layout">
+          <form id="addRecipeForm" class="recipe-form">
+            <div class="form-group">
+              <label>Recipe Name *</label>
+              <input type="text" id="recipeName" placeholder="Enter recipe name" required />
+            </div>
 
-            <div class="form-group">
-              <label>Preparation Time</label>
-              <input type="text" id="prepTime" placeholder="e.g. 30 mins" required />
-            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="recipeCategory" required>
+                <option value="">Select Category</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snacks">Snacks</option>
+                <option value="drinks">Drinks</option>
+                <option value="dessert">Dessert</option>
+              </select>
+            </div>
 
-            <div class="form-group">
-              <label>Description</label>
-              <textarea id="recipeDesc" placeholder="Short description..." required></textarea>
-            </div>
+            <div class="form-group">
+              <label>Preparation Time *</label>
+              <input type="text" id="prepTime" placeholder="e.g. 30 mins" required />
+            </div>
 
-            <div class="form-group">
-              <label>Image URL</label>
-              <input type="url" id="recipeImage" placeholder="Paste image URL" required />
-            </div>
+            <div class="form-group">
+              <label>Description *</label>
+              <textarea id="recipeDesc" placeholder="Short description..." required></textarea>
+            </div>
 
-            <button type="submit" class="submit-btn">
-              <i class="fa-solid fa-plus"></i> Add Recipe
-            </button>
-          </form>
+            <div class="form-group">
+              <label>Image URL *</label>
+              <input type="url" id="recipeImage" placeholder="Paste image URL" required />
+            </div>
 
-          <div class="preview-card" id="previewCard">
-            <img src="https://via.placeholder.com/300x200?text=Preview" id="previewImage" />
-            <div class="info">
-              <span class="tag" id="previewCategory">Category</span>
-              <h3 id="previewName">Recipe Name</h3>
-              <p id="previewTime">Prep Time: --</p>
-              <p id="previewDesc">Description will appear here...</p>
-            </div>
-          </div>
-        </div>
-      </section>
+            <div class="form-group">
+              <label>Show on Main Dashboard</label>
+              <select id="recipeStatus">
+                <option value="published">Yes - Publish to Dashboard</option>
+                <option value="draft">No - Save as Draft Only</option>
+              </select>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fa-solid fa-plus"></i> Add Recipe
+            </button>
+          </form>
+
+          <div class="preview-card" id="previewCard">
+            <img src="https://via.placeholder.com/300x200?text=Recipe+Preview" id="previewImage" />
+            <div class="info">
+              <span class="tag" id="previewCategory">Category</span>
+              <span class="status-badge status-draft" id="previewStatus">Draft</span>
+              <h3 id="previewName">Recipe Name</h3>
+              <p id="previewTime">Prep Time: --</p>
+              <p id="previewDesc">Description will appear here...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <div id="successModal" class="modal">
+        <div class="modal-content">
+          <i class="fa-solid fa-circle-check"></i>
+          <h2>Congratulations!</h2>
+          <p id="successMessage">Your recipe has been added successfully 🎉</p>
+          <button id="closeModal" class="submit-btn">OK</button>
+        </div>
+      </div>
+      
+      <div id="editRecipeModal" class="modal">
+        <div class="modal-content">
+          <h2>Edit Recipe</h2>
+          <button type="button" id="closeEditModal" class="close-btn">&times;</button>
+          <form id="editRecipeForm" class="recipe-form">
+            <input type="hidden" id="editRecipeId" value="">
+            <div class="form-group">
+              <label>Recipe Name</label>
+              <input type="text" id="editRecipeName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Category</label>
+              <select id="editRecipeCategory">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snacks">Snacks</option>
+                <option value="drinks">Drinks</option>
+                <option value="dessert">Dessert</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Preparation Time</label>
+              <input type="text" id="editPrepTime" required />
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="editRecipeDesc" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Image URL</label>
+              <input type="url" id="editRecipeImage" required />
+            </div>
+
+            <div class="form-group">
+              <label>Show on Main Dashboard</label>
+              <select id="editRecipeStatus">
+                <option value="published">Yes - Published</option>
+                <option value="draft">No - Draft Only</option>
+              </select>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fa-solid fa-floppy-disk"></i> Save Changes
+            </button>
+          </form>
+        </div>
+      </div>
+      
+      <section id="profile" class="page">
+        <h2>User Profile</h2>
+        <div class="profile-info">
+          <p><strong>Name:</strong> <span id="profileName">Loading...</span></p>
+          <p><strong>Email:</strong> <span id="profileEmail">Loading...</span></p>
+          <p><strong>Role:</strong> <span id="profileRole">Loading...</span></p>
+          <p><strong>Member Since:</strong> <span id="profileJoinDate">Today</span></p>
+        </div>
+      </section>
+
+      <section id="settings" class="page">
+        <h2>Settings</h2>
+        <p>Coming soon...</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // AUTHENTICATION SYSTEM
+    const AUTH_TOKEN_KEY = 'authToken';
+    const USER_DATA_KEY = 'userData';
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      const token = localStorage.getItem(AUTH_TOKEN_KEY);
+      const userData = localStorage.getItem(USER_DATA_KEY);
+      
+      return !!(token && userData);
+    }
+
+    // Redirect to login if not authenticated
+    function requireAuth() {
+      if (!isAuthenticated()) {
+        alert('Please login to access the admin dashboard');
+        window.location.href = "../login-active_folder/login-active.html";
+        return false;
+      }
+      return true;
+    }
+
+    // RECIPE STORAGE SYSTEM - Shared between admin and main dashboard
+    const DISHDISCOVERY_RECIPES_KEY = 'dishcovery_all_recipes';
+    
+    // Initialize with demo recipes if none exist
+    function initializeDemoRecipes() {
+      const existingRecipes = getAllRecipes();
+      if (existingRecipes.length === 0) {
+        const demoRecipes = [
+          {
+            id: '1',
+            name: 'Classic Pancakes',
+            category: 'breakfast',
+            prepTime: '20 mins',
+            description: 'Fluffy homemade pancakes perfect for weekend breakfast',
+            image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop',
+            status: 'published',
+            createdAt: new Date().toISOString(),
+            createdBy: 'system'
+          },
+          {
+            id: '2',
+            name: 'Avocado Toast',
+            category: 'breakfast',
+            prepTime: '10 mins',
+            description: 'Creamy avocado on toasted artisan bread',
+            image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop',
+            status: 'published',
+            createdAt: new Date().toISOString(),
+            createdBy: 'system'
+          },
+          {
+            id: '3',
+            name: 'Grilled Chicken Salad',
+            category: 'lunch',
+            prepTime: '25 mins',
+            description: 'Healthy grilled chicken with fresh garden vegetables',
+            image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop',
+            status: 'published',
+            createdAt: new Date().toISOString(),
+            createdBy: 'system'
+          }
+        ];
+        localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(demoRecipes));
+        console.log('Demo recipes initialized');
+      }
+    }
+
+    // Check authentication and load user data
+    function checkAuth() {
+      if (!requireAuth()) {
+        return null;
+      }
+      
+      try {
+        const userData = localStorage.getItem(USER_DATA_KEY);
+        return userData ? JSON.parse(userData) : null;
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        alert('Session expired. Please login again.');
+        window.location.href = "../login-active_folder/login-active.html";
+        return null;
+      }
+    }
+
+    // Display user information
+    function displayUserInfo() {
+      const user = checkAuth();
+      if (user) {
+        const userNameElement = document.getElementById('userFirstName');
+        if (userNameElement) {
+          userNameElement.textContent = user.firstName || 'User';
+        }
         
-                <div id="successModal" class="modal">
-        <div class="modal-content">
-          <i class="fa-solid fa-circle-check"></i>
-          <h2>Congratulations!</h2>
-          <p>Your recipe has been added successfully 🎉</p>
-          <button id="closeModal">OK</button>
-        </div>
-      </div>
-        
-        <div id="editRecipeModal" class="modal">
-            <div class="modal-content">
-                <h2>Edit Recipe</h2>
-                <button type="button" id="closeEditModal" class="close-btn">&times;</button>
-                <form id="editRecipeForm" class="recipe-form">
-                    <input type="hidden" id="editRecipeId" value="">
-                    <div class="form-group">
-                        <label>Recipe Name</label>
-                        <input type="text" id="editRecipeName" required />
-                    </div>
-    
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select id="editRecipeCategory">
-                            <option value="breakfast">Breakfast</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="dinner">Dinner</option>
-                            <option value="snacks">Snacks</option>
-                            <option value="drinks">Drinks</option>
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <label>Preparation Time</label>
-                        <input type="text" id="editPrepTime" required />
-                    </div>
-    
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="editRecipeDesc" required></textarea>
-                    </div>
-    
-                    <div class="form-group">
-                        <label>Image URL</label>
-                        <input type="url" id="editRecipeImage" required />
-                    </div>
-    
-                    <button type="submit" class="submit-btn save-btn">
-                        <i class="fa-solid fa-floppy-disk"></i> Save Changes
-                    </button>
-                </form>
-            </div>
-        </div>
-                    <section id="profile" class="page">
-        <h2>Admin Profile</h2>
-        <p>Name: Precious</p>
-        <p>Email: admin@dishcovery.com</p>
-      </section>
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileRole = document.getElementById('profileRole');
+        
+        if (profileName) profileName.textContent = `${user.firstName} ${user.lastName}`;
+        if (profileEmail) profileEmail.textContent = user.email;
+        if (profileRole) profileRole.textContent = user.role || 'user';
+        
+        document.title = `Dishcovery - ${user.firstName}'s Dashboard`;
+      }
+    }
 
-            <section id="settings" class="page">
-        <h2>Settings</h2>
-        <p>Coming soon...</p>
-      </section>
-    </main>
-  </div>
+    // Recipe Management Functions
+    function getAllRecipes() {
+      try {
+        const recipes = localStorage.getItem(DISHDISCOVERY_RECIPES_KEY);
+        return recipes ? JSON.parse(recipes) : [];
+      } catch (error) {
+        console.error('Error reading recipes from localStorage:', error);
+        return [];
+      }
+    }
 
-  <script src="admin.js"></script>
+    function getPublishedRecipes() {
+      const recipes = getAllRecipes();
+      return recipes.filter(recipe => recipe.status === 'published');
+    }
+
+    function saveRecipe(recipe) {
+      const recipes = getAllRecipes();
+      const newRecipe = {
+        id: Date.now().toString(),
+        name: recipe.name,
+        category: recipe.category,
+        prepTime: recipe.prepTime,
+        description: recipe.description,
+        image: recipe.image,
+        status: recipe.status || 'published',
+        createdAt: new Date().toISOString(),
+        createdBy: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).email : 'admin'
+      };
+      
+      recipes.push(newRecipe);
+      try {
+        localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(recipes));
+        console.log('Recipe saved successfully:', newRecipe);
+        return newRecipe;
+      } catch (error) {
+        console.error('Error saving recipe:', error);
+        throw new Error('Failed to save recipe');
+      }
+    }
+
+    function updateRecipe(recipeId, updatedData) {
+      const recipes = getAllRecipes();
+      const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+      
+      if (recipeIndex !== -1) {
+        recipes[recipeIndex] = { ...recipes[recipeIndex], ...updatedData };
+        try {
+          localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(recipes));
+          console.log('Recipe updated successfully:', recipes[recipeIndex]);
+          return true;
+        } catch (error) {
+          console.error('Error updating recipe:', error);
+          return false;
+        }
+      }
+      return false;
+    }
+
+    function updateRecipeCount() {
+      const recipes = getAllRecipes();
+      const publishedRecipes = getPublishedRecipes();
+      
+      document.getElementById('totalRecipes').textContent = recipes.length;
+      document.getElementById('publishedRecipes').textContent = publishedRecipes.length;
+      document.getElementById('dashboardRecipes').textContent = publishedRecipes.length;
+    }
+
+    function loadRecipesTable() {
+      const recipes = getAllRecipes();
+      const recipeList = document.getElementById('recipeList');
+      
+      recipeList.innerHTML = '';
+      
+      if (recipes.length === 0) {
+        recipeList.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+              <i class="fa-solid fa-utensils" style="font-size: 48px; margin-bottom: 10px; display: block; color: #ddd;"></i>
+              No recipes found. Add your first recipe!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      recipes.forEach(recipe => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <img src="${recipe.image}" alt="${recipe.name}" 
+                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                 onerror="this.src='https://via.placeholder.com/50x50?text=No+Image'">
+          </td>
+          <td><strong>${recipe.name}</strong></td>
+          <td>${recipe.category ? recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1) : 'Uncategorized'}</td>
+          <td>${recipe.prepTime || 'Not specified'}</td>
+          <td>
+            <span class="status-badge ${recipe.status === 'published' ? 'status-published' : 'status-draft'}">
+              ${recipe.status || 'draft'}
+            </span>
+          </td>
+          <td>${recipe.status === 'published' ? '✅ Visible' : '❌ Hidden'}</td>
+          <td>
+            <button class="edit-btn" onclick="editRecipe('${recipe.id}')">
+              <i class="fa-solid fa-edit"></i> Edit
+            </button>
+            <button class="delete-btn" onclick="deleteRecipe('${recipe.id}')">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+          </td>
+        `;
+        recipeList.appendChild(row);
+      });
+    }
+
+    function editRecipe(recipeId) {
+      const recipes = getAllRecipes();
+      const recipe = recipes.find(r => r.id === recipeId);
+      
+      if (recipe) {
+        document.getElementById('editRecipeId').value = recipe.id;
+        document.getElementById('editRecipeName').value = recipe.name;
+        document.getElementById('editRecipeCategory').value = recipe.category;
+        document.getElementById('editPrepTime').value = recipe.prepTime;
+        document.getElementById('editRecipeDesc').value = recipe.description;
+        document.getElementById('editRecipeImage').value = recipe.image;
+        document.getElementById('editRecipeStatus').value = recipe.status;
+        
+        document.getElementById('editRecipeModal').style.display = 'block';
+      }
+    }
+
+    function deleteRecipe(recipeId) {
+      if (confirm('Are you sure you want to delete this recipe? This will remove it from both admin and main dashboard.')) {
+        const recipes = getAllRecipes();
+        const filteredRecipes = recipes.filter(recipe => recipe.id !== recipeId);
+        
+        try {
+          localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(filteredRecipes));
+          loadRecipesTable();
+          updateRecipeCount();
+          
+          // Clear any saved references in the main dashboard
+          clearRecipeFromSaved(recipeId);
+          
+          alert('Recipe deleted successfully from both admin and main dashboard!');
+        } catch (error) {
+          console.error('Error deleting recipe:', error);
+          alert('Error deleting recipe. Please try again.');
+        }
+      }
+    }
+
+    // Clear recipe from saved recipes in main dashboard
+    function clearRecipeFromSaved(recipeId) {
+      try {
+        // Convert recipeId to match the format used in main dashboard
+        const adminRecipeId = -Math.abs(parseInt(recipeId));
+        
+        // Get current saved recipes
+        const savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+        
+        // Remove the deleted recipe from saved recipes
+        const updatedSavedRecipes = savedRecipes.filter(id => id !== adminRecipeId);
+        
+        // Save back to localStorage
+        localStorage.setItem('savedRecipes', JSON.stringify(updatedSavedRecipes));
+        
+        console.log('Cleared recipe from saved recipes:', recipeId);
+      } catch (error) {
+        console.error('Error clearing recipe from saved:', error);
+      }
+    }
+
+    // Form Handlers
+    document.getElementById('addRecipeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const recipeData = {
+        name: document.getElementById('recipeName').value,
+        category: document.getElementById('recipeCategory').value,
+        prepTime: document.getElementById('prepTime').value,
+        description: document.getElementById('recipeDesc').value,
+        image: document.getElementById('recipeImage').value,
+        status: document.getElementById('recipeStatus').value
+      };
+      
+      try {
+        const newRecipe = saveRecipe(recipeData);
+        updateRecipeCount();
+        loadRecipesTable();
+        
+        // Show success message
+        const successMessage = document.getElementById('successMessage');
+        if (recipeData.status === 'published') {
+          successMessage.textContent = 'Recipe published successfully! It will appear on the main Dishcovery dashboard. 🎉';
+        } else {
+          successMessage.textContent = 'Recipe saved as draft successfully! It will not appear on the main dashboard.';
+        }
+        document.getElementById('successModal').style.display = 'block';
+        
+        // Reset form
+        this.reset();
+        updatePreview();
+        
+        console.log('New recipe added:', newRecipe);
+        console.log('All recipes:', getAllRecipes());
+        
+      } catch (error) {
+        console.error('Error adding recipe:', error);
+        alert('Error adding recipe. Please try again.');
+      }
+    });
+
+    document.getElementById('editRecipeForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const recipeId = document.getElementById('editRecipeId').value;
+      const updatedData = {
+        name: document.getElementById('editRecipeName').value,
+        category: document.getElementById('editRecipeCategory').value,
+        prepTime: document.getElementById('editPrepTime').value,
+        description: document.getElementById('editRecipeDesc').value,
+        image: document.getElementById('editRecipeImage').value,
+        status: document.getElementById('editRecipeStatus').value
+      };
+      
+      const success = updateRecipe(recipeId, updatedData);
+      if (success) {
+        loadRecipesTable();
+        updateRecipeCount();
+        document.getElementById('editRecipeModal').style.display = 'none';
+        alert('Recipe updated successfully!');
+      } else {
+        alert('Error updating recipe. Please try again.');
+      }
+    });
+
+    // Preview update function
+    function updatePreview() {
+      const name = document.getElementById('recipeName').value || 'Recipe Name';
+      const category = document.getElementById('recipeCategory').value || 'Category';
+      const time = document.getElementById('prepTime').value || '--';
+      const desc = document.getElementById('recipeDesc').value || 'Description will appear here...';
+      const image = document.getElementById('recipeImage').value || 'https://via.placeholder.com/300x200?text=Recipe+Preview';
+      const status = document.getElementById('recipeStatus').value || 'draft';
+
+      document.getElementById('previewName').textContent = name;
+      document.getElementById('previewCategory').textContent = category;
+      document.getElementById('previewTime').textContent = `Prep Time: ${time}`;
+      document.getElementById('previewDesc').textContent = desc;
+      document.getElementById('previewImage').src = image;
+      document.getElementById('previewStatus').textContent = status === 'published' ? 'Published' : 'Draft';
+      document.getElementById('previewStatus').className = `status-badge ${status === 'published' ? 'status-published' : 'status-draft'}`;
+    }
+
+    // Modal handlers
+    document.getElementById('closeModal').addEventListener('click', function() {
+      document.getElementById('successModal').style.display = 'none';
+    });
+
+    document.getElementById('closeEditModal').addEventListener('click', function() {
+      document.getElementById('editRecipeModal').style.display = 'none';
+    });
+
+    // Page navigation
+    function setupPageNavigation() {
+      const menuItems = document.querySelectorAll('.menu-item');
+      const pages = document.querySelectorAll('.page');
+      
+      menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetPage = this.getAttribute('data-page');
+          
+          // Update active menu item
+          menuItems.forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show target page
+          pages.forEach(page => {
+            page.classList.remove('active-page');
+            if (page.id === targetPage) {
+              page.classList.add('active-page');
+            }
+          });
+        });
+      });
+    }
+
+    // Mobile menu toggle
+    function setupMobileMenu() {
+      const menuToggle = document.getElementById('menuToggle');
+      const sidebar = document.getElementById('sidebar');
+      
+      if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+        });
+      }
+    }
+
+    // Logout function
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        window.location.href = "../login-active_folder/login-active.html";
+      }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication first
+      if (!requireAuth()) {
+        return;
+      }
+      
+      // Initialize demo recipes
+      initializeDemoRecipes();
+      
+      // Setup authentication and user info
+      displayUserInfo();
+      
+      // Setup recipe management
+      updateRecipeCount();
+      loadRecipesTable();
+      
+      // Setup UI interactions
+      setupPageNavigation();
+      setupMobileMenu();
+      
+      // Add event listeners for form preview
+      const formInputs = document.querySelectorAll('#addRecipeForm input, #addRecipeForm select, #addRecipeForm textarea');
+      formInputs.forEach(input => {
+        input.addEventListener('input', updatePreview);
+      });
+
+      // Initialize preview
+      updatePreview();
+      
+      console.log('Admin dashboard initialized successfully');
+      console.log('All recipes in storage:', getAllRecipes());
+      console.log('Published recipes will appear on main Dishcovery dashboard');
+    });
+  </script>
 </body>
 </html>

@@ -110,6 +110,17 @@
       box-shadow: 0 0 0 2px rgba(216, 68, 68, 0.1);
     }
 
+    input.input-error {
+      border-color: #d84444;
+      background-color: #fff9f9;
+    }
+
+    input.duplicate-email {
+      border-color: #ff6b6b;
+      background-color: #fff9f9;
+      border-width: 2px;
+    }
+
     button {
       margin-top: 10px;
       height: 38px;
@@ -157,14 +168,14 @@
       font-size: 12px;
       margin-top: 5px;
       display: none;
+      padding: 5px;
+      background: #fff9f9;
+      border-radius: 4px;
+      border-left: 3px solid #d84444;
     }
 
     .error-message.show {
       display: block;
-    }
-
-    .input-error {
-      border-color: #d84444;
     }
 
     .success-message {
@@ -173,6 +184,10 @@
       text-align: center;
       margin-top: 10px;
       display: none;
+      padding: 10px;
+      background: #f8fff8;
+      border-radius: 6px;
+      border: 1px solid #4CAF50;
     }
 
     .success-message.show {
@@ -195,6 +210,61 @@
       display: block;
     }
 
+    .duplicate-email-suggestion {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 10px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .duplicate-email-suggestion.show {
+      display: block;
+    }
+
+    .suggestion-title {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .suggestion-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .suggestion-btn {
+      padding: 8px 16px;
+      border: 2px solid #d84444;
+      border-radius: 6px;
+      background: white;
+      color: #d84444;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .suggestion-btn:hover {
+      background: #d84444;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .suggestion-btn.login {
+      background: #d84444;
+      color: white;
+    }
+
+    .suggestion-btn.login:hover {
+      background: #c13c3c;
+    }
+
     .spinner {
       border: 2px solid #f3f3f3;
       border-top: 2px solid #d84444;
@@ -210,6 +280,11 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .loading-overlay {
@@ -311,6 +386,10 @@
       .dish__details p {
         font-size: 13px;
       }
+
+      .suggestion-actions {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -354,6 +433,16 @@
               <label for="email">Email</label>
               <input type="email" id="email" placeholder="Enter your email" required>
               <div class="error-message" id="emailError"></div>
+              
+              <!-- Duplicate email suggestion box -->
+              <div class="duplicate-email-suggestion" id="duplicateEmailSuggestion">
+                <div class="suggestion-title">📧 This email is already registered</div>
+                <div style="font-size: 13px; color: #666; margin-bottom: 10px;">Would you like to sign in instead?</div>
+                <div class="suggestion-actions">
+                  <button type="button" class="suggestion-btn login" onclick="redirectToLogin()">Sign In Now</button>
+                  <button type="button" class="suggestion-btn" onclick="useDifferentEmail()">Use Different Email</button>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -395,6 +484,8 @@
       const loadingText = document.getElementById("loadingText");
       const timeoutMessage = document.getElementById("timeoutMessage");
       const formTimeoutMessage = document.getElementById("formTimeoutMessage");
+      const duplicateEmailSuggestion = document.getElementById('duplicateEmailSuggestion');
+      const emailInput = document.getElementById('email');
 
       // Use the deployed backend URL
       const API_BASE_URL = "https://dishcovery-backend-1.onrender.com";
@@ -403,12 +494,28 @@
       const TIMEOUT_DURATION = 30000; // 30 seconds
       let timeoutId;
 
-      function showError(fieldId, message) {
+      // Enhanced error handling for duplicate emails
+      function showError(fieldId, message, isDuplicateEmail = false) {
         const errorElement = document.getElementById(fieldId);
         const inputElement = document.getElementById(fieldId.replace('Error', ''));
+        
+        // MAKE SURE ERROR IS VISIBLE
         errorElement.textContent = message;
         errorElement.classList.add('show');
-        if (inputElement) inputElement.classList.add('input-error');
+        
+        if (inputElement) {
+          inputElement.classList.add('input-error');
+          if (isDuplicateEmail) {
+            inputElement.classList.add('duplicate-email');
+            // Show the duplicate email suggestion box
+            duplicateEmailSuggestion.classList.add('show');
+          }
+        }
+        
+        // Scroll to error for better visibility
+        setTimeout(() => {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
       }
 
       function clearErrors() {
@@ -418,15 +525,21 @@
         });
         document.querySelectorAll('input').forEach(el => {
           el.classList.remove('input-error');
+          el.classList.remove('duplicate-email');
         });
         successMessage.classList.remove('show');
         infoMessage.classList.remove('show');
         formTimeoutMessage.classList.remove('show');
+        duplicateEmailSuggestion.classList.remove('show');
       }
 
       function showSuccess(message) {
         successMessage.textContent = message;
         successMessage.classList.add('show');
+        // Scroll to success message
+        setTimeout(() => {
+          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
       }
 
       function showInfo(message) {
@@ -457,7 +570,20 @@
         return re.test(email);
       }
 
-      // REAL BACKEND IMPLEMENTATION - OPTIMIZED VERSION
+      // Enhanced duplicate email handling functions
+      window.redirectToLogin = function() {
+        const email = emailInput.value;
+        window.location.href = "../login-active_folder/login-active.html?email=" + encodeURIComponent(email);
+      };
+
+      window.useDifferentEmail = function() {
+        duplicateEmailSuggestion.classList.remove('show');
+        emailInput.classList.remove('duplicate-email');
+        emailInput.focus();
+        emailInput.select();
+      };
+
+      // REAL BACKEND IMPLEMENTATION - ENHANCED DUPLICATE EMAIL HANDLING
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -566,7 +692,7 @@
           // Handle different response statuses
           if (response.ok) {
             // SUCCESS - User created
-            showSuccess('✅ Account created successfully!');
+            showSuccess('✅ Account created successfully! Redirecting to login...');
             loadingText.textContent = 'Redirecting to login...';
             
             // Store user data if needed
@@ -582,19 +708,22 @@
             setTimeout(() => {
               hideLoading();
               window.location.href = "../login-active_folder/login-active.html";
-            }, 1500);
+            }, 2000);
             
           } else {
             hideLoading();
-            // Handle different error cases from backend
+            
+            // ENHANCED DUPLICATE EMAIL HANDLING - VISIBLE ON PAGE
             if (response.status === 409) {
-              showError('emailError', data.message || 'An account with this email already exists');
+              // This email is already registered - SHOW VISIBLE ERROR
+              showError('emailError', '❌ This email address is already registered. Please use a different email or sign in.', true);
+              
             } else if (response.status === 400) {
               showError('emailError', data.message || 'Please check your input data');
             } else if (response.status === 500) {
               showInfo('🛠️ Server error: The backend is having issues. Please try again in a moment.');
             } else {
-              throw new Error(data.message || `Registration failed with status ${response.status}`);
+              showError('emailError', data.message || 'Registration failed. Please try again.');
             }
             signupBtn.innerHTML = originalBtnText;
             signupBtn.disabled = false;
@@ -626,8 +755,18 @@
           if (errorElement && errorElement.classList.contains('show')) {
             errorElement.classList.remove('show');
             input.classList.remove('input-error');
+            input.classList.remove('duplicate-email');
+            duplicateEmailSuggestion.classList.remove('show');
           }
         });
+      });
+
+      // Clear duplicate email styling when user starts typing
+      emailInput.addEventListener('input', () => {
+        if (emailInput.classList.contains('duplicate-email')) {
+          emailInput.classList.remove('duplicate-email');
+          duplicateEmailSuggestion.classList.remove('show');
+        }
       });
     });
   </script>

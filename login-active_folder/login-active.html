@@ -3,204 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dishcovery Login</title>
+    <title>Login | Dishcovery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Your existing CSS styles remain the same */
         * {
-            margin: 0;
             padding: 0;
+            margin: 0;
             box-sizing: border-box;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        html {
-            font-size: 62.5%;
+            font-family: "Open Sans", sans-serif;
         }
 
         body {
             background-color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #000;
+            color: #333;
             overflow: hidden;
         }
 
-        .login_page {
+        .sign {
             display: flex;
-            position: relative;
+            height: 100vh;
+        }
+
+        .sign img {
+            width: 45%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .active {
+            width: 55%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            background-color: #fff;
+        }
+
+        .dish {
             width: 100%;
-            height: 100vh; 
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 100%;
         }
 
-        .left_panel {
-            flex: 1; 
-            position: relative; 
+        .dish__details {
+            text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
-            border-right: 1px solid #eee; 
-            margin: 5rem 0;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
-        .right-panel {
-            flex: 1; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 0 4rem;
-            font-family: sans-serif;
-            margin-top: -15rem;
-        }
-
-        .right-panel h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding-bottom: 5rem;
+        .dish__details h1 {
+            font-size: 28px;
             color: #d84444;
+            letter-spacing: 1px;
+            font-weight: 700;
         }
 
-        .right-panel h2 {
-            font-size: 2.4rem;
-            font-weight: 400;
-            font-style: normal;
-            text-transform: capitalize;
-            padding-bottom: 2rem;
+        .dish__details p {
+            font-size: 14px;
+            color: #555;
         }
 
-        .right-panel h3 {
-            font-size: 1.6rem;
-            font-weight: 300;
-            font-style: normal;
-            padding-bottom: 5rem;
-            color: #666;
-        }
-
-        .input_wrapper {
+        .dish__fills {
+            flex-grow: 1;
+            overflow-y: hidden;
+            padding-right: 0;
+            padding-bottom: 0;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            width: 37.7rem;
+            justify-content: center;
         }
 
-        .input_wrapper input {
-            height: 4.8rem;
-            padding: 1rem;
-            border-radius: 5px;
-            border: 1px solid #E6E6E6;
-            height: 4.4rem;
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            height: 35px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
-        .input_wrapper input:focus {
+        input:focus {
             outline: none;
             border-color: #d84444;
             box-shadow: 0 0 0 2px rgba(216, 68, 68, 0.1);
         }
 
-        .input_wrapper input.error {
+        .input-error {
             border-color: #d84444;
+            background-color: #fff9f9;
         }
 
-        .forgot_password {
-            text-align: right;
-            text-transform: capitalize;
-            margin-top: -1rem;
-        }
-
-        .forgot_password a {
-            text-decoration: none;
-            color: #666;
-            font-size: 1.3rem;
-            transition: color 0.3s ease;
-        }
-
-        .submit_btn {
-            display: flex;
-            padding: 1rem;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            align-self: stretch;
+        button {
+            margin-top: 10px;
+            height: 38px;
+            font-weight: 700;
             border-radius: 8px;
-            background: #D84444;
-            margin: 2rem 0;
-            transition: all 0.3s ease;
             border: none;
-            cursor: pointer;
-        }
-
-        .submit_btn:hover {
-            background: #c13c3c;
-        }
-
-        .submit_btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-
-        .log-in_btn {
-            background: transparent;
-            border: none;
+            background-color: #d84444;
             color: #fff;
-            font-size: 1.6rem;
-            font-weight: 600;
+            transition: 0.3s ease;
             cursor: pointer;
+            flex-shrink: 0;
+            font-size: 14px;
         }
 
-        .new_user {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: 400;
-            gap: 2px;
-            color: #666;
+        button:hover {
+            background-color: #c13c3c;
+            transform: translateY(-1px);
         }
 
-        .new_user a {
-            text-decoration: none;
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -5px;
+        }
+
+        .forgot-password a {
             color: #d84444;
+            text-decoration: none;
+            font-size: 13px;
             font-weight: 600;
         }
 
-        /* Error message styling */
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .acc-log {
+            margin-top: 5px;
+            font-size: 13px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        a {
+            color: #d84444;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         .error-message {
             color: #d84444;
-            font-size: 1.2rem;
-            margin-top: -0.5rem;
-            margin-bottom: 1rem;
+            font-size: 12px;
+            margin-top: 5px;
             display: none;
+            padding: 5px;
+            background: #fff9f9;
+            border-radius: 4px;
+            border-left: 3px solid #d84444;
         }
 
         .error-message.show {
             display: block;
         }
 
-        /* Success message */
         .success-message {
             color: #4CAF50;
-            font-size: 1.4rem;
+            font-size: 14px;
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 10px;
             display: none;
+            padding: 10px;
+            background: #f8fff8;
+            border-radius: 6px;
+            border: 1px solid #4CAF50;
         }
 
         .success-message.show {
             display: block;
         }
 
-        /* Loading spinner */
+        .info-message {
+            color: #ff9800;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .info-message.show {
+            display: block;
+        }
+
         .spinner {
             border: 2px solid #f3f3f3;
             border-top: 2px solid #ffffff;
@@ -210,6 +229,7 @@
             animation: spin 1s linear infinite;
             display: inline-block;
             margin-right: 8px;
+            vertical-align: middle;
         }
 
         @keyframes spin {
@@ -217,411 +237,400 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Alert styles */
-        .alert {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 1.4rem;
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-text {
+            margin-top: 15px;
+            color: #d84444;
+            font-weight: 600;
+        }
+        
+        .large-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #d84444;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        .timeout-message {
+            color: #ff9800;
+            font-size: 14px;
+            text-align: center;
+            margin: 10px 0;
             display: none;
         }
-
-        .alert.error {
-            background-color: #fee;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
+        
+        .timeout-message.show {
             display: block;
         }
 
-        .alert.success {
-            background-color: #efffef;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            display: block;
-        }
-
-        /* Test buttons */
-        .test-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .test-btn {
-            padding: 8px 16px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .test-btn:hover {
-            background: #5a6268;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 767px) {
-            .login_page {
+        @media (max-width: 900px) {
+            .sign {
                 flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+                overflow: auto;
+            }
+
+            body {
+                overflow-y: auto;
             }
             
-            .left_panel {
-                display: none;
-            }
-            
-            .right-panel {
-                margin-top: 0;
-                padding: 2rem;
-            }
-            
-            .input_wrapper {
+            .sign img {
                 width: 100%;
+                height: 300px;
+            }
+
+            .active {
+                width: 100%;
+                box-shadow: none;
+                padding: 30px 20px;
+            }
+
+            .dish {
+                gap: 20px;
+                max-height: unset;
+                padding: 0;
+            }
+
+            .dish__fills {
+                overflow-y: visible;
+            }
+
+            .dish__details h1 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .dish {
+                max-width: 100%;
+            }
+
+            input {
+                height: 38px;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .dish__details p {
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
-    <section class="login_page">
-        <div class="left_panel">
-            <div class="logo_area">
-                <img src="../images/Frame 13.png" alt="Dishcovery Logo" style="height: 40px;">
-            </div>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="large-spinner"></div>
+        <div class="loading-text" id="loadingText">Logging you in...</div>
+        <div class="timeout-message" id="timeoutMessage">
+            ⏳ This is taking longer than expected. Please wait...
         </div>
+    </div>
 
-        <div class="right-panel">
-            <h1>dishcovery</h1>
-            <h2>welcome back</h2>
-            <h3>Please Log in</h3>
-            
-            <!-- Test Connection Button -->
-            <div class="test-buttons">
-                <button class="test-btn" onclick="testBackendConnection()">Test Backend Connection</button>
-                <button class="test-btn" onclick="fillTestCredentials()">Fill Test Credentials</button>
-            </div>
-            
-            <form id="loginForm">
-                <div class="form_wrapper">
-                    <div class="input_wrapper">
-                        <!-- Alert Messages -->
-                        <div class="alert" id="generalAlert"></div>
-                        
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Enter your email" required>
-                        <div class="error-message" id="emailError"></div>
-                        
-                        <label for="password">Password</label>
-                        <input type="password" id="password" placeholder="Enter your password" required>
-                        <div class="error-message" id="passwordError"></div>
-                        
-                        <div class="forgot_password">
-                            <a href="../password__Recovery--active/forget password.html">forgot password?</a>
+    <section class="sign">
+        <!-- Using your original image path -->
+        <img src="../images/Frame 340.png" alt="Dishcovery Illustration">
+
+        <div class="active">
+            <div class="dish">
+                <div class="dish__details">
+                    <h1>DISHCOVERY</h1>
+                    <p>Welcome back</p>
+                    <p>Please log in to your account</p>
+                </div>
+
+                <div class="dish__fills">
+                    <form id="loginForm">
+                        <div>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                            <div class="error-message" id="emailError"></div>
                         </div>
-                        
-                        <div class="submit_btn" id="submitBtn">
-                            <button class="log-in_btn" type="submit" id="loginBtn">
-                                Log in
-                            </button>
+
+                        <div>
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                            <div class="error-message" id="passwordError"></div>
                         </div>
-                        
+
+                        <div class="forgot-password">
+                            <a href="../password__Recovery--active/forget password.html">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="sign--btn" id="loginBtn">
+                            Log In
+                        </button>
+
                         <div class="success-message" id="successMessage"></div>
-                    </div>
-                </div>
+                        <div class="info-message" id="infoMessage"></div>
+                        <div class="timeout-message" id="formTimeoutMessage"></div>
 
-                <div class="new_user">
-                    <p>Don't have an account?</p>
-                    <a href="../sign-up page/sign-up.html">Sign up</a>
+                        <p class="acc-log">Don't have an account?
+                            <a href="../sign-up page/sign-up.html">Sign up</a>
+                        </p>
+                    </form>
                 </div>
-            </form>   
+            </div>
         </div>
     </section>
 
     <script>
-        // Backend API Configuration
-        const API_BASE_URL = "https://dishcovery-backend-1.onrender.com";
-        
-        // Test credentials (you'll need to replace these with actual registered users)
-        const TEST_CREDENTIALS = [
-            { email: "demo@dishcovery.com", password: "demo123" },
-            { email: "test@dishcovery.com", password: "test123" },
-            { email: "admin@dishcovery.com", password: "admin123" }
-        ];
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("loginForm");
+            const loginBtn = document.getElementById("loginBtn");
+            const successMessage = document.getElementById("successMessage");
+            const infoMessage = document.getElementById("infoMessage");
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            const loadingText = document.getElementById("loadingText");
+            const timeoutMessage = document.getElementById("timeoutMessage");
+            const formTimeoutMessage = document.getElementById("formTimeoutMessage");
 
-        // Utility Functions
-        function showAlert(message, type = 'error') {
-            const alertElement = document.getElementById('generalAlert');
-            alertElement.textContent = message;
-            alertElement.className = `alert ${type}`;
-        }
-
-        function hideAlert() {
-            const alertElement = document.getElementById('generalAlert');
-            alertElement.style.display = 'none';
-        }
-
-        function showError(fieldId, message) {
-            const errorElement = document.getElementById(fieldId);
-            const inputElement = document.getElementById(fieldId.replace('Error', ''));
+            // Use the deployed backend URL
+            const API_BASE_URL = "https://dishcovery-backend-1.onrender.com";
             
-            if (errorElement) {
+            // Timeout handling
+            const TIMEOUT_DURATION = 30000; // 30 seconds
+            let timeoutId;
+
+            function showError(fieldId, message) {
+                const errorElement = document.getElementById(fieldId);
+                const inputElement = document.getElementById(fieldId.replace('Error', ''));
                 errorElement.textContent = message;
                 errorElement.classList.add('show');
+                if (inputElement) inputElement.classList.add('input-error');
             }
-            if (inputElement) {
-                inputElement.classList.add('error');
+
+            function clearErrors() {
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.classList.remove('show');
+                    el.textContent = '';
+                });
+                document.querySelectorAll('input').forEach(el => {
+                    el.classList.remove('input-error');
+                });
+                successMessage.classList.remove('show');
+                infoMessage.classList.remove('show');
+                formTimeoutMessage.classList.remove('show');
             }
-        }
 
-        function clearErrors() {
-            // Clear field errors
-            const errorElements = document.querySelectorAll('.error-message');
-            errorElements.forEach(element => {
-                element.classList.remove('show');
-                element.textContent = '';
-            });
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.classList.add('show');
+            }
 
-            // Clear input errors
-            const inputElements = document.querySelectorAll('input');
-            inputElements.forEach(element => {
-                element.classList.remove('error');
-            });
+            function showInfo(message) {
+                infoMessage.textContent = message;
+                infoMessage.classList.add('show');
+            }
 
-            // Hide general alert
-            hideAlert();
-        }
+            function showLoading(message = "Logging you in...") {
+                loadingText.textContent = message;
+                loadingOverlay.classList.add('active');
+                
+                // Show timeout message after 10 seconds
+                setTimeout(() => {
+                    timeoutMessage.classList.add('show');
+                }, 10000);
+            }
 
-        function setLoadingState(isLoading) {
-            const loginBtn = document.getElementById('loginBtn');
-            const submitBtn = document.getElementById('submitBtn');
+            function hideLoading() {
+                loadingOverlay.classList.remove('active');
+                timeoutMessage.classList.remove('show');
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+            }
 
-            if (isLoading) {
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            // Check URL parameters for pre-filled email (from signup page)
+            function checkUrlParameters() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const email = urlParams.get('email');
+                if (email) {
+                    document.getElementById('email').value = email;
+                }
+            }
+
+            // LOGIN BACKEND IMPLEMENTATION
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                // Get form values
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+
+                // Clear previous errors
+                clearErrors();
+
+                // Validation
+                let hasErrors = false;
+                
+                if (!email) { 
+                    showError('emailError', 'Email is required'); 
+                    hasErrors = true; 
+                } else if (!validateEmail(email)) {
+                    showError('emailError', 'Please enter a valid email address');
+                    hasErrors = true;
+                }
+                
+                if (!password) { 
+                    showError('passwordError', 'Password is required'); 
+                    hasErrors = true; 
+                } else if (password.length < 6) { 
+                    showError('passwordError', 'Password must be at least 6 characters'); 
+                    hasErrors = true; 
+                }
+                
+                if (hasErrors) return;
+
+                // Update button state and show loading
+                const originalBtnText = loginBtn.innerHTML;
                 loginBtn.innerHTML = '<span class="spinner"></span>Logging in...';
-                submitBtn.disabled = true;
-            } else {
-                loginBtn.innerHTML = 'Log in';
-                submitBtn.disabled = false;
-            }
-        }
+                loginBtn.disabled = true;
+                showLoading();
 
-        // Form Validation
-        function validateForm() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            let isValid = true;
+                // Set timeout for the request
+                timeoutId = setTimeout(() => {
+                    hideLoading();
+                    showInfo('⏰ Request is taking longer than expected. The backend might be starting up. Please try again in a moment.');
+                    loginBtn.innerHTML = originalBtnText;
+                    loginBtn.disabled = false;
+                }, TIMEOUT_DURATION);
 
-            clearErrors();
-
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email) {
-                showError('emailError', 'Email is required');
-                isValid = false;
-            } else if (!emailRegex.test(email)) {
-                showError('emailError', 'Please enter a valid email address');
-                isValid = false;
-            }
-
-            // Password validation
-            if (!password) {
-                showError('passwordError', 'Password is required');
-                isValid = false;
-            } else if (password.length < 6) {
-                showError('passwordError', 'Password must be at least 6 characters long');
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        // Backend Connection Test
-        async function testBackendConnection() {
-            console.log('Testing backend connection...');
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: "test@example.com",
-                        password: "testpassword"
-                    })
-                });
-
-                const data = await response.json();
-                
-                console.log('Backend Response:', {
-                    status: response.status,
-                    ok: response.ok,
-                    data: data
-                });
-
-                if (response.status === 400 && data.error === 'Invalid credentials') {
-                    showAlert('✅ Backend is working! (Returning expected error for test credentials)', 'success');
-                } else if (response.ok) {
-                    showAlert('✅ Backend is working! Login successful with test data.', 'success');
-                } else {
-                    showAlert(`Backend response: ${data.error || data.message || 'Unknown error'}`, 'error');
-                }
-            } catch (error) {
-                console.error('Backend test failed:', error);
-                showAlert('❌ Backend connection failed: ' + error.message, 'error');
-            }
-        }
-
-        // Fill test credentials
-        function fillTestCredentials() {
-            // Use the first set of test credentials
-            const testCredential = TEST_CREDENTIALS[0];
-            document.getElementById('email').value = testCredential.email;
-            document.getElementById('password').value = testCredential.password;
-            showAlert('Test credentials filled. Click "Log in" to test.', 'success');
-        }
-
-        // Login Function
-        async function handleLogin(email, password) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email.trim(),
+                try {
+                    // Prepare data for backend
+                    const loginData = {
+                        email: email,
                         password: password
-                    })
-                });
+                    };
 
-                const data = await response.json();
+                    console.log('🔄 Sending login request to backend...');
 
-                if (!response.ok) {
-                    // Handle different error cases
-                    let errorMessage = data.error || data.message || 'Login failed';
-                    
-                    // Provide more specific error messages
-                    if (response.status === 400) {
-                        if (errorMessage.toLowerCase().includes('invalid credentials')) {
-                            errorMessage = 'Invalid email or password. Please check your credentials.';
-                        } else if (errorMessage.toLowerCase().includes('email')) {
-                            errorMessage = 'Please check your email address.';
-                        } else if (errorMessage.toLowerCase().includes('password')) {
-                            errorMessage = 'Please check your password.';
+                    // REAL API CALL TO BACKEND with timeout
+                    const controller = new AbortController();
+                    const timeoutId2 = setTimeout(() => controller.abort(), TIMEOUT_DURATION);
+
+                    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(loginData),
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId2);
+                    clearTimeout(timeoutId);
+
+                    console.log('📊 Response status:', response.status);
+
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (parseError) {
+                        console.error('❌ Failed to parse JSON response:', parseError);
+                        throw new Error('Server returned an invalid response. Please try again.');
+                    }
+
+                    console.log('📄 Response data:', data);
+
+                    // Handle different response statuses
+                    if (response.ok) {
+                        // SUCCESS - Login successful
+                        showSuccess('✅ Login successful! Redirecting...');
+                        loadingText.textContent = 'Redirecting to dashboard...';
+                        
+                        // Store user data
+                        if (data.token) {
+                            localStorage.setItem('authToken', data.token);
+                            localStorage.setItem('userData', JSON.stringify(data.user));
                         }
-                    } else if (response.status === 401) {
-                        errorMessage = 'Unauthorized access. Please check your credentials.';
-                    } else if (response.status === 404) {
-                        errorMessage = 'User not found. Please check if you have an account.';
-                    } else if (response.status === 500) {
-                        errorMessage = 'Server error. Please try again later.';
+                        
+                        // Clear form
+                        form.reset();
+                        
+                        // Redirect to dashboard after shorter delay
+                        setTimeout(() => {
+                            hideLoading();
+                            window.location.href = "../admin-dashboard/admin.html";
+                        }, 1500);
+                        
+                    } else {
+                        hideLoading();
+                        // Handle different error cases from backend
+                        if (response.status === 400 || response.status === 401) {
+                            showError('emailError', 'Invalid email or password');
+                            showError('passwordError', 'Invalid email or password');
+                        } else if (response.status === 404) {
+                            showError('emailError', 'No account found with this email');
+                        } else if (response.status === 500) {
+                            showInfo('🛠️ Server error: The backend is having issues. Please try again in a moment.');
+                        } else {
+                            throw new Error(data.message || `Login failed with status ${response.status}`);
+                        }
+                        loginBtn.innerHTML = originalBtnText;
+                        loginBtn.disabled = false;
                     }
 
-                    throw new Error(errorMessage);
-                }
-
-                return data;
-            } catch (error) {
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    throw new Error('Network error: Unable to connect to the server. Please check your internet connection.');
-                }
-                throw error;
-            }
-        }
-
-        // Form Submission Handler
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
-            // Clear previous errors
-            clearErrors();
-
-            // Validate form
-            if (!validateForm()) {
-                return;
-            }
-
-            // Set loading state
-            setLoadingState(true);
-
-            try {
-                console.log('Attempting login with:', { email: email.substring(0, 3) + '...' });
-                
-                const result = await handleLogin(email, password);
-
-                if (result.token) {
-                    // Store the token and user data
-                    localStorage.setItem('authToken', result.token);
-                    if (result.user) {
-                        localStorage.setItem('userData', JSON.stringify(result.user));
+                } catch (error) {
+                    hideLoading();
+                    console.error('❌ Login error:', error);
+                    
+                    // Network errors or other issues
+                    if (error.name === 'AbortError') {
+                        showInfo('⏰ Request timeout: The server is taking too long to respond. This is normal for free hosting services. Please try again.');
+                    } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                        showInfo('🌐 Network error: Please check your internet connection and try again');
+                    } else {
+                        showError('emailError', error.message || 'Login failed. Please try again.');
                     }
                     
-                    // Show success message
-                    showAlert('✅ Login successful! Redirecting...', 'success');
-                    
-                    // Redirect to dashboard
-                    setTimeout(() => {
-                        window.location.href = "../admin-dashboard/admin.html";
-                    }, 2000);
-                } else {
-                    throw new Error('No token received from server');
+                    loginBtn.innerHTML = originalBtnText;
+                    loginBtn.disabled = false;
                 }
-            } catch (error) {
-                console.error('Login error:', error);
-                
-                // Show appropriate error message
-                const errorMessage = error.message;
-                
-                if (errorMessage.includes('Invalid email or password') || 
-                    errorMessage.includes('credentials') ||
-                    errorMessage.includes('Unauthorized')) {
-                    showError('emailError', 'Invalid email or password');
-                    showError('passwordError', 'Invalid email or password');
-                    showAlert('Invalid email or password. Please try again.', 'error');
-                } else if (errorMessage.includes('Network error')) {
-                    showAlert('Network error: Please check your internet connection and try again.', 'error');
-                } else {
-                    showAlert(errorMessage, 'error');
-                }
-            } finally {
-                setLoadingState(false);
-            }
+            });
+
+            // Real-time validation for better UX
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => {
+                    const errorId = input.id + 'Error';
+                    const errorElement = document.getElementById(errorId);
+                    if (errorElement && errorElement.classList.contains('show')) {
+                        errorElement.classList.remove('show');
+                        input.classList.remove('input-error');
+                    }
+                });
+            });
+
+            // Check for pre-filled email from URL
+            checkUrlParameters();
         });
-
-        // Real-time validation
-        document.getElementById('email').addEventListener('blur', validateForm);
-        document.getElementById('password').addEventListener('blur', validateForm);
-
-        // Clear errors when user starts typing
-        document.getElementById('email').addEventListener('input', () => {
-            clearErrors();
-        });
-        document.getElementById('password').addEventListener('input', () => {
-            clearErrors();
-        });
-
-        // Check if user is already logged in
-        function checkExistingAuth() {
-            const token = localStorage.getItem('authToken');
-            if (token) {
-                console.log('User already has a token');
-                // You can add token validation here if needed
-            }
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            checkExistingAuth();
-            console.log('Login page initialized');
-            console.log('Backend URL:', API_BASE_URL);
-        });
-
-        // Export functions for global access
-        window.testBackendConnection = testBackendConnection;
-        window.fillTestCredentials = fillTestCredentials;
     </script>
 </body>
 </html>

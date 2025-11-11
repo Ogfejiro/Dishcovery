@@ -50,6 +50,34 @@
     .filters button.active,.filters button:hover{background:#f44336;color:#fff;border-color:#f44336;}
     #searchPage .filters{display:none;}
 
+    /* ────────────────────── ADMIN DASHBOARD LINK ────────────────────── */
+    .admin-dashboard-link {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #d84444;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .admin-dashboard-link:hover {
+      background: #c13c3c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .admin-dashboard-link i {
+      font-size: 16px;
+    }
+
     /* ────────────────────── RECIPE CARD ────────────────────── */
     .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
     .recipe-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);
@@ -156,6 +184,14 @@
     @media (max-width:1024px){
       .main{padding-left:2rem;}
     }
+    @media (max-width: 768px) {
+      .admin-dashboard-link {
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -177,6 +213,11 @@
 
   <!-- ====================== MAIN ====================== -->
   <main class="main">
+    <!-- Admin Dashboard Link - Will be added dynamically if user is logged in -->
+    <a href="../admin-dashboard/admin.html" class="admin-dashboard-link" id="adminDashboardLink" style="display: none;">
+      <i class="fa-solid fa-chart-line"></i> Admin Dashboard
+    </a>
+
     <header class="topbar">
       <button class="toggle-sidebar" id="toggleSidebar"><i class="fa-solid fa-bars"></i></button>
       <div class="filters">
@@ -240,12 +281,25 @@
       <p style="text-align:center;color:#777;margin-top:30px;">Click a recipe card to view details.</p>
     </section>
   </main>
-</div> <!-- ← THIS CLOSING DIV WAS MISSING BEFORE! -->
+</div>
 
 <script>
-/* ============================== DATA ============================== */
-// const STATIC_RECIPES = [
-  /* ============================== DATA ============================== */
+/* ============================== AUTHENTICATION CHECK ============================== */
+function checkAuthentication() {
+  const token = localStorage.getItem('authToken');
+  const userData = localStorage.getItem('userData');
+  
+  if (token && userData) {
+    // User is logged in, show admin dashboard link
+    document.getElementById('adminDashboardLink').style.display = 'flex';
+    console.log('User is logged in, showing admin dashboard link');
+  } else {
+    // User is not logged in, hide admin dashboard link
+    document.getElementById('adminDashboardLink').style.display = 'none';
+    console.log('User is not logged in, hiding admin dashboard link');
+  }
+}
+
 /* ============================== DATA ============================== */
 const STATIC_RECIPES = [
   {
@@ -290,7 +344,7 @@ const STATIC_RECIPES = [
     _id:3,
     name:"Puff Puff",
     category:"snacks",
-    image:"https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image:"https://images.unsplash.com/photo-1664993085274-80c6ba725ccc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVmZiUyMHB1ZmZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
     cookingTime:30,
     description:"Fluffy deep-fried dough balls — slightly sweet and addictive, perfect for snacks.",
     ingredients:["2 cups flour","½ cup sugar","2 tsp yeast","1 cup warm water","Oil for frying"],
@@ -350,7 +404,7 @@ const STATIC_RECIPES = [
     _id:9,
     name:"Fried Rice",
     category:"lunch",
-    image:"https://images.pexels.com/photos/7363933/pexels-photo-7363933.jpeg?auto=compress&cs=tinysrgb&w=600",
+    image: "https://images.unsplash.com/photo-1664717698774-84f62382613b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTR8fGZyaWVkJTIwcmljZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500",
     cookingTime:35,
     description:"Colorful rice stir-fried with veggies and proteins — a Nigerian party favorite.",
     ingredients:["2 cups rice","Mixed veggies","Shrimp or chicken","Soy sauce","Seasoning"],
@@ -388,13 +442,49 @@ const STATIC_RECIPES = [
   }
 ];
 
-
-let ALL_RECIPES = [...STATIC_RECIPES];
-
 // Load savedRecipes from localStorage and ensure IDs are numbers
 let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
 savedRecipes = savedRecipes.map(id => Number(id)).filter(id => !Number.isNaN(id));
 
+/* ============================== INTEGRATION WITH ADMIN DASHBOARD ============================== */
+function loadRecipesFromAdminDashboard() {
+  try {
+    const adminRecipes = JSON.parse(localStorage.getItem('dishcovery_all_recipes')) || [];
+    console.log('Recipes from admin dashboard:', adminRecipes);
+    
+    // Convert admin recipes to match our format
+    const convertedRecipes = adminRecipes.map(recipe => {
+      // Generate a unique ID for admin recipes (use negative numbers to avoid conflicts)
+      const adminId = -Math.abs(parseInt(recipe.id) || Date.now());
+      
+      return {
+        _id: adminId,
+        name: recipe.name,
+        category: recipe.category,
+        image: recipe.image,
+        cookingTime: parseInt(recipe.prepTime) || 30, // Convert "30 mins" to 30
+        description: recipe.description,
+        ingredients: ["Ingredients added via admin dashboard"], // Default ingredients
+        instructions: ["Instructions added via admin dashboard"] // Default instructions
+      };
+    });
+    
+    return convertedRecipes;
+  } catch (error) {
+    console.error('Error loading recipes from admin dashboard:', error);
+    return [];
+  }
+}
+
+// Combine static recipes with admin dashboard recipes
+function getAllRecipes() {
+  const adminRecipes = loadRecipesFromAdminDashboard();
+  const allRecipes = [...STATIC_RECIPES, ...adminRecipes];
+  console.log('All recipes (static + admin):', allRecipes);
+  return allRecipes;
+}
+
+let ALL_RECIPES = getAllRecipes();
 
 /* ============================== SAVE LOGIC ============================== */
 function toggleSaveRecipe(id){
@@ -415,7 +505,6 @@ function toggleSaveRecipe(id){
   updateMyRecipesPage();
 }
 
-
 function updateAllSaveButtons(id) {
   // Update all save buttons anywhere in the page
   document.querySelectorAll(`.save-btn`).forEach(btn => {
@@ -429,9 +518,6 @@ function updateAllSaveButtons(id) {
     }
   });
 }
-
-
-
 
 /* ============================== CARD ============================== */
 function createRecipeCard(r){
@@ -458,7 +544,6 @@ function createRecipeCard(r){
   return card;
 }
 
-
 /* ============================== RENDER ============================== */
 function renderRecipes(list, container){
   container.innerHTML='';
@@ -467,8 +552,6 @@ function renderRecipes(list, container){
 }
 
 /* ============================== DETAIL PAGE ============================== */
-/* ============================== DETAIL PAGE ============================== */
-/* ============================== DETAIL PAGE (FIXED) ============================== */
 function showRecipeDetail(recipe){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));
   document.getElementById('recipeDetailPage').classList.add('active-page');
@@ -490,7 +573,7 @@ function showRecipeDetail(recipe){
       <p><span class="instruction-number">${i+1}</span>${s}</p>
     </li>`).join('');
 
-  const mightLike = STATIC_RECIPES.filter(r=>r._id!==recipe._id).slice(0,2);
+  const mightLike = ALL_RECIPES.filter(r=>r._id!==recipe._id).slice(0,2);
 
   // ---- BUILD THE WHOLE DETAIL PAGE ----
   document.getElementById('recipeDetailPage').innerHTML = `
@@ -512,9 +595,6 @@ function showRecipeDetail(recipe){
         onclick="event.stopPropagation(); toggleSaveRecipe(${recipe._id})">
   <i class="${savedRecipes.includes(recipe._id)?'fas':'far'} fa-bookmark"></i>
 </button>
-
-
-
         </div>
         <div class="recipe-meta-data">
           <p><i class="fa-regular fa-clock"></i> Prep Time: <span>${prepTime} mins</span></p>
@@ -571,14 +651,6 @@ function showRecipeDetail(recipe){
   });
 }
 
-/* ============================== SEARCH ============================== */
-// document.getElementById('searchInput').oninput = e=>{
-//   const q = e.target.value.toLowerCase();
-//   const res = ALL_RECIPES.filter(r=>r.name.toLowerCase().includes(q)||r.description.toLowerCase().includes(q));
-//   renderRecipes(res, document.getElementById('searchResults'));
-// };
-
-
 /* ============================== SEARCH FUNCTION ============================== */
 const searchInput = document.getElementById('searchInput');
 const searchResultsContainer = document.getElementById('searchResults');
@@ -602,7 +674,6 @@ searchInput.addEventListener('input', e => {
   // Render search results dynamically
   renderRecipes(results, searchResultsContainer);
 });
-
 
 /* ============================== MY RECIPES ============================== */
 function updateMyRecipesPage(){
@@ -629,7 +700,6 @@ function updateMyRecipesPage(){
   }
 }
 
-
 /* ============================== SIDEBAR TOGGLE ============================== */
 document.getElementById('toggleSidebar').addEventListener('click', () => {
   const sidebar = document.getElementById('sidebar');
@@ -641,13 +711,6 @@ document.getElementById('overlay').addEventListener('click', () => {
   document.getElementById('sidebar').classList.remove('active');
   document.getElementById('overlay').classList.remove('active');
 });
-
-/* ============================== INITIAL LOAD ============================== */
-renderRecipes(ALL_RECIPES, document.getElementById('homeRecipes'));
-updateMyRecipesPage();
-
-
-
 
 /* ============================== FILTER BUTTONS ============================== */
 const filterButtons = document.querySelectorAll('.filter-btn');
@@ -675,7 +738,6 @@ filterButtons.forEach(btn => {
   });
 });
 
-
 /* ============================== PAGE NAVIGATION ============================== */
 const navLinks = document.querySelectorAll('.nav-link');
 
@@ -683,9 +745,9 @@ navLinks.forEach(link => {
   link.addEventListener('click', e => {
     const targetPage = link.dataset.page;
 
-    // ✅ If the link is "Add Recipe", allow it to go to the signup page normally
+    // ✅ If the link is "Add Recipe", allow it to go to the admin page normally
     if (targetPage === 'add-recipe') {
-      return; // don’t stop it — let it open the sign-up page
+      return; // don't stop it — let it open the admin page
     }
 
     // For all other links, prevent the normal page refresh
@@ -701,10 +763,48 @@ navLinks.forEach(link => {
   });
 });
 
+/* ============================== ADMIN DASHBOARD LINK HANDLER ============================== */
+// Add event listener to admin dashboard link to prevent interference from other scripts
+document.addEventListener('DOMContentLoaded', function() {
+  const adminLink = document.getElementById('adminDashboardLink');
+  if (adminLink) {
+    adminLink.addEventListener('click', function(e) {
+      // Allow the link to work normally - don't prevent default
+      console.log('Admin dashboard link clicked');
+    });
+  }
+});
 
+/* ============================== REFRESH RECIPES FUNCTION ============================== */
+function refreshRecipes() {
+  ALL_RECIPES = getAllRecipes();
+  renderRecipes(ALL_RECIPES, document.getElementById('homeRecipes'));
+  updateMyRecipesPage();
+  console.log('Recipes refreshed:', ALL_RECIPES);
+}
 
+/* ============================== INITIAL LOAD ============================== */
+// Check authentication on page load
+checkAuthentication();
+refreshRecipes();
 
+/* ============================== AUTO-REFRESH WHEN RETURNING TO PAGE ============================== */
+// Refresh recipes when the page becomes visible (user returns from admin dashboard)
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    refreshRecipes();
+    checkAuthentication(); // Also check authentication status
+  }
+});
 
+// Also refresh when the page loads
+window.addEventListener('load', function() {
+  refreshRecipes();
+  checkAuthentication();
+});
+
+// Check authentication periodically (every 2 seconds) to catch login/logout changes
+setInterval(checkAuthentication, 2000);
 </script>
 </body>
 </html>

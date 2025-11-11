@@ -56,6 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const pages = document.querySelectorAll(".page");
     const recipeList = document.getElementById("recipeList");
     const totalRecipes = document.getElementById("totalRecipes");
+    const publishedRecipes = document.getElementById("publishedRecipes");
+    const dashboardRecipes = document.getElementById("dashboardRecipes");
     const addRecipeForm = document.getElementById("addRecipeForm");
     const modal = document.getElementById("successModal");
     const closeModalBtn = document.getElementById("closeModal");
@@ -65,55 +67,119 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeEditModalBtn = document.getElementById("closeEditModal");
     const editRecipeForm = document.getElementById("editRecipeForm");
 
-    // ==============================
-    // STATIC RECIPES (12 LOCKED ITEMS)
-    // ==============================
-    const STATIC_RECIPES = [
-        { name: "Pancakes", category: "Breakfast", time: "15 mins", desc: "Fluffy pancakes served warm with syrup and fresh berries.", image: "https://media.istockphoto.com/id/518525367/photo/breakfast-pancakes-and-syrup.webp?a=1&b=1&s=612x612&w=0&k=20&c=aU5gXk1huHPXP0tupPAvQP8-6tkxpQ28zziXIxyMOG4=", source: 'static' },
-        { name: "Jollof Rice", category: "Lunch", time: "45 mins", desc: "A West African classic — spicy rice cooked with tomatoes, peppers, and seasoning.", image: "https://plus.unsplash.com/premium_photo-1694141252774-c937d97641da?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8am9sbG9mJTIwcmljZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Puff Puff", category: "Snacks", time: "30 mins", desc: "Fluffy deep-fried dough balls — slightly sweet and addictive, perfect for snacks.", image: "https://images.unsplash.com/photo-1664993085274-80c6ba725ccc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVmZiUyMHB1ZmZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Grilled Chicken", category: "Dinner", time: "35 mins", desc: "Juicy grilled chicken marinated in herbs and spices — smoky and delicious.", image: "https://plus.unsplash.com/premium_photo-1695931844305-b5dd90ab6138?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JpbGxlZCUyMGNoaWNrZW58ZW58MHx8MHx8fDA%3D%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Smoothie", category: "Drinks", time: "5 mins", desc: "A refreshing fruit smoothie packed with vitamins and a cool burst of energy.", image: "https://images.unsplash.com/photo-1615478503562-ec2d8aa0e24e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21vb3RoaWV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Avocado Toast", category: "Breakfast", time: "10 mins", desc: "Toasted bread topped with creamy avocado and seasonings — simple and satisfying.", image: "https://media.istockphoto.com/id/1518833009/photo/avocado-toast.webp?a=1&b=1&s=612x612&w=0&k=20&c=6m3ocHfARNgjtgykJ6nm2nP9ziHv_5bNA11G-XgEcs4=", source: 'static' },
-        { name: "Spaghetti Bolognese", category: "Lunch", time: "40 mins", desc: "Classic Italian pasta with rich tomato meat sauce — comforting and hearty.", image: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3BhZ2hldHRpJTIwYm9sb2duZXNlfGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Chicken Salad", category: "Dinner", time: "20 mins", desc: "Light and healthy — grilled chicken tossed with crisp vegetables and dressing.", image: "https://images.unsplash.com/photo-1605291535065-e1d52d2b264a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMHNhbGFkfGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Fried Rice", category: "Lunch", time: "35 mins", desc: "Colorful rice stir-fried with veggies and proteins — a Nigerian party favorite.", image: "https://media.istockphoto.com/id/2154268555/photo/asian-chicken-fried-rice-comfort-food-takeaway-food-top-down-rice-dish-photography.webp?a=1&b=1&s=612x612&w=0&k=20&c=Y2qaDNcEUamRMoa-vJw4Ulp_CE8fZFXyrkAw1vAIAdg=", source: 'static' },
-        { name: "Chapman Drink", category: "Drinks", time: "5 mins", desc: "Popular Nigerian cocktail made with Fanta, Sprite, and bitters — sweet and zesty.", image: "https://images.unsplash.com/photo-1557935260-03ada3026d41?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hhcG1hbnxlbnwwfHx8fDA%3D&auto=format&fit=crop&q=60&w=500", source: 'static' },
-        { name: "Suya", category: "Dinner", time: "25 mins", desc: "Spicy Nigerian street food — grilled beef skewers coated with yaji pepper mix.", image: "https://media.istockphoto.com/id/2182713829/photo/nigerian-beef-suya-steak-served-at-a-party.webp?a=1&b=1&s=612x612&w=0&k=20&c=h_cPDQaG20hs0CZe1upzFpIMoHwXji97TwjRxojCKT8=", source: 'static' },
-        { name: "Fruit Parfait", category: "Snacks", time: "10 mins", desc: "Layered yogurt, fruits, and granola — delicious and refreshing.", image: "https://plus.unsplash.com/premium_photo-1669680784119-1f2ac0260295?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RnJ1aXQlMjBQYXJmYWl0fGVufDB8fDB8fDA%3D&auto=format&fit=crop&q=60&w=500", source: 'static' }
-    ];
+    // RECIPE STORAGE SYSTEM - Use the same key as HTML
+    const DISHDISCOVERY_RECIPES_KEY = 'dishcovery_all_recipes';
 
     // ==============================
-    // CORE FIX: Initialization Logic to Prevent Duplication
+    // CORE FIX: Use the same storage system as HTML
     // ==============================
     function initializeRecipes() {
-        const loadedFlag = localStorage.getItem("staticRecipesLoaded");
-        let recipes = JSON.parse(localStorage.getItem("recipes") || "[]");
-
-        // ONLY RUN THIS BLOCK ONCE
-        if (!loadedFlag) {
-            
-            // 1. Ensure any user recipes are kept and not overwritten
-            const userRecipes = recipes.filter(r => r.source === 'user'); 
-            
-            // 2. Set the list to the STATIC recipes + any user recipes
-            const finalRecipes = [...STATIC_RECIPES, ...userRecipes];
-            
-            // 3. Save the final list and set the flag to prevent re-running
-            localStorage.setItem("recipes", JSON.stringify(finalRecipes));
-            localStorage.setItem("staticRecipesLoaded", "true");
-            
-            return finalRecipes;
-        } 
-        
-        // Return the current recipe list from storage
-        return recipes;
+        const existingRecipes = getAllRecipes();
+        if (existingRecipes.length === 0) {
+            const demoRecipes = [
+                {
+                    id: '1',
+                    name: 'Classic Pancakes',
+                    category: 'breakfast',
+                    prepTime: '20 mins',
+                    description: 'Fluffy homemade pancakes perfect for weekend breakfast',
+                    image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop',
+                    status: 'published',
+                    createdAt: new Date().toISOString(),
+                    createdBy: 'system'
+                },
+                {
+                    id: '2',
+                    name: 'Avocado Toast',
+                    category: 'breakfast',
+                    prepTime: '10 mins',
+                    description: 'Creamy avocado on toasted artisan bread',
+                    image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400&h=300&fit=crop',
+                    status: 'published',
+                    createdAt: new Date().toISOString(),
+                    createdBy: 'system'
+                },
+                {
+                    id: '3',
+                    name: 'Grilled Chicken Salad',
+                    category: 'lunch',
+                    prepTime: '25 mins',
+                    description: 'Healthy grilled chicken with fresh garden vegetables',
+                    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop',
+                    status: 'published',
+                    createdAt: new Date().toISOString(),
+                    createdBy: 'system'
+                }
+            ];
+            localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(demoRecipes));
+            return demoRecipes;
+        }
+        return existingRecipes;
     }
 
-    let recipes = initializeRecipes();
-
     function getAllRecipes() {
-        return JSON.parse(localStorage.getItem("recipes") || "[]");
+        try {
+            const recipes = localStorage.getItem(DISHDISCOVERY_RECIPES_KEY);
+            return recipes ? JSON.parse(recipes) : [];
+        } catch (error) {
+            console.error('Error reading recipes from localStorage:', error);
+            return [];
+        }
+    }
+
+    function getPublishedRecipes() {
+        const recipes = getAllRecipes();
+        return recipes.filter(recipe => recipe.status === 'published');
+    }
+
+    function saveRecipe(recipe) {
+        const recipes = getAllRecipes();
+        const newRecipe = {
+            id: Date.now().toString(),
+            name: recipe.name,
+            category: recipe.category,
+            prepTime: recipe.prepTime,
+            description: recipe.description,
+            image: recipe.image,
+            status: recipe.status || 'published',
+            createdAt: new Date().toISOString(),
+            createdBy: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).email : 'admin'
+        };
+        
+        recipes.push(newRecipe);
+        try {
+            localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(recipes));
+            return newRecipe;
+        } catch (error) {
+            console.error('Error saving recipe:', error);
+            throw new Error('Failed to save recipe');
+        }
+    }
+
+    function updateRecipe(recipeId, updatedData) {
+        const recipes = getAllRecipes();
+        const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+        
+        if (recipeIndex !== -1) {
+            recipes[recipeIndex] = { ...recipes[recipeIndex], ...updatedData };
+            try {
+                localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(recipes));
+                return true;
+            } catch (error) {
+                console.error('Error updating recipe:', error);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    function updateRecipeCount() {
+        const recipes = getAllRecipes();
+        const publishedRecipesList = getPublishedRecipes();
+        
+        if (totalRecipes) totalRecipes.textContent = recipes.length;
+        if (publishedRecipes) publishedRecipes.textContent = publishedRecipesList.length;
+        if (dashboardRecipes) dashboardRecipes.textContent = publishedRecipesList.length;
     }
 
     // ==============================
@@ -146,8 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (targetPageId === "manage") {
                 renderRecipeList();
             } else if (targetPageId === "dashboard") {
-                recipes = getAllRecipes();
-                totalRecipes.textContent = recipes.length;
+                updateRecipeCount();
             }
 
             // Close sidebar on mobile after navigation
@@ -177,60 +242,60 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==============================
-    // RECIPE MANAGEMENT (CRUD) - FIXED EDIT/DELETE
+    // RECIPE MANAGEMENT (CRUD) - FIXED TO WORK WITH HTML SYSTEM
     // ==============================
 
-    // RENDER: Render the list of recipes (Static + User-added)
+    // RENDER: Render the list of recipes
     function renderRecipeList() {
-        recipes = getAllRecipes(); 
+        const recipes = getAllRecipes(); 
         
-        recipeList.innerHTML = "";
-        totalRecipes.textContent = recipes.length; 
-
-        if (recipes.length === 0) {
-            recipeList.innerHTML = `<tr class="empty"><td colspan="5" style="text-align: center; color: #777; padding: 2rem;">No recipes found. Use the 'Add Recipe' tab to create one.</td></tr>`;
-            return;
-        }
-
-        recipes.forEach((recipe, index) => {
-            const isStatic = recipe.source === 'static';
-            const row = document.createElement("tr");
+        if (recipeList) {
+            recipeList.innerHTML = "";
             
-            row.innerHTML = `
-                <td>
-                    <img src="${recipe.image || 'https://via.placeholder.com/50x35?text=No+Image'}" 
-                         alt="${recipe.name}" 
-                         class="recipe-thumb"
-                         loading="lazy">
-                </td>
-                <td>${recipe.name}</td>
-                <td>${recipe.category}</td>
-                <td>${recipe.time}</td> 
-                <td>
-                    ${isStatic 
-                        ? `<span class="locked-icon" title="Static recipe: Cannot edit or delete.">
-                             <i class="fa-solid fa-lock"></i>
-                             <span class="sr-only">Locked</span>
-                           </span>`
-                        : `
-                          <div class="action-buttons">
-                            <button class="action-btn edit-btn" data-id="${index}" aria-label="Edit ${recipe.name}">
-                                <i class="fa-solid fa-pen"></i>
-                                <span class="btn-text">Edit</span>
-                            </button>
-                            <button class="action-btn delete-btn" data-id="${index}" aria-label="Delete ${recipe.name}">
-                                <i class="fa-solid fa-trash"></i>
-                                <span class="btn-text">Delete</span>
-                            </button>
-                          </div>
-                        `
-                    }
-                </td>
-            `;
-            recipeList.appendChild(row);
-        });
+            if (recipes.length === 0) {
+                recipeList.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                            <i class="fa-solid fa-utensils" style="font-size: 48px; margin-bottom: 10px; display: block; color: #ddd;"></i>
+                            No recipes found. Add your first recipe!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            recipes.forEach((recipe) => {
+                const row = document.createElement("tr");
+                
+                row.innerHTML = `
+                    <td>
+                        <img src="${recipe.image}" alt="${recipe.name}" 
+                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                             onerror="this.src='https://via.placeholder.com/50x50?text=No+Image'">
+                    </td>
+                    <td><strong>${recipe.name}</strong></td>
+                    <td>${recipe.category ? recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1) : 'Uncategorized'}</td>
+                    <td>${recipe.prepTime || 'Not specified'}</td>
+                    <td>
+                        <span class="status-badge ${recipe.status === 'published' ? 'status-published' : 'status-draft'}">
+                            ${recipe.status || 'draft'}
+                        </span>
+                    </td>
+                    <td>${recipe.status === 'published' ? '✅ Visible' : '❌ Hidden'}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editRecipe('${recipe.id}')">
+                            <i class="fa-solid fa-edit"></i> Edit
+                        </button>
+                        <button class="delete-btn" onclick="deleteRecipe('${recipe.id}')">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                recipeList.appendChild(row);
+            });
+        }
         
-        attachActionListeners();
+        updateRecipeCount();
     }
 
     // C: Handle Add Recipe Form Submission
@@ -238,155 +303,162 @@ document.addEventListener("DOMContentLoaded", () => {
         addRecipeForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
-            let currentRecipes = getAllRecipes();
-
-            const newRecipe = {
+            const recipeData = {
                 name: document.getElementById("recipeName").value,
                 category: document.getElementById("recipeCategory").value,
-                time: document.getElementById("prepTime").value,
-                desc: document.getElementById("recipeDesc").value,
+                prepTime: document.getElementById("prepTime").value,
+                description: document.getElementById("recipeDesc").value,
                 image: document.getElementById("recipeImage").value,
-                source: 'user',
+                status: document.getElementById("recipeStatus").value
             };
 
-            currentRecipes.push(newRecipe);
-            localStorage.setItem("recipes", JSON.stringify(currentRecipes));
-
-            modal.style.display = "block";
-            addRecipeForm.reset();
-            
-            // Navigate to the 'manage' page
-            pages.forEach(p => p.classList.remove("active-page"));
-            document.getElementById("manage").classList.add("active-page");
-            navLinks.forEach(l => l.classList.remove("active"));
-            document.querySelector('[data-page="manage"]').classList.add("active");
-            
-            renderRecipeList(); 
+            try {
+                const newRecipe = saveRecipe(recipeData);
+                
+                // Show success message
+                const successMessage = document.getElementById("successMessage");
+                if (successMessage) {
+                    if (recipeData.status === 'published') {
+                        successMessage.textContent = 'Recipe published successfully! It will appear on the main Dishcovery dashboard. 🎉';
+                    } else {
+                        successMessage.textContent = 'Recipe saved as draft successfully! It will not appear on the main dashboard.';
+                    }
+                }
+                
+                if (modal) {
+                    modal.style.display = "block";
+                }
+                
+                addRecipeForm.reset();
+                updatePreview();
+                renderRecipeList();
+                
+            } catch (error) {
+                console.error('Error adding recipe:', error);
+                alert('Error adding recipe. Please try again.');
+            }
         });
-    }
-
-    // U: Handle Edit Recipe (Open Modal)
-    function openEditModal(index) {
-        console.log("Opening edit modal for index:", index); // Debug log
-        recipes = getAllRecipes();
-        const recipeToEdit = recipes[index];
-        
-        if (!recipeToEdit || recipeToEdit.source === 'static') {
-            console.log("Cannot edit - recipe is static or doesn't exist");
-            return;
-        }
-
-        document.getElementById("editRecipeId").value = index; 
-        document.getElementById("editRecipeName").value = recipeToEdit.name;
-        document.getElementById("editRecipeCategory").value = recipeToEdit.category;
-        document.getElementById("editPrepTime").value = recipeToEdit.time;
-        document.getElementById("editRecipeDesc").value = recipeToEdit.desc;
-        document.getElementById("editRecipeImage").value = recipeToEdit.image;
-        
-        editModal.style.display = "block";
-        console.log("Edit modal should be visible now");
     }
 
     // U: Handle Edit Recipe (Save Changes)
     if (editRecipeForm) {
         editRecipeForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            const index = parseInt(document.getElementById("editRecipeId").value);
-            console.log("Saving edits for index:", index); // Debug log
+            const recipeId = document.getElementById("editRecipeId").value;
             
-            recipes = getAllRecipes();
-            
-            if (!recipes[index] || recipes[index].source === 'static') {
-                console.log("Cannot save - recipe is static or doesn't exist");
-                editModal.style.display = "none";
-                return;
-            }
-
-            recipes[index] = {
-                ...recipes[index], 
+            const updatedData = {
                 name: document.getElementById("editRecipeName").value,
                 category: document.getElementById("editRecipeCategory").value,
-                time: document.getElementById("editPrepTime").value,
-                desc: document.getElementById("editRecipeDesc").value,
+                prepTime: document.getElementById("editPrepTime").value,
+                description: document.getElementById("editRecipeDesc").value,
                 image: document.getElementById("editRecipeImage").value,
+                status: document.getElementById("editRecipeStatus").value
             };
-
-            localStorage.setItem("recipes", JSON.stringify(recipes));
-            editModal.style.display = "none";
-            renderRecipeList();
-            console.log("Recipe updated successfully");
+            
+            const success = updateRecipe(recipeId, updatedData);
+            if (success) {
+                if (editModal) {
+                    editModal.style.display = "none";
+                }
+                renderRecipeList();
+                alert('Recipe updated successfully!');
+            } else {
+                alert('Error updating recipe. Please try again.');
+            }
         });
     }
-    
-    // D: Handle Delete Recipe
-    function deleteRecipe(index) {
-        console.log("Deleting recipe at index:", index); // Debug log
-        recipes = getAllRecipes();
-        
-        if (!recipes[index] || recipes[index].source === 'static') {
-            console.log("Cannot delete - recipe is static or doesn't exist");
-            return; 
+
+    // Clear recipe from saved recipes in main dashboard
+    function clearRecipeFromSaved(recipeId) {
+        try {
+            // Convert recipeId to match the format used in main dashboard
+            const adminRecipeId = -Math.abs(parseInt(recipeId));
+            
+            // Get current saved recipes
+            const savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+            
+            // Remove the deleted recipe from saved recipes
+            const updatedSavedRecipes = savedRecipes.filter(id => id !== adminRecipeId);
+            
+            // Save back to localStorage
+            localStorage.setItem('savedRecipes', JSON.stringify(updatedSavedRecipes));
+            
+            console.log('Cleared recipe from saved recipes:', recipeId);
+        } catch (error) {
+            console.error('Error clearing recipe from saved:', error);
         }
+    }
 
-        if (confirm(`Are you sure you want to delete the recipe: "${recipes[index].name}"?`)) {
-            recipes.splice(index, 1);
-            localStorage.setItem("recipes", JSON.stringify(recipes));
-            renderRecipeList();
-            console.log("Recipe deleted successfully");
+    // ==============================
+    // GLOBAL FUNCTIONS FOR HTML BUTTONS
+    // ==============================
+    window.editRecipe = function(recipeId) {
+        const recipes = getAllRecipes();
+        const recipe = recipes.find(r => r.id === recipeId);
+        
+        if (recipe && editModal) {
+            document.getElementById('editRecipeId').value = recipe.id;
+            document.getElementById('editRecipeName').value = recipe.name;
+            document.getElementById('editRecipeCategory').value = recipe.category;
+            document.getElementById('editPrepTime').value = recipe.prepTime;
+            document.getElementById('editRecipeDesc').value = recipe.description;
+            document.getElementById('editRecipeImage').value = recipe.image;
+            document.getElementById('editRecipeStatus').value = recipe.status;
+            
+            editModal.style.display = 'block';
         }
-    }
+    };
 
-    // Attach listeners to dynamically created buttons - FIXED VERSION
-    function attachActionListeners() {
-        console.log("Attaching action listeners..."); // Debug log
-        
-        // Edit buttons
-        document.querySelectorAll(".edit-btn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const index = parseInt(btn.getAttribute("data-id"));
-                console.log("Edit button clicked, index:", index); // Debug log
-                openEditModal(index);
-            });
-        });
+    window.deleteRecipe = function(recipeId) {
+        if (confirm('Are you sure you want to delete this recipe? This will remove it from both admin and main dashboard.')) {
+            const recipes = getAllRecipes();
+            const filteredRecipes = recipes.filter(recipe => recipe.id !== recipeId);
+            
+            try {
+                localStorage.setItem(DISHDISCOVERY_RECIPES_KEY, JSON.stringify(filteredRecipes));
+                
+                // Clear any saved references in the main dashboard
+                clearRecipeFromSaved(recipeId);
+                
+                renderRecipeList();
+                alert('Recipe deleted successfully from both admin and main dashboard!');
+            } catch (error) {
+                console.error('Error deleting recipe:', error);
+                alert('Error deleting recipe. Please try again.');
+            }
+        }
+    };
 
-        // Delete buttons
-        document.querySelectorAll(".delete-btn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const index = parseInt(btn.getAttribute("data-id"));
-                console.log("Delete button clicked, index:", index); // Debug log
-                deleteRecipe(index);
-            });
-        });
-        
-        console.log("Action listeners attached to:", document.querySelectorAll(".edit-btn").length, "edit buttons and", document.querySelectorAll(".delete-btn").length, "delete buttons"); // Debug log
-    }
+    window.logout = function() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = "../login-active_folder/login-active.html";
+        }
+    };
 
     // ==============================
     // MODAL CONTROLS
     // ==============================
     if (closeModalBtn) {
         closeModalBtn.addEventListener("click", () => {
-            modal.style.display = "none";
+            if (modal) modal.style.display = "none";
         });
     }
 
     if (closeEditModalBtn) {
         closeEditModalBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            editModal.style.display = "none";
+            if (editModal) editModal.style.display = "none";
         });
     }
 
     // Close modals when clicking outside
     window.addEventListener("click", (e) => {
-        if (e.target === modal) {
+        if (modal && e.target === modal) {
             modal.style.display = "none";
         }
-        if (e.target === editModal) {
+        if (editModal && e.target === editModal) {
             editModal.style.display = "none";
         }
     });
@@ -409,23 +481,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const time = document.getElementById('prepTime').value || '--';
         const desc = document.getElementById('recipeDesc').value || 'Description will appear here...';
         const image = document.getElementById('recipeImage').value || 'https://via.placeholder.com/300x200?text=Preview';
+        const status = document.getElementById('recipeStatus') ? document.getElementById('recipeStatus').value : 'draft';
 
-        document.getElementById('previewName').textContent = name;
-        document.getElementById('previewCategory').textContent = category;
-        document.getElementById('previewTime').textContent = `Prep Time: ${time}`;
-        document.getElementById('previewDesc').textContent = desc;
-        document.getElementById('previewImage').src = image;
+        const previewName = document.getElementById('previewName');
+        const previewCategory = document.getElementById('previewCategory');
+        const previewTime = document.getElementById('previewTime');
+        const previewDesc = document.getElementById('previewDesc');
+        const previewImage = document.getElementById('previewImage');
+        const previewStatus = document.getElementById('previewStatus');
+
+        if (previewName) previewName.textContent = name;
+        if (previewCategory) previewCategory.textContent = category;
+        if (previewTime) previewTime.textContent = `Prep Time: ${time}`;
+        if (previewDesc) previewDesc.textContent = desc;
+        if (previewImage) previewImage.src = image;
+        if (previewStatus) {
+            previewStatus.textContent = status === 'published' ? 'Published' : 'Draft';
+            previewStatus.className = `status-badge ${status === 'published' ? 'status-published' : 'status-draft'}`;
+        }
     }
 
     // ==============================
     // INITIAL LOAD
     // ==============================
+    initializeRecipes();
     renderRecipeList();
     updatePreview(); // Initialize preview with placeholder values
-
-    // Set initial dashboard stats
-    recipes = getAllRecipes();
-    totalRecipes.textContent = recipes.length;
+    updateRecipeCount();
     
-    console.log("Admin dashboard initialized successfully"); // Debug log
+    console.log("Admin dashboard initialized successfully with unified storage system");
 });
