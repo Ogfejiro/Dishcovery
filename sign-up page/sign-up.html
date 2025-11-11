@@ -3,11 +3,329 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account sign up/ | Dishcovery</title>
-  <link rel="stylesheet" href="sign-up.css">
+  <title>Create Account | Dishcovery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: "Open Sans", sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      color: #333;
+      overflow: hidden;
+    }
+
+    .sign {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sign img {
+      width: 45%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .active {
+      width: 55%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 40px;
+      background-color: #fff;
+    }
+
+    .dish {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-height: 100%;
+    }
+
+    .dish__details {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .dish__details h1 {
+      font-size: 28px;
+      color: #d84444;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .dish__details p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .dish__fills {
+      flex-grow: 1;
+      overflow-y: hidden;
+      padding-right: 0;
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      height: 35px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 0 10px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #d84444;
+      box-shadow: 0 0 0 2px rgba(216, 68, 68, 0.1);
+    }
+
+    button {
+      margin-top: 10px;
+      height: 38px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      background-color: #d84444;
+      color: #fff;
+      transition: 0.3s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #c13c3c;
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .acc-log {
+      margin-top: 5px;
+      font-size: 13px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    a {
+      color: #d84444;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: #d84444;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .input-error {
+      border-color: #d84444;
+    }
+
+    .success-message {
+      color: #4CAF50;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .info-message {
+      color: #ff9800;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+      background: #fff3e0;
+      padding: 10px;
+      border-radius: 6px;
+      border-left: 4px solid #ff9800;
+    }
+
+    .info-message.show {
+      display: block;
+    }
+
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #d84444;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    
+    .loading-overlay.active {
+      display: flex;
+    }
+    
+    .loading-text {
+      margin-top: 15px;
+      color: #d84444;
+      font-weight: 600;
+    }
+    
+    .large-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #d84444;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    .timeout-message {
+      color: #ff9800;
+      font-size: 14px;
+      text-align: center;
+      margin: 10px 0;
+      display: none;
+    }
+    
+    .timeout-message.show {
+      display: block;
+    }
+
+    @media (max-width: 900px) {
+      .sign {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+      }
+
+      body {
+        overflow-y: auto;
+      }
+      
+      .sign img {
+        width: 100%;
+        height: 300px;
+      }
+
+      .active {
+        width: 100%;
+        box-shadow: none;
+        padding: 30px 20px;
+      }
+
+      .dish {
+        gap: 20px;
+        max-height: unset;
+        padding: 0;
+      }
+
+      .dish__fills {
+        overflow-y: visible;
+      }
+
+      .dish__details h1 {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .dish {
+        max-width: 100%;
+      }
+
+      input {
+        height: 38px;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .dish__details p {
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="large-spinner"></div>
+    <div class="loading-text" id="loadingText">Creating your account...</div>
+    <div class="timeout-message" id="timeoutMessage">
+      ⏳ This is taking longer than expected. Please wait...
+    </div>
+  </div>
+
   <section class="sign">
+    <!-- Using your original image path -->
     <img src="../images/Frame 340.png" alt="Dishcovery Illustration">
 
     <div class="active">
@@ -19,23 +337,44 @@
         </div>
 
         <div class="dish__fills">
-          <form action="">
-            <label for="firstname">First Name</label>
-            <input type="text" id="firstname" placeholder="Enter your first name">
+          <form id="signupForm">
+            <div>
+              <label for="firstname">First Name</label>
+              <input type="text" id="firstname" placeholder="Enter your first name" required>
+              <div class="error-message" id="firstNameError"></div>
+            </div>
 
-            <label for="last-name">Last Name</label>
-            <input type="text" id="last-name" placeholder="Enter your last name">
+            <div>
+              <label for="last-name">Last Name</label>
+              <input type="text" id="last-name" placeholder="Enter your last name" required>
+              <div class="error-message" id="lastNameError"></div>
+            </div>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email">
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="Enter your email" required>
+              <div class="error-message" id="emailError"></div>
+            </div>
 
-            <label for="password1">Password</label>
-            <input type="password" id="password1" placeholder="Enter your password">
+            <div>
+              <label for="password1">Password</label>
+              <input type="password" id="password1" placeholder="Enter your password" required minlength="6">
+              <div class="error-message" id="passwordError"></div>
+            </div>
 
-            <label for="password2">Confirm Password</label>
-            <input type="password" id="password2" placeholder="Confirm password">
+            <div>
+              <label for="password2">Confirm Password</label>
+              <input type="password" id="password2" placeholder="Confirm password" required>
+              <div class="error-message" id="confirmPasswordError"></div>
+            </div>
 
-            <button type="submit" class="sign--btn">Sign Up</button>
+            <button type="submit" class="sign--btn" id="signupBtn">
+              Sign Up
+            </button>
+
+            <div class="success-message" id="successMessage"></div>
+            <div class="info-message" id="infoMessage"></div>
+            <div class="timeout-message" id="formTimeoutMessage"></div>
 
             <p class="acc-log">Already have an account?
               <a href="../login-active_folder/login-active.html">Log in</a>
@@ -44,7 +383,253 @@
         </div>
       </div>
     </div>
-    <script src="inactive.js"></script>
   </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("signupForm");
+      const signupBtn = document.getElementById("signupBtn");
+      const successMessage = document.getElementById("successMessage");
+      const infoMessage = document.getElementById("infoMessage");
+      const loadingOverlay = document.getElementById("loadingOverlay");
+      const loadingText = document.getElementById("loadingText");
+      const timeoutMessage = document.getElementById("timeoutMessage");
+      const formTimeoutMessage = document.getElementById("formTimeoutMessage");
+
+      // Use the deployed backend URL
+      const API_BASE_URL = "https://dishcovery-backend-1.onrender.com";
+      
+      // Timeout handling
+      const TIMEOUT_DURATION = 30000; // 30 seconds
+      let timeoutId;
+
+      function showError(fieldId, message) {
+        const errorElement = document.getElementById(fieldId);
+        const inputElement = document.getElementById(fieldId.replace('Error', ''));
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+        if (inputElement) inputElement.classList.add('input-error');
+      }
+
+      function clearErrors() {
+        document.querySelectorAll('.error-message').forEach(el => {
+          el.classList.remove('show');
+          el.textContent = '';
+        });
+        document.querySelectorAll('input').forEach(el => {
+          el.classList.remove('input-error');
+        });
+        successMessage.classList.remove('show');
+        infoMessage.classList.remove('show');
+        formTimeoutMessage.classList.remove('show');
+      }
+
+      function showSuccess(message) {
+        successMessage.textContent = message;
+        successMessage.classList.add('show');
+      }
+
+      function showInfo(message) {
+        infoMessage.textContent = message;
+        infoMessage.classList.add('show');
+      }
+
+      function showLoading(message = "Creating your account...") {
+        loadingText.textContent = message;
+        loadingOverlay.classList.add('active');
+        
+        // Show timeout message after 10 seconds
+        setTimeout(() => {
+          timeoutMessage.classList.add('show');
+        }, 10000);
+      }
+
+      function hideLoading() {
+        loadingOverlay.classList.remove('active');
+        timeoutMessage.classList.remove('show');
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      // REAL BACKEND IMPLEMENTATION - OPTIMIZED VERSION
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get form values
+        const firstName = document.getElementById('firstname').value.trim();
+        const lastName = document.getElementById('last-name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password1').value;
+        const confirmPassword = document.getElementById('password2').value;
+
+        // Clear previous errors
+        clearErrors();
+
+        // Validation
+        let hasErrors = false;
+        
+        if (!firstName) { 
+          showError('firstNameError', 'First name is required'); 
+          hasErrors = true; 
+        }
+        
+        if (!lastName) { 
+          showError('lastNameError', 'Last name is required'); 
+          hasErrors = true; 
+        }
+        
+        if (!email) { 
+          showError('emailError', 'Email is required'); 
+          hasErrors = true; 
+        } else if (!validateEmail(email)) {
+          showError('emailError', 'Please enter a valid email address');
+          hasErrors = true;
+        }
+        
+        if (!password) { 
+          showError('passwordError', 'Password is required'); 
+          hasErrors = true; 
+        } else if (password.length < 6) { 
+          showError('passwordError', 'Password must be at least 6 characters'); 
+          hasErrors = true; 
+        }
+        
+        if (!confirmPassword) { 
+          showError('confirmPasswordError', 'Please confirm your password'); 
+          hasErrors = true; 
+        } else if (password !== confirmPassword) { 
+          showError('confirmPasswordError', 'Passwords do not match'); 
+          hasErrors = true; 
+        }
+        
+        if (hasErrors) return;
+
+        // Update button state and show loading
+        const originalBtnText = signupBtn.innerHTML;
+        signupBtn.innerHTML = '<span class="spinner"></span>Creating Account...';
+        signupBtn.disabled = true;
+        showLoading();
+
+        // Set timeout for the request
+        timeoutId = setTimeout(() => {
+          hideLoading();
+          showInfo('⏰ Request is taking longer than expected. The backend might be starting up. Please try again in a moment.');
+          signupBtn.innerHTML = originalBtnText;
+          signupBtn.disabled = false;
+        }, TIMEOUT_DURATION);
+
+        try {
+          // Prepare data for backend
+          const userData = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password
+          };
+
+          console.log('🔄 Sending signup request to backend...');
+
+          // REAL API CALL TO BACKEND with timeout
+          const controller = new AbortController();
+          const timeoutId2 = setTimeout(() => controller.abort(), TIMEOUT_DURATION);
+
+          const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId2);
+          clearTimeout(timeoutId);
+
+          console.log('📊 Response status:', response.status);
+
+          let data;
+          try {
+            data = await response.json();
+          } catch (parseError) {
+            console.error('❌ Failed to parse JSON response:', parseError);
+            throw new Error('Server returned an invalid response. Please try again.');
+          }
+
+          console.log('📄 Response data:', data);
+
+          // Handle different response statuses
+          if (response.ok) {
+            // SUCCESS - User created
+            showSuccess('✅ Account created successfully!');
+            loadingText.textContent = 'Redirecting to login...';
+            
+            // Store user data if needed
+            if (data.token) {
+              localStorage.setItem('authToken', data.token);
+              localStorage.setItem('userData', JSON.stringify(data.user));
+            }
+            
+            // Clear form
+            form.reset();
+            
+            // Redirect to login page after shorter delay
+            setTimeout(() => {
+              hideLoading();
+              window.location.href = "../login-active_folder/login-active.html";
+            }, 1500);
+            
+          } else {
+            hideLoading();
+            // Handle different error cases from backend
+            if (response.status === 409) {
+              showError('emailError', data.message || 'An account with this email already exists');
+            } else if (response.status === 400) {
+              showError('emailError', data.message || 'Please check your input data');
+            } else if (response.status === 500) {
+              showInfo('🛠️ Server error: The backend is having issues. Please try again in a moment.');
+            } else {
+              throw new Error(data.message || `Registration failed with status ${response.status}`);
+            }
+            signupBtn.innerHTML = originalBtnText;
+            signupBtn.disabled = false;
+          }
+
+        } catch (error) {
+          hideLoading();
+          console.error('❌ Signup error:', error);
+          
+          // Network errors or other issues
+          if (error.name === 'AbortError') {
+            showInfo('⏰ Request timeout: The server is taking too long to respond. This is normal for free hosting services. Please try again.');
+          } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showInfo('🌐 Network error: Please check your internet connection and try again');
+          } else {
+            showError('emailError', error.message || 'Registration failed. Please try again.');
+          }
+          
+          signupBtn.innerHTML = originalBtnText;
+          signupBtn.disabled = false;
+        }
+      });
+
+      // Real-time validation for better UX
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', () => {
+          const errorId = input.id + 'Error';
+          const errorElement = document.getElementById(errorId);
+          if (errorElement && errorElement.classList.contains('show')) {
+            errorElement.classList.remove('show');
+            input.classList.remove('input-error');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
