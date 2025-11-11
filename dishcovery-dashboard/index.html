@@ -284,19 +284,43 @@
 </div>
 
 <script>
-/* ============================== AUTHENTICATION CHECK ============================== */
+/* ============================== SIMPLE AUTHENTICATION CHECK ============================== */
 function checkAuthentication() {
+  // SIMPLE CHECK: If authToken exists, show admin dashboard link
   const token = localStorage.getItem('authToken');
   const userData = localStorage.getItem('userData');
   
-  if (token && userData) {
-    // User is logged in, show admin dashboard link
+  console.log('Auth check - Token:', token, 'UserData:', userData);
+  
+  if (token) {
+    // User has logged in before, show admin dashboard link
     document.getElementById('adminDashboardLink').style.display = 'flex';
-    console.log('User is logged in, showing admin dashboard link');
+    console.log('✅ Showing admin dashboard link - user is logged in');
   } else {
     // User is not logged in, hide admin dashboard link
     document.getElementById('adminDashboardLink').style.display = 'none';
-    console.log('User is not logged in, hiding admin dashboard link');
+    console.log('❌ Hiding admin dashboard link - user is not logged in');
+  }
+}
+
+/* ============================== ADMIN DASHBOARD LINK PROTECTION ============================== */
+function protectAdminDashboardLink() {
+  const adminLink = document.getElementById('adminDashboardLink');
+  if (adminLink) {
+    adminLink.addEventListener('click', function(e) {
+      const token = localStorage.getItem('authToken');
+      
+      if (!token) {
+        // User is not logged in, prevent access and redirect to login
+        e.preventDefault();
+        alert('Please login to access the admin dashboard');
+        window.location.href = "../login-active_folder/login-active.html";
+        return;
+      }
+      
+      // User has authToken, allow navigation to admin dashboard
+      console.log('✅ Allowing access to admin dashboard');
+    });
   }
 }
 
@@ -763,18 +787,6 @@ navLinks.forEach(link => {
   });
 });
 
-/* ============================== ADMIN DASHBOARD LINK HANDLER ============================== */
-// Add event listener to admin dashboard link to prevent interference from other scripts
-document.addEventListener('DOMContentLoaded', function() {
-  const adminLink = document.getElementById('adminDashboardLink');
-  if (adminLink) {
-    adminLink.addEventListener('click', function(e) {
-      // Allow the link to work normally - don't prevent default
-      console.log('Admin dashboard link clicked');
-    });
-  }
-});
-
 /* ============================== REFRESH RECIPES FUNCTION ============================== */
 function refreshRecipes() {
   ALL_RECIPES = getAllRecipes();
@@ -786,6 +798,8 @@ function refreshRecipes() {
 /* ============================== INITIAL LOAD ============================== */
 // Check authentication on page load
 checkAuthentication();
+// Protect admin dashboard link
+protectAdminDashboardLink();
 refreshRecipes();
 
 /* ============================== AUTO-REFRESH WHEN RETURNING TO PAGE ============================== */
@@ -801,6 +815,7 @@ document.addEventListener('visibilitychange', function() {
 window.addEventListener('load', function() {
   refreshRecipes();
   checkAuthentication();
+  protectAdminDashboardLink();
 });
 
 // Check authentication periodically (every 2 seconds) to catch login/logout changes
